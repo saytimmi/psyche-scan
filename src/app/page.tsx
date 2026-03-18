@@ -1,65 +1,97 @@
-import Image from "next/image";
+"use client";
+
+import { sessions, getTotalQuestionCount } from "@/data/questions";
+import Link from "next/link";
+import { motion } from "framer-motion";
 
 export default function Home() {
+  const totalQuestions = getTotalQuestionCount();
+  const totalMinutes = sessions.reduce((a, s) => a + s.estimatedMinutes, 0);
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <main className="min-h-screen flex flex-col items-center justify-center px-4 py-16">
+      {/* Hero */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="text-center max-w-2xl mx-auto mb-16"
+      >
+        <div className="text-5xl mb-6">🧠</div>
+        <h1 className="text-4xl md:text-5xl font-bold mb-4 tracking-tight">
+          Psyche Scan
+        </h1>
+        <p className="text-lg text-muted mb-2">
+          Глубинное профилирование личности на основе научно-валидированных методик
+        </p>
+        <p className="text-sm text-muted/60">
+          {totalQuestions} вопросов &middot; {totalMinutes} минут &middot; 4 сессии
+        </p>
+      </motion.div>
+
+      {/* Session Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-3xl w-full mb-16">
+        {sessions.map((session, i) => (
+          <motion.div
+            key={session.id}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.1 * (i + 1) }}
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+            <Link href={`/session/${session.id}`}>
+              <div className="group relative bg-surface border border-border rounded-2xl p-6 hover:border-accent/50 transition-all duration-300 hover:shadow-lg hover:shadow-accent/5 cursor-pointer">
+                <div className="flex items-start justify-between mb-4">
+                  <span className="text-3xl">{session.icon}</span>
+                  <span className="text-xs text-muted bg-surface-2 px-2 py-1 rounded-full">
+                    ~{session.estimatedMinutes} мин
+                  </span>
+                </div>
+                <h2 className="text-xl font-semibold mb-1 group-hover:text-accent transition-colors">
+                  {session.title}
+                </h2>
+                <p className="text-sm text-accent/80 mb-2">{session.subtitle}</p>
+                <p className="text-sm text-muted leading-relaxed">
+                  {session.description}
+                </p>
+                <div className="mt-4 text-xs text-muted/50">
+                  {session.sections.length} секций &middot;{" "}
+                  {session.sections.reduce((a, s) => a + s.questions.length, 0)} вопросов
+                </div>
+              </div>
+            </Link>
+          </motion.div>
+        ))}
+      </div>
+
+      {/* Science Badge */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.8 }}
+        className="max-w-2xl text-center"
+      >
+        <div className="bg-surface border border-border rounded-2xl p-6">
+          <h3 className="text-sm font-semibold mb-3 text-accent">Научная база</h3>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs text-muted">
+            <div className="bg-surface-2 rounded-lg p-3">
+              <div className="font-mono text-foreground mb-1">IPIP-NEO</div>
+              <div>Big Five r=.87-.93</div>
+            </div>
+            <div className="bg-surface-2 rounded-lg p-3">
+              <div className="font-mono text-foreground mb-1">ECR-R</div>
+              <div>Attachment r=.28-.42</div>
+            </div>
+            <div className="bg-surface-2 rounded-lg p-3">
+              <div className="font-mono text-foreground mb-1">DERS</div>
+              <div>Emotion reg alpha=.93</div>
+            </div>
+            <div className="bg-surface-2 rounded-lg p-3">
+              <div className="font-mono text-foreground mb-1">YSQ-S3</div>
+              <div>Schemas alpha=.97</div>
+            </div>
+          </div>
         </div>
-      </main>
-    </div>
+      </motion.div>
+    </main>
   );
 }
