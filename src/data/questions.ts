@@ -298,6 +298,82 @@ const behavioral: Question[] = [
 ];
 
 // ============================================================
+// SESSION 5: OPERATING SYSTEM (~40 min)
+// Strengths, Chronotype, Communication, Conflict, Money, Body
+// ============================================================
+
+const strengths: Question[] = [
+  // Adapted talent themes (inspired by Gallup domains, original questions)
+  // Strategic Thinking
+  { id: "str1", text: "Мне легко увидеть паттерн или закономерность там, где другие видят хаос", type: "scale", dimension: "strengths.strategic", facet: "strategic", scale: { min: 1, max: 5, minLabel: "Совсем не про меня", maxLabel: "Точно про меня" } },
+  { id: "str2", text: "Я быстро генерирую идеи — мне легко придумать 10 вариантов решения", type: "scale", dimension: "strengths.strategic", facet: "ideation", scale: { min: 1, max: 5, minLabel: "Совсем не про меня", maxLabel: "Точно про меня" } },
+  { id: "str3", text: "Мне нравится собирать информацию и знания — даже если пока не знаю зачем", type: "scale", dimension: "strengths.strategic", facet: "input", scale: { min: 1, max: 5, minLabel: "Совсем не про меня", maxLabel: "Точно про меня" } },
+  { id: "str4", text: "Я люблю анализировать — раскладывать на части, искать причины", type: "scale", dimension: "strengths.strategic", facet: "analytical", scale: { min: 1, max: 5, minLabel: "Совсем не про меня", maxLabel: "Точно про меня" } },
+  // Executing
+  { id: "str5", text: "Я получаю удовольствие когда вычёркиваю задачу из списка — мне нужен ощутимый прогресс", type: "scale", dimension: "strengths.executing", facet: "achiever", scale: { min: 1, max: 5, minLabel: "Совсем не про меня", maxLabel: "Точно про меня" } },
+  { id: "str6", text: "Я могу привести вещи в порядок и создать систему из хаоса", type: "scale", dimension: "strengths.executing", facet: "arranger", scale: { min: 1, max: 5, minLabel: "Совсем не про меня", maxLabel: "Точно про меня" } },
+  { id: "str7", text: "Я сфокусирован — могу долго работать над одной целью, не отвлекаясь", type: "scale", dimension: "strengths.executing", facet: "focus", scale: { min: 1, max: 5, minLabel: "Совсем не про меня", maxLabel: "Точно про меня" } },
+  { id: "str8", text: "Я серьёзно отношусь к обязательствам — если сказал, значит сделаю", type: "scale", dimension: "strengths.executing", facet: "responsibility", scale: { min: 1, max: 5, minLabel: "Совсем не про меня", maxLabel: "Точно про меня" } },
+  // Influencing
+  { id: "str9", text: "Мне легко убеждать людей и вести за собой", type: "scale", dimension: "strengths.influencing", facet: "command", scale: { min: 1, max: 5, minLabel: "Совсем не про меня", maxLabel: "Точно про меня" } },
+  { id: "str10", text: "Я уверен в себе и легко принимаю решения, даже рискованные", type: "scale", dimension: "strengths.influencing", facet: "self_assurance", scale: { min: 1, max: 5, minLabel: "Совсем не про меня", maxLabel: "Точно про меня" } },
+  { id: "str11", text: "Мне важно быть первым, побеждать, соревноваться", type: "scale", dimension: "strengths.influencing", facet: "competition", scale: { min: 1, max: 5, minLabel: "Совсем не про меня", maxLabel: "Точно про меня" } },
+  { id: "str12", text: "Я энергичный стартер — легко запускаю проекты и зажигаю людей", type: "scale", dimension: "strengths.influencing", facet: "activator", scale: { min: 1, max: 5, minLabel: "Совсем не про меня", maxLabel: "Точно про меня" } },
+  // Relationship Building
+  { id: "str13", text: "Я легко понимаю что чувствуют другие, даже если они не говорят", type: "scale", dimension: "strengths.relationship", facet: "empathy", scale: { min: 1, max: 5, minLabel: "Совсем не про меня", maxLabel: "Точно про меня" } },
+  { id: "str14", text: "Мне нравится развивать людей — видеть их потенциал и помогать расти", type: "scale", dimension: "strengths.relationship", facet: "developer", scale: { min: 1, max: 5, minLabel: "Совсем не про меня", maxLabel: "Точно про меня" } },
+  { id: "str15", text: "Я легко нахожу общий язык с разными людьми и строю связи", type: "scale", dimension: "strengths.relationship", facet: "relator", scale: { min: 1, max: 5, minLabel: "Совсем не про меня", maxLabel: "Точно про меня" } },
+  { id: "str16", text: "Я умею включать людей — делать так чтобы каждый чувствовал себя частью команды", type: "scale", dimension: "strengths.relationship", facet: "includer", scale: { min: 1, max: 5, minLabel: "Совсем не про меня", maxLabel: "Точно про меня" } },
+];
+
+const chronotype: Question[] = [
+  { id: "chr1", text: "Если бы ты мог выбрать — во сколько ты бы просыпался?", type: "choice", dimension: "body.chronotype" },
+  { id: "chr2", text: "В какое время суток ты чувствуешь пик умственной активности?", type: "choice", dimension: "body.peak_mental" },
+  { id: "chr3", text: "Во сколько ты обычно ложишься спать когда нет обязательств?", type: "choice", dimension: "body.sleep_time" },
+  { id: "chr4", text: "Сколько часов сна тебе нужно чтобы чувствовать себя хорошо?", type: "choice", dimension: "body.sleep_need" },
+  { id: "chr5", text: "Занимаешься ли ты спортом/физической активностью регулярно?", type: "choice", dimension: "body.exercise" },
+];
+
+const communication: Question[] = [
+  { id: "com1", text: "Мне проще донести мысль текстом, чем голосом", type: "scale", dimension: "communication.channel", scale: { min: 1, max: 5, minLabel: "Совсем нет (голос)", maxLabel: "Точно (текст)" } },
+  { id: "com2", text: "Я предпочитаю сначала подумать, потом говорить (а не думать вслух)", type: "scale", dimension: "communication.processing", scale: { min: 1, max: 5, minLabel: "Думаю вслух", maxLabel: "Думаю молча" } },
+  { id: "com3", text: "Мне важнее факты и логика чем эмоции и чувства в разговоре", type: "scale", dimension: "communication.style", scale: { min: 1, max: 5, minLabel: "Эмоции важнее", maxLabel: "Факты важнее" } },
+  { id: "com4", text: "Я говорю прямо и по делу, без вступлений и украшений", type: "scale", dimension: "communication.directness", scale: { min: 1, max: 5, minLabel: "Мягко, издалека", maxLabel: "Прямо в лоб" } },
+  { id: "com5", text: "Мне легче слушать чем говорить", type: "scale", dimension: "communication.role", scale: { min: 1, max: 5, minLabel: "Люблю говорить", maxLabel: "Люблю слушать" } },
+];
+
+const conflictStyle: Question[] = [
+  { id: "conf1", text: "В конфликте мне важнее отстоять свою позицию, чем сохранить отношения", type: "scale", dimension: "conflict.competing", scale: { min: 1, max: 5, minLabel: "Совсем нет", maxLabel: "Точно" } },
+  { id: "conf2", text: "Я ищу решение которое устроит обе стороны, даже если это займёт больше времени", type: "scale", dimension: "conflict.collaborating", scale: { min: 1, max: 5, minLabel: "Совсем нет", maxLabel: "Точно" } },
+  { id: "conf3", text: "Я готов уступить часть своего чтобы быстрее договориться", type: "scale", dimension: "conflict.compromising", scale: { min: 1, max: 5, minLabel: "Совсем нет", maxLabel: "Точно" } },
+  { id: "conf4", text: "Я стараюсь избегать конфликтов — лучше промолчать чем спорить", type: "scale", dimension: "conflict.avoiding", scale: { min: 1, max: 5, minLabel: "Совсем нет", maxLabel: "Точно" } },
+  { id: "conf5", text: "Я часто уступаю другим чтобы им было хорошо, даже в ущерб себе", type: "scale", dimension: "conflict.accommodating", scale: { min: 1, max: 5, minLabel: "Совсем нет", maxLabel: "Точно" } },
+];
+
+const money: Question[] = [
+  { id: "mon1", text: "Деньги для меня — это прежде всего свобода и возможности", type: "scale", dimension: "money.freedom", scale: { min: 1, max: 5, minLabel: "Совсем нет", maxLabel: "Точно" } },
+  { id: "mon2", text: "Я легко трачу деньги на импульсивные покупки", type: "scale", dimension: "money.impulsive", scale: { min: 1, max: 5, minLabel: "Никогда", maxLabel: "Постоянно" } },
+  { id: "mon3", text: "Я готов рискнуть деньгами ради большой возможности", type: "scale", dimension: "money.risk", scale: { min: 1, max: 5, minLabel: "Совсем нет", maxLabel: "Точно" } },
+  { id: "mon4", text: "У меня есть финансовая подушка на 3+ месяца", type: "boolean", dimension: "money.safety_net" },
+  { id: "mon5", text: "Я трачу больше чем зарабатываю", type: "scale", dimension: "money.overspend", scale: { min: 1, max: 5, minLabel: "Никогда", maxLabel: "Часто" } },
+];
+
+const stressProfile: Question[] = [
+  { id: "stress1", text: "Когда ты в сильном стрессе — что происходит с твоим телом? (сжимается живот, болит голова, бессонница, etc.)", type: "open", dimension: "stress.body_response" },
+  { id: "stress2", text: "Что ты делаешь чтобы снять стресс? Первая автоматическая реакция, не 'правильная'.", type: "open", dimension: "stress.coping" },
+  { id: "stress3", text: "Какой самый стрессовый период в твоей жизни? Как ты с ним справился?", type: "open", dimension: "stress.peak_story" },
+  { id: "stress4", text: "Что тебя стрессует прямо сейчас? Топ-3.", type: "open", dimension: "stress.current" },
+];
+
+const metaPreferences: Question[] = [
+  { id: "meta1", text: "Как ты хочешь чтобы AI-ассистент с тобой общался?", type: "choice", dimension: "meta.coaching_style" },
+  { id: "meta2", text: "Насколько прямо и жёстко тебе можно говорить правду?", type: "scale", dimension: "meta.directness", scale: { min: 1, max: 5, minLabel: "Очень мягко", maxLabel: "Максимально прямо" } },
+  { id: "meta3", text: "Тебе нужен внешний контроль и напоминания, или ты сам себя мотивируешь?", type: "scale", dimension: "meta.accountability", scale: { min: 1, max: 5, minLabel: "Сам справляюсь", maxLabel: "Нужен внешний пинок" } },
+  { id: "meta4", text: "Что тебя больше мотивирует — вдохновляющее будущее или страх упустить?", type: "scale", dimension: "meta.motivation_type", scale: { min: 1, max: 5, minLabel: "Страх потери", maxLabel: "Вдохновение" } },
+  { id: "meta5", text: "Опиши идеального помощника/коуча — каким он должен быть?", type: "open", dimension: "meta.ideal_coach" },
+];
+
+// ============================================================
 // SESSION CONFIGS
 // ============================================================
 
@@ -359,6 +435,23 @@ export const sessions: SessionConfig[] = [
       { id: "ifs", title: "Внутренние части", description: "Кто внутри тебя конфликтует", questions: ifs },
       { id: "sdt", title: "Мотивация", description: "Базовые психологические потребности", questions: sdt },
       { id: "behavioral", title: "Поведенческие тесты", description: "Как ты реально действуешь", questions: behavioral },
+    ],
+  },
+  {
+    id: "operating",
+    title: "Operating System",
+    subtitle: "Как ты работаешь",
+    description: "Таланты, хронотип, коммуникация, конфликт, деньги, стресс и настройки AI",
+    estimatedMinutes: 40,
+    icon: "⚙️",
+    sections: [
+      { id: "strengths", title: "Таланты и сильные стороны", description: "Что тебе даётся естественно", questions: strengths },
+      { id: "chronotype", title: "Хронотип и тело", description: "Когда ты на пике, сколько спишь", questions: chronotype },
+      { id: "communication", title: "Стиль коммуникации", description: "Как ты говоришь и слушаешь", questions: communication },
+      { id: "conflict_style", title: "Стиль конфликта", description: "Thomas-Kilmann: как ты решаешь разногласия", questions: conflictStyle },
+      { id: "money", title: "Отношение к деньгам", description: "Финансовое поведение и установки", questions: money },
+      { id: "stress", title: "Стресс-профиль", description: "Как реагируешь, как справляешься", questions: stressProfile },
+      { id: "meta", title: "Настройки AI-помощника", description: "Как ты хочешь чтобы с тобой работали", questions: metaPreferences },
     ],
   },
 ];

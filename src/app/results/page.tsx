@@ -67,6 +67,32 @@ function Big5Radar({ profile }: { profile: ProfileResult }) {
 export default function ResultsPage() {
   const [profile, setProfile] = useState<ProfileResult | null>(null);
   const [missing, setMissing] = useState<string[]>([]);
+  const [passport, setPassport] = useState<string | null>(null);
+  const [generating, setGenerating] = useState(false);
+
+  const handleGeneratePassport = async () => {
+    if (!profile) return;
+    setGenerating(true);
+    try {
+      const res = await fetch("/api/generate-profile", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          profileData: profile,
+          summary: generateSummary(profile),
+        }),
+      });
+      const data = await res.json();
+      if (data.passport) {
+        setPassport(data.passport);
+        localStorage.setItem("psyche_passport", data.passport);
+      }
+    } catch (err) {
+      console.error("Failed to generate passport:", err);
+    } finally {
+      setGenerating(false);
+    }
+  };
 
   useEffect(() => {
     // Collect answers from all sessions
@@ -93,6 +119,8 @@ export default function ResultsPage() {
     if (allAnswers.length > 0) {
       setProfile(scoreProfile(allAnswers));
     }
+    const savedPassport = localStorage.getItem("psyche_passport");
+    if (savedPassport) setPassport(savedPassport);
   }, []);
 
   if (!profile) {
@@ -356,17 +384,70 @@ export default function ResultsPage() {
           </div>
         </motion.section>
 
-        {/* Summary */}
+        {/* AI Personality Passport */}
         <motion.section
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.7 }}
-          className="bg-surface border border-accent/30 rounded-2xl p-6"
+          className="bg-surface border-2 border-accent/40 rounded-2xl p-6"
         >
-          <h2 className="text-lg font-semibold mb-4 text-accent">
-            Текстовый профиль
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h2 className="text-xl font-bold text-accent">
+                Personality Passport
+              </h2>
+              <p className="text-xs text-muted">
+                AI-анализ всех данных — полный портрет личности
+              </p>
+            </div>
+            {!passport && !generating && (
+              <button
+                onClick={handleGeneratePassport}
+                className="px-5 py-2.5 bg-accent text-white rounded-xl font-medium hover:bg-accent-dim transition-colors text-sm"
+              >
+                Сгенерировать
+              </button>
+            )}
+            {generating && (
+              <div className="flex items-center gap-2 text-sm text-muted">
+                <div className="w-4 h-4 border-2 border-accent border-t-transparent rounded-full animate-spin" />
+                Анализирую...
+              </div>
+            )}
+          </div>
+          {passport && (
+            <div className="prose prose-invert prose-sm max-w-none">
+              <div
+                className="text-sm text-foreground/90 leading-relaxed whitespace-pre-wrap"
+                dangerouslySetInnerHTML={{
+                  __html: passport
+                    .replace(/^## /gm, '<h2 class="text-lg font-bold text-accent mt-6 mb-2">')
+                    .replace(/^### /gm, '<h3 class="text-md font-semibold text-foreground mt-4 mb-1">')
+                    .replace(/\*\*(.*?)\*\*/g, '<strong class="text-foreground">$1</strong>')
+                    .replace(/```yaml\n([\s\S]*?)```/g, '<pre class="bg-surface-2 rounded-xl p-4 text-xs font-mono overflow-x-auto mt-2 mb-2">$1</pre>')
+                    .replace(/```\n([\s\S]*?)```/g, '<pre class="bg-surface-2 rounded-xl p-4 text-xs font-mono overflow-x-auto mt-2 mb-2">$1</pre>')
+                }}
+              />
+            </div>
+          )}
+          {!passport && !generating && (
+            <p className="text-sm text-muted/60 mt-2">
+              AI проанализирует все твои ответы и создаст: портрет личности, карту сильных сторон и блоков, слепые зоны, план роста и YAML-профиль для AI-ассистента.
+            </p>
+          )}
+        </motion.section>
+
+        {/* Raw Summary */}
+        <motion.section
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.75 }}
+          className="bg-surface border border-border rounded-2xl p-6"
+        >
+          <h2 className="text-lg font-semibold mb-4 text-muted">
+            Сырые данные
           </h2>
-          <pre className="text-sm text-muted whitespace-pre-wrap font-mono leading-relaxed">
+          <pre className="text-xs text-muted/70 whitespace-pre-wrap font-mono leading-relaxed">
             {generateSummary(profile)}
           </pre>
         </motion.section>
@@ -392,13 +473,28 @@ export default function ResultsPage() {
         )}
 
         {/* Actions */}
-        <div className="flex gap-3 justify-center pb-8">
+        <div className="flex flex-wrap gap-3 justify-center pb-8">
           <Link
             href="/"
             className="px-6 py-3 bg-surface border border-border text-muted rounded-xl hover:bg-surface-2 transition-colors"
           >
             На главную
           </Link>
+          {passport && (
+            <button
+              onClick={() => {
+                const blob = new Blob([passport], { type: "text/markdown" });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                a.href = url;
+                a.download = "personality-passport.md";
+                a.click();
+              }}
+              className="px-6 py-3 bg-accent text-white rounded-xl hover:bg-accent-dim transition-colors"
+            >
+              Скачать Passport (.md)
+            </button>
+          )}
           <button
             onClick={() => {
               const data = JSON.stringify(profile, null, 2);

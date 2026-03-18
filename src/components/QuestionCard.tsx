@@ -4,6 +4,69 @@ import { Question } from "@/data/questions";
 import { motion } from "framer-motion";
 import { useState } from "react";
 
+const choiceOptionsMap: Record<string, { label: string; value: string }[]> = {
+  rel2: [
+    { label: "Атака — иду в конфликт, отстаиваю позицию", value: "fight" },
+    { label: "Уход — дистанцируюсь, замыкаюсь", value: "flight" },
+    { label: "Ступор — замираю, не знаю что делать", value: "freeze" },
+    { label: "Умиротворение — соглашаюсь, сглаживаю", value: "fawn" },
+  ],
+  beh1: [
+    { label: "А — результат через час, но небольшой", value: "immediate" },
+    { label: "Б — работать 3 дня, результат в 5 раз больше", value: "delayed" },
+  ],
+  beh2: [
+    { label: "А — результат через час", value: "immediate" },
+    { label: "Б — работать 3 недели, результат в 5 раз больше", value: "delayed" },
+  ],
+  beh3: [
+    { label: "Сделаю задачу которую откладывал", value: "catch_up" },
+    { label: "Начну что-то новое и интересное", value: "novelty" },
+    { label: "Отдохну", value: "rest" },
+  ],
+  chr1: [
+    { label: "6:00–7:00", value: "early" },
+    { label: "8:00–9:00", value: "moderate" },
+    { label: "10:00–11:00", value: "late" },
+    { label: "12:00+", value: "very_late" },
+  ],
+  chr2: [
+    { label: "Утро (8–12)", value: "morning" },
+    { label: "День (12–17)", value: "afternoon" },
+    { label: "Вечер (17–21)", value: "evening" },
+    { label: "Ночь (21+)", value: "night" },
+  ],
+  chr3: [
+    { label: "До 22:00", value: "early" },
+    { label: "22:00–00:00", value: "moderate" },
+    { label: "00:00–02:00", value: "late" },
+    { label: "02:00+", value: "very_late" },
+  ],
+  chr4: [
+    { label: "5–6 часов", value: "short" },
+    { label: "7–8 часов", value: "normal" },
+    { label: "9+ часов", value: "long" },
+  ],
+  chr5: [
+    { label: "Да, 3+ раза в неделю", value: "regular" },
+    { label: "Иногда, 1-2 раза", value: "sometimes" },
+    { label: "Редко / не занимаюсь", value: "rarely" },
+  ],
+  meta1: [
+    { label: "Жёстко, по делу, без сантиментов", value: "drill_sergeant" },
+    { label: "Через вопросы — пусть я сам додумаюсь", value: "socratic" },
+    { label: "Поддерживающе, с эмпатией", value: "supportive" },
+    { label: "Аналитически — дай данные, я решу сам", value: "analytical" },
+  ],
+};
+
+function getChoiceOptions(questionId: string) {
+  return choiceOptionsMap[questionId] ?? [
+    { label: "Вариант А", value: "a" },
+    { label: "Вариант Б", value: "b" },
+  ];
+}
+
 interface QuestionCardProps {
   question: Question;
   questionNumber: number;
@@ -144,101 +207,22 @@ export function QuestionCard({
       {/* Choice answers */}
       {question.type === "choice" && (
         <div className="space-y-3">
-          {question.id === "rel2" && (
-            <>
-              {[
-                { label: "Атака — иду в конфликт, отстаиваю позицию", value: "fight" },
-                { label: "Уход — дистанцируюсь, замыкаюсь", value: "flight" },
-                { label: "Ступор — замираю, не знаю что делать", value: "freeze" },
-                { label: "Умиротворение — соглашаюсь, сглаживаю", value: "fawn" },
-              ].map((opt) => (
-                <button
-                  key={opt.value}
-                  onClick={() => onAnswer(question.id, opt.value)}
-                  className={`
-                    w-full text-left px-5 py-4 rounded-xl transition-all duration-200
-                    ${
-                      initialValue === opt.value
-                        ? "bg-accent text-white"
-                        : "bg-surface-2 text-muted hover:bg-border hover:text-foreground"
-                    }
-                  `}
-                >
-                  {opt.label}
-                </button>
-              ))}
-            </>
-          )}
-          {question.id === "beh1" && (
-            <>
-              {[
-                { label: "А — результат через час, но небольшой", value: "immediate" },
-                { label: "Б — работать 3 дня, результат в 5 раз больше", value: "delayed" },
-              ].map((opt) => (
-                <button
-                  key={opt.value}
-                  onClick={() => onAnswer(question.id, opt.value)}
-                  className={`
-                    w-full text-left px-5 py-4 rounded-xl transition-all duration-200
-                    ${
-                      initialValue === opt.value
-                        ? "bg-accent text-white"
-                        : "bg-surface-2 text-muted hover:bg-border hover:text-foreground"
-                    }
-                  `}
-                >
-                  {opt.label}
-                </button>
-              ))}
-            </>
-          )}
-          {question.id === "beh2" && (
-            <>
-              {[
-                { label: "А — результат через час", value: "immediate" },
-                { label: "Б — работать 3 недели, результат в 5 раз больше", value: "delayed" },
-              ].map((opt) => (
-                <button
-                  key={opt.value}
-                  onClick={() => onAnswer(question.id, opt.value)}
-                  className={`
-                    w-full text-left px-5 py-4 rounded-xl transition-all duration-200
-                    ${
-                      initialValue === opt.value
-                        ? "bg-accent text-white"
-                        : "bg-surface-2 text-muted hover:bg-border hover:text-foreground"
-                    }
-                  `}
-                >
-                  {opt.label}
-                </button>
-              ))}
-            </>
-          )}
-          {question.id === "beh3" && (
-            <>
-              {[
-                { label: "Сделаю задачу которую откладывал", value: "catch_up" },
-                { label: "Начну что-то новое и интересное", value: "novelty" },
-                { label: "Отдохну", value: "rest" },
-              ].map((opt) => (
-                <button
-                  key={opt.value}
-                  onClick={() => onAnswer(question.id, opt.value)}
-                  className={`
-                    w-full text-left px-5 py-4 rounded-xl transition-all duration-200
-                    ${
-                      initialValue === opt.value
-                        ? "bg-accent text-white"
-                        : "bg-surface-2 text-muted hover:bg-border hover:text-foreground"
-                    }
-                  `}
-                >
-                  {opt.label}
-                </button>
-              ))}
-            </>
-          )}
+          {getChoiceOptions(question.id).map((opt) => (
+            <button
+              key={opt.value}
+              onClick={() => onAnswer(question.id, opt.value)}
+              className={`
+                w-full text-left px-5 py-4 rounded-xl transition-all duration-200
+                ${
+                  initialValue === opt.value
+                    ? "bg-accent text-white"
+                    : "bg-surface-2 text-muted hover:bg-border hover:text-foreground"
+                }
+              `}
+            >
+              {opt.label}
+            </button>
+          ))}
         </div>
       )}
     </motion.div>
