@@ -69,10 +69,12 @@ export default function ResultsPage() {
   const [missing, setMissing] = useState<string[]>([]);
   const [passport, setPassport] = useState<string | null>(null);
   const [generating, setGenerating] = useState(false);
+  const [genError, setGenError] = useState<string | null>(null);
 
   const handleGeneratePassport = async () => {
     if (!profile) return;
     setGenerating(true);
+    setGenError(null);
     try {
       const res = await fetch("/api/generate-profile", {
         method: "POST",
@@ -83,12 +85,14 @@ export default function ResultsPage() {
         }),
       });
       const data = await res.json();
-      if (data.passport) {
+      if (data.error) {
+        setGenError(data.error);
+      } else if (data.passport) {
         setPassport(data.passport);
         localStorage.setItem("psyche_passport", data.passport);
       }
-    } catch (err) {
-      console.error("Failed to generate passport:", err);
+    } catch {
+      setGenError("Не удалось подключиться к серверу. Попробуй позже.");
     } finally {
       setGenerating(false);
     }
@@ -102,7 +106,8 @@ export default function ResultsPage() {
     for (const session of sessions) {
       const stored = localStorage.getItem(`psyche_answers_${session.id}`);
       if (stored) {
-        const answers = JSON.parse(stored) as Record<string, number | string | boolean>;
+        let answers: Record<string, number | string | boolean>;
+        try { answers = JSON.parse(stored); } catch { continue; }
         for (const [questionId, value] of Object.entries(answers)) {
           allAnswers.push({
             questionId,
@@ -416,19 +421,12 @@ export default function ResultsPage() {
             )}
           </div>
           {passport && (
-            <div className="prose prose-invert prose-sm max-w-none">
-              <div
-                className="text-sm text-foreground/90 leading-relaxed whitespace-pre-wrap"
-                dangerouslySetInnerHTML={{
-                  __html: passport
-                    .replace(/^## /gm, '<h2 class="text-lg font-bold text-accent mt-6 mb-2">')
-                    .replace(/^### /gm, '<h3 class="text-md font-semibold text-foreground mt-4 mb-1">')
-                    .replace(/\*\*(.*?)\*\*/g, '<strong class="text-foreground">$1</strong>')
-                    .replace(/```yaml\n([\s\S]*?)```/g, '<pre class="bg-surface-2 rounded-xl p-4 text-xs font-mono overflow-x-auto mt-2 mb-2">$1</pre>')
-                    .replace(/```\n([\s\S]*?)```/g, '<pre class="bg-surface-2 rounded-xl p-4 text-xs font-mono overflow-x-auto mt-2 mb-2">$1</pre>')
-                }}
-              />
+            <div className="text-sm text-foreground/90 leading-relaxed whitespace-pre-wrap font-body">
+              {passport}
             </div>
+          )}
+          {genError && (
+            <p className="text-sm text-red-400 mt-2">{genError}</p>
           )}
           {!passport && !generating && (
             <p className="text-sm text-muted/60 mt-2">

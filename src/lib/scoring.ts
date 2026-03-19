@@ -80,6 +80,7 @@ function scoreDimension(
   const facets: Record<string, number[]> = {};
   let totalRaw = 0;
   let maxPossible = 0;
+  let minPossible = 0;
 
   for (const ans of relevant) {
     const q = questionMap.get(ans.questionId);
@@ -96,6 +97,7 @@ function scoreDimension(
 
     totalRaw += val;
     maxPossible += max;
+    minPossible += min;
 
     if (q.facet) {
       if (!facets[q.facet]) facets[q.facet] = [];
@@ -103,7 +105,9 @@ function scoreDimension(
     }
   }
 
-  const score = maxPossible > 0 ? totalRaw / maxPossible : 0;
+  // Normalize to true 0-1 range (not inflated by scale minimum)
+  const range = maxPossible - minPossible;
+  const score = range > 0 ? (totalRaw - minPossible) / range : 0;
   const facetScores: Record<string, number> = {};
   for (const [facet, vals] of Object.entries(facets)) {
     facetScores[facet] = vals.reduce((a, b) => a + b, 0) / vals.length;
@@ -215,7 +219,7 @@ export function scoreProfile(answers: RawAnswer[]): ProfileResult {
   const attachment = scoreAttachment(answers, questionMap);
 
   // Values
-  const valuesAnswers = answers.filter((a) => a.questionId.startsWith("val"));
+  const valuesAnswers = answers.filter((a) => a.questionId.startsWith("val") && !a.questionId.startsWith("val_v"));
   const valuesScored = valuesAnswers
     .map((a) => {
       const q = questionMap.get(a.questionId);

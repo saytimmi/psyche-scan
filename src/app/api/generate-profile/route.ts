@@ -1,13 +1,31 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { NextRequest, NextResponse } from "next/server";
 
-const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
-
 export async function POST(request: NextRequest) {
-  const { profileData, summary } = await request.json();
+  const apiKey = process.env.ANTHROPIC_API_KEY;
+  if (!apiKey) {
+    return NextResponse.json(
+      { error: "ANTHROPIC_API_KEY not configured" },
+      { status: 500 }
+    );
+  }
 
+  let body: { profileData?: unknown; summary?: string };
+  try {
+    body = await request.json();
+  } catch {
+    return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
+  }
+
+  const { profileData, summary } = body;
   if (!profileData) {
     return NextResponse.json({ error: "No profile data" }, { status: 400 });
+  }
+
+  // Limit payload size to prevent abuse
+  const profileStr = JSON.stringify(profileData);
+  if (profileStr.length > 200_000) {
+    return NextResponse.json({ error: "Payload too large" }, { status: 413 });
   }
 
   const prompt = `Ты — AI-психолог с глубоким знанием Big Five, теории привязанности, Schema Therapy, Self-Determination Theory, IFS и когнитивной психологии.
@@ -15,12 +33,12 @@ export async function POST(request: NextRequest) {
 Тебе даны результаты полного психологического профилирования человека. На основе ВСЕХ данных создай документ "Personality Passport" — полный портрет личности.
 
 ДАННЫЕ ПРОФИЛЯ:
-${JSON.stringify(profileData, null, 2)}
+${profileStr}
 
 КРАТКАЯ СВОДКА:
-${summary}
+${summary ?? "Нет сводки"}
 
-Создай документ на русском языке в следующей структуре:
+Создай документ на русском языке в следующей структуре. НЕ включай HTML-теги, только markdown.
 
 ## 1. КТО ТЫ (3-5 предложений)
 Сжатое, точное описание личности — как будто объясняешь кому-то кто этот человек. Не сухо, не банально — живой портрет.
@@ -72,13 +90,24 @@ personality_profile:
 
 Пиши от второго лица ("ты"). Будь конкретен, избегай общих фраз. Каждый пункт должен быть основан на данных профиля, не на домыслах.`;
 
-  const message = await client.messages.create({
-    model: "claude-sonnet-4-20250514",
-    max_tokens: 4096,
-    messages: [{ role: "user", content: prompt }],
-  });
+  try {
+    const client = new Anthropic({ apiKey });
+    const message = await client.messages.create({
+      model: "claude-sonnet-4-20250514",
+      max_tokens: 4096,
+      messages: [{ role: "user", content: prompt }],
+    });
 
-  const text = message.content[0].type === "text" ? message.content[0].text : "";
+    const text =
+      message.content[0].type === "text" ? message.content[0].text : "";
 
-  return NextResponse.json({ passport: text });
+    return NextResponse.json({ passport: text });
+  } catch (err) {
+    const errorMessage =
+      err instanceof Error ? err.message : "Unknown API error";
+    return NextResponse.json(
+      { error: `AI generation failed: ${errorMessage}` },
+      { status: 502 }
+    );
+  }
 }
