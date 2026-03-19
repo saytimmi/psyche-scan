@@ -1,15 +1,19 @@
-import { createClient } from "@supabase/supabase-js";
+import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+// Only create client if env vars are set (optional dependency)
+export const supabase: SupabaseClient | null =
+  supabaseUrl && supabaseAnonKey
+    ? createClient(supabaseUrl, supabaseAnonKey)
+    : null;
 
-// Database types
+// Database types (matches supabase/migration.sql)
 export interface DbSession {
   id: string;
   user_id: string;
-  session_type: string; // 'foundation' | 'depths' | 'narrative' | 'dynamics'
+  session_type: string;
   status: "in_progress" | "completed";
   started_at: string;
   completed_at: string | null;
@@ -29,7 +33,7 @@ export interface DbAnswer {
 export interface DbProfile {
   id: string;
   user_id: string;
-  profile_data: Record<string, unknown>; // full ProfileResult JSON
+  profile_data: Record<string, unknown>;
   snapshot_yaml: string;
   version: number;
   created_at: string;

@@ -182,26 +182,17 @@ function scoreACE(answers: RawAnswer[]): { score: number; items: string[] } {
 
 // Score SDT
 function scoreSDT(answers: RawAnswer[]): { autonomy: number; competence: number; relatedness: number } {
-  const avg = (prefix: string) => {
+  const avgByIds = (ids: string[]) => {
     const vals = answers
-      .filter((a) => a.questionId.startsWith(prefix) && typeof a.value === "number")
+      .filter((a) => ids.includes(a.questionId) && typeof a.value === "number")
       .map((a) => a.value as number);
     return vals.length > 0 ? Math.round((vals.reduce((a, b) => a + b, 0) / vals.length) * 10) / 10 : 0;
   };
 
   return {
-    autonomy: avg("sdt1") || avg("sdt2") || avg("sdt3") || (() => {
-      const vals = answers.filter(a => ["sdt1","sdt2","sdt3"].includes(a.questionId) && typeof a.value === "number").map(a => a.value as number);
-      return vals.length > 0 ? Math.round((vals.reduce((a,b) => a+b, 0) / vals.length) * 10) / 10 : 0;
-    })(),
-    competence: (() => {
-      const vals = answers.filter(a => ["sdt4","sdt5","sdt6"].includes(a.questionId) && typeof a.value === "number").map(a => a.value as number);
-      return vals.length > 0 ? Math.round((vals.reduce((a,b) => a+b, 0) / vals.length) * 10) / 10 : 0;
-    })(),
-    relatedness: (() => {
-      const vals = answers.filter(a => ["sdt7","sdt8","sdt9"].includes(a.questionId) && typeof a.value === "number").map(a => a.value as number);
-      return vals.length > 0 ? Math.round((vals.reduce((a,b) => a+b, 0) / vals.length) * 10) / 10 : 0;
-    })(),
+    autonomy: avgByIds(["sdt1", "sdt2", "sdt3"]),
+    competence: avgByIds(["sdt4", "sdt5", "sdt6"]),
+    relatedness: avgByIds(["sdt7", "sdt8", "sdt9"]),
   };
 }
 
