@@ -2,7 +2,7 @@
 
 import { Question } from "@/data/questions";
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 
 const choiceOptionsMap: Record<string, { label: string; value: string }[]> = {
   rel2: [
@@ -108,10 +108,19 @@ function getChoiceOptions(questionId: string) {
   ];
 }
 
+// Timer duration based on question type
+function getTimerDuration(type: string): number {
+  if (type === "open") return 120; // 2 min for open-ended
+  if (type === "choice") return 15;
+  return 10; // scale/likert/boolean
+}
+
 interface QuestionCardProps {
   question: Question;
   questionNumber: number;
   totalQuestions: number;
+  totalGlobalQuestions: number;
+  globalQuestionNumber: number;
   onAnswer: (questionId: string, value: number | string | boolean) => void;
   initialValue?: number | string | boolean;
 }
@@ -120,6 +129,8 @@ export function QuestionCard({
   question,
   questionNumber,
   totalQuestions,
+  totalGlobalQuestions,
+  globalQuestionNumber,
   onAnswer,
   initialValue,
 }: QuestionCardProps) {
@@ -127,11 +138,35 @@ export function QuestionCard({
     typeof initialValue === "string" ? initialValue : ""
   );
 
+  // Timer
+  const timerDuration = getTimerDuration(question.type);
+  const [timeLeft, setTimeLeft] = useState(timerDuration);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    setTimeLeft(timerDuration);
+    timerRef.current = setInterval(() => {
+      setTimeLeft((prev) => (prev > 0 ? prev - 1 : 0));
+    }, 1000);
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
+  }, [question.id, timerDuration]);
+
+  // Reset text value when question changes
+  useEffect(() => {
+    setTextValue(typeof initialValue === "string" ? initialValue : "");
+  }, [question.id, initialValue]);
+
+  const timerPercent = (timeLeft / timerDuration) * 100;
+  const timerColor =
+    timerPercent > 50 ? "text-muted/40" :
+    timerPercent > 20 ? "text-amber-500/60" : "text-red-500/60";
+
   const scale = question.scale;
   const min = scale?.min ?? 1;
   const max = scale?.max ?? 5;
   const points = Array.from({ length: max - min + 1 }, (_, i) => min + i);
-
   const selectedNumber = typeof initialValue === "number" ? initialValue : null;
 
   return (
@@ -142,52 +177,68 @@ export function QuestionCard({
       transition={{ duration: 0.3 }}
       className="w-full max-w-2xl mx-auto"
     >
-      {/* Progress */}
+      {/* Progress bar */}
       <div className="flex items-center justify-between mb-2 text-xs text-muted">
-        <span>
-          {questionNumber} / {totalQuestions}
+        <span>{questionNumber} / {totalQuestions}</span>
+        <span className="text-muted/30">
+          Всего: {globalQuestionNumber} / {totalGlobalQuestions}
         </span>
         <span>{Math.round((questionNumber / totalQuestions) * 100)}%</span>
       </div>
-      <div className="w-full h-1 bg-surface-2 rounded-full mb-8">
+      <div className="w-full h-1 bg-surface-2 rounded-full mb-6">
         <motion.div
           className="h-full bg-accent rounded-full"
           initial={{ width: 0 }}
-          animate={{
-            width: `${(questionNumber / totalQuestions) * 100}%`,
-          }}
+          animate={{ width: `${(questionNumber / totalQuestions) * 100}%` }}
           transition={{ duration: 0.4 }}
         />
       </div>
 
+      {/* Timer */}
+      <div className="flex justify-end mb-4">
+        <div className={`flex items-center gap-2 text-xs font-mono transition-colors ${timerColor}`}>
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" className="opacity-60">
+            <circle cx="7" cy="7" r="6" stroke="currentColor" strokeWidth="1.2" />
+            <path d="M7 4v3.5l2 1.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
+          </svg>
+          {timeLeft}s
+          {/* Timer ring */}
+          <svg width="20" height="20" viewBox="0 0 20 20" className="opacity-40">
+            <circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" strokeWidth="1.5" opacity="0.15" />
+            <circle
+              cx="10" cy="10" r="8" fill="none" stroke="currentColor" strokeWidth="1.5"
+              strokeDasharray={`${2 * Math.PI * 8}`}
+              strokeDashoffset={`${2 * Math.PI * 8 * (1 - timerPercent / 100)}`}
+              strokeLinecap="round"
+              style={{ transform: "rotate(-90deg)", transformOrigin: "center", transition: "stroke-dashoffset 1s linear" }}
+            />
+          </svg>
+        </div>
+      </div>
+
       {/* Question */}
-      <h2 className="text-xl md:text-2xl font-medium mb-8 leading-relaxed">
+      <h2 className="font-display text-xl md:text-2xl mb-8 leading-relaxed">
         {question.text}
       </h2>
 
       {/* Scale answers */}
-      {(question.type === "scale" ||
-        question.type === "likert7" ||
-        question.type === "likert6") && (
+      {(question.type === "scale" || question.type === "likert7" || question.type === "likert6") && (
         <div className="space-y-4">
-          {/* Labels */}
           <div className="flex justify-between text-xs text-muted px-1">
             <span>{scale?.minLabel}</span>
             <span>{scale?.maxLabel}</span>
           </div>
-          {/* Buttons */}
-          <div className="flex gap-2 justify-center">
+          <div className="flex gap-2 justify-center flex-wrap">
             {points.map((point) => (
               <button
                 key={point}
                 onClick={() => onAnswer(question.id, point)}
                 className={`
-                  w-12 h-12 md:w-14 md:h-14 rounded-xl text-lg font-medium
+                  w-11 h-11 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-xl text-base sm:text-lg font-medium
                   transition-all duration-200
-                  ${
-                    selectedNumber === point
-                      ? "bg-accent text-white scale-110 shadow-lg shadow-accent/30"
-                      : "bg-surface-2 text-muted hover:bg-border hover:text-foreground"
+                  ${selectedNumber === point
+                    ? "bg-accent text-white scale-110 shadow-lg shadow-accent/30"
+                    : "bg-surface-2 text-muted hover:bg-border hover:text-foreground"
                   }
                 `}
               >
@@ -209,12 +260,10 @@ export function QuestionCard({
               key={label}
               onClick={() => onAnswer(question.id, value)}
               className={`
-                px-8 py-4 rounded-xl text-lg font-medium
-                transition-all duration-200
-                ${
-                  initialValue === value
-                    ? "bg-accent text-white scale-105 shadow-lg shadow-accent/30"
-                    : "bg-surface-2 text-muted hover:bg-border hover:text-foreground"
+                px-8 py-4 rounded-xl text-lg font-medium transition-all duration-200
+                ${initialValue === value
+                  ? "bg-accent text-white scale-105 shadow-lg shadow-accent/30"
+                  : "bg-surface-2 text-muted hover:bg-border hover:text-foreground"
                 }
               `}
             >
@@ -254,10 +303,9 @@ export function QuestionCard({
               onClick={() => onAnswer(question.id, opt.value)}
               className={`
                 w-full text-left px-5 py-4 rounded-xl transition-all duration-200
-                ${
-                  initialValue === opt.value
-                    ? "bg-accent text-white"
-                    : "bg-surface-2 text-muted hover:bg-border hover:text-foreground"
+                ${initialValue === opt.value
+                  ? "bg-accent text-white"
+                  : "bg-surface-2 text-muted hover:bg-border hover:text-foreground"
                 }
               `}
             >

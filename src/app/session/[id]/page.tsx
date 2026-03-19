@@ -2,10 +2,23 @@
 
 import { useParams, useRouter } from "next/navigation";
 import { useState, useCallback, useMemo, useEffect } from "react";
-import { sessions } from "@/data/questions";
+import { sessions, getTotalQuestionCount } from "@/data/questions";
 import { QuestionCard } from "@/components/QuestionCard";
 import { motion, AnimatePresence } from "framer-motion";
 import type { Question } from "@/data/questions";
+
+// Session descriptions for the summary after completion
+const sessionInsights: Record<string, { learned: string; icon: string }> = {
+  foundation: { learned: "Базовая структура личности: 5 черт характера, стиль привязанности и ценности", icon: "🧬" },
+  depths: { learned: "Эмоциональная регуляция, глубинные убеждения, детские схемы и травмы", icon: "🔬" },
+  narrative: { learned: "Твоя история: формирующий опыт, слепые зоны, идентичность, энергия", icon: "📖" },
+  dynamics: { learned: "Паттерны отношений, внутренние конфликты, мотивация, поведение", icon: "⚡" },
+  operating: { learned: "Как ты работаешь: таланты, ритм, коммуникация, конфликт, деньги, стресс", icon: "⚙️" },
+  ego: { learned: "Структура эго: уровень сознания, защиты, стратегии схем, тень, роли", icon: "🪞" },
+  depth: { learned: "Экзистенциальная глубина: смысл, страхи, готовность к изменениям, ресурсы", icon: "🕳️" },
+  soma: { learned: "Тело и мета: нервная система, самосострадание, гибкость, метакогниция", icon: "🫀" },
+  core: { learned: "Ядро: как конструируешь других, нарратив жизни, иммунитет к изменениям", icon: "💎" },
+};
 
 function loadSavedAnswers(sessionId: string): Record<string, number | string | boolean> {
   if (typeof window === "undefined") return {};
@@ -193,38 +206,80 @@ export default function SessionPage() {
     );
   }
 
-  // Completion screen
+  // Completion screen with profile summary
   if (completed) {
     const sessionIndex = sessions.findIndex((s) => s.id === sessionId);
     const nextSession = sessions[sessionIndex + 1];
+    const insight = sessionInsights[sessionId];
 
-    // Check if ALL sessions are completed
-    const allCompleted = sessions.every(
+    const completedCount = sessions.filter(
       (s) => localStorage.getItem(`psyche_completed_${s.id}`) === "true"
-    );
+    ).length;
+    const totalSessions = sessions.length;
+    const allCompleted = completedCount === totalSessions;
+    const profilePercent = Math.round((completedCount / totalSessions) * 100);
 
     return (
-      <main className="min-h-screen flex items-center justify-center px-4">
+      <main className="min-h-screen flex items-center justify-center px-4 py-12">
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="max-w-lg text-center"
+          className="max-w-lg w-full"
         >
-          <div className="text-5xl mb-6">✅</div>
-          <h1 className="font-display text-3xl mb-2">
-            {session.title} — готово!
-          </h1>
-          <p className="text-muted mb-8">
-            {Object.keys(answers).length} ответов сохранено
-          </p>
+          {/* Session done */}
+          <div className="text-center mb-8">
+            <div className="text-5xl mb-4">{insight?.icon ?? "✅"}</div>
+            <h1 className="font-display text-3xl mb-2">{session.title} — готово!</h1>
+            <p className="text-sm text-muted">{Object.keys(answers).length} ответов сохранено</p>
+          </div>
 
+          {/* What was learned */}
+          {insight && (
+            <div className="bg-surface border border-accent/20 rounded-2xl p-5 mb-6">
+              <p className="text-xs text-accent uppercase tracking-wider mb-2">Система теперь знает</p>
+              <p className="text-sm text-foreground/80 leading-relaxed">{insight.learned}</p>
+            </div>
+          )}
+
+          {/* Profile completeness */}
+          <div className="bg-surface border border-border rounded-2xl p-5 mb-8">
+            <div className="flex items-center justify-between mb-3">
+              <p className="text-xs text-muted uppercase tracking-wider">Профиль заполнен</p>
+              <p className="text-lg font-mono text-accent">{profilePercent}%</p>
+            </div>
+            <div className="w-full h-2 bg-surface-2 rounded-full mb-4">
+              <motion.div
+                className="h-full bg-accent rounded-full"
+                initial={{ width: 0 }}
+                animate={{ width: `${profilePercent}%` }}
+                transition={{ duration: 0.8, delay: 0.3 }}
+              />
+            </div>
+            <div className="grid grid-cols-3 gap-2">
+              {sessions.map((s) => {
+                const done = localStorage.getItem(`psyche_completed_${s.id}`) === "true";
+                return (
+                  <div
+                    key={s.id}
+                    className={`text-center py-2 px-1 rounded-lg text-[10px] ${
+                      done ? "bg-accent/10 text-accent" : "bg-surface-2 text-muted/50"
+                    }`}
+                  >
+                    {done ? "✓ " : ""}{s.title}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Actions */}
           <div className="space-y-3">
             {allCompleted && (
               <button
                 onClick={() => router.push("/results")}
-                className="w-full px-6 py-4 bg-accent text-white rounded-xl font-medium hover:bg-accent-dim transition-colors"
+                className="w-full px-6 py-4 bg-accent text-white rounded-xl font-medium hover:bg-accent-dim transition-colors shadow-glow"
               >
-                Смотреть результаты →
+                Смотреть полный Personality Passport →
               </button>
             )}
 
@@ -237,7 +292,7 @@ export default function SessionPage() {
                     : "bg-accent text-white hover:bg-accent-dim"
                 }`}
               >
-                Следующая: {nextSession.title} →
+                Следующая: {nextSession.icon} {nextSession.title} →
               </button>
             )}
 
@@ -246,7 +301,7 @@ export default function SessionPage() {
                 onClick={() => router.push("/results")}
                 className="w-full px-6 py-4 bg-accent text-white rounded-xl font-medium hover:bg-accent-dim transition-colors"
               >
-                Смотреть результаты →
+                Смотреть результаты (частичные) →
               </button>
             )}
 
@@ -254,7 +309,7 @@ export default function SessionPage() {
               onClick={() => router.push("/")}
               className="w-full px-6 py-4 bg-surface border border-border text-muted rounded-xl font-medium hover:bg-surface-2 transition-colors"
             >
-              На главную
+              Выбрать другую сессию
             </button>
           </div>
         </motion.div>
@@ -295,6 +350,13 @@ export default function SessionPage() {
               question={currentQuestion}
               questionNumber={currentIndex + 1}
               totalQuestions={allQuestions.length}
+              totalGlobalQuestions={getTotalQuestionCount()}
+              globalQuestionNumber={
+                sessions
+                  .slice(0, sessions.findIndex((s) => s.id === sessionId))
+                  .reduce((sum, s) => sum + s.sections.reduce((a, sec) => a + sec.questions.length, 0), 0) +
+                currentIndex + 1
+              }
               onAnswer={handleAnswer}
               initialValue={answers[currentQuestion.id]}
             />
