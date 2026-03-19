@@ -706,6 +706,72 @@ export const sessions: SessionConfig[] = [
   },
 ];
 
+// ============================================================
+// SESSION 9: CORE ARCHITECTURE
+// ============================================================
+
+const objectRelations: Question[] = [
+  // How you construct others mentally (deeper than attachment)
+  { id: "obj1", text: "Опиши свою мать в нескольких предложениях. Какой она человек?", type: "open", dimension: "object_relations.mother" },
+  { id: "obj2", text: "Опиши своего отца в нескольких предложениях. Какой он человек?", type: "open", dimension: "object_relations.father" },
+  { id: "obj3", text: "Подумай о человеке который тебя обидел. Как ты думаешь — что ОН чувствовал в тот момент? Что было в его внутреннем мире?", type: "open", dimension: "object_relations.mentalization" },
+  { id: "obj4", text: "Ты склонен видеть людей как 'полностью хороших' или 'полностью плохих', или можешь удерживать и то и другое одновременно?", type: "scale", dimension: "object_relations.splitting", scale: { min: 1, max: 5, minLabel: "Чёрное или белое", maxLabel: "Всегда вижу обе стороны" } },
+  { id: "obj5", text: "Когда кто-то близкий тебя разочаровывает — меняется ли полностью твоё представление о нём?", type: "scale", dimension: "object_relations.constancy", scale: { min: 1, max: 5, minLabel: "Да, полностью", maxLabel: "Нет, я помню и хорошее" } },
+  { id: "obj6", text: "Ты воспринимаешь людей вокруг как полностью отдельных от тебя существ со своей внутренней жизнью, или иногда ожидаешь что они будут 'для тебя'?", type: "scale", dimension: "object_relations.separation", scale: { min: 1, max: 5, minLabel: "Ожидаю что для меня", maxLabel: "Полностью отдельные" } },
+];
+
+const mcadamsNarrative: Question[] = [
+  // McAdams: how you construct your life story
+  // Agency probes
+  { id: "nid1", text: "Расскажи о повороте в жизни. Кто его вызвал — ты или обстоятельства?", type: "open", dimension: "narrative.agency" },
+  // Communion probes
+  { id: "nid2", text: "Расскажи о моменте глубокой связи с другим человеком. Что произошло?", type: "open", dimension: "narrative.communion" },
+  // Redemption probe
+  { id: "nid3", text: "Расскажи о тяжёлом опыте, который в итоге привёл к чему-то хорошему.", type: "open", dimension: "narrative.redemption" },
+  // Contamination probe
+  { id: "nid4", text: "Расскажи о хорошем периоде или достижении, которое было испорчено или потеряно.", type: "open", dimension: "narrative.contamination" },
+  // Life chapters
+  { id: "nid5", text: "Если бы твоя жизнь была книгой — какие были бы названия глав? Перечисли.", type: "open", dimension: "narrative.chapters" },
+  // Protagonist assessment
+  { id: "nid6", text: "В истории своей жизни ты — герой, наблюдатель, жертва обстоятельств, или что-то другое?", type: "choice", dimension: "narrative.protagonist" },
+  // Theme
+  { id: "nid7", text: "Если бы нужно было описать главную тему твоей жизни одним предложением — какое бы оно было?", type: "open", dimension: "narrative.theme" },
+];
+
+const immunityToChange: Question[] = [
+  // Kegan's Immunity to Change framework
+  { id: "itc1", text: "Назови одну вещь которую ты ХОЧЕШЬ изменить в себе, но не можешь, несмотря на попытки.", type: "open", dimension: "immunity.goal" },
+  { id: "itc2", text: "Что ты ДЕЛАЕШЬ (или не делаешь), что работает ПРОТИВ этого изменения?", type: "open", dimension: "immunity.behaviors" },
+  { id: "itc3", text: "Представь что ты делаешь ПРОТИВОПОЛОЖНОЕ этому саботажу. Какое чувство возникает? Чего ты боишься?", type: "open", dimension: "immunity.hidden_commitment" },
+  { id: "itc4", text: "Какое УБЕЖДЕНИЕ стоит за этим страхом? Что-то типа 'если я сделаю X, то произойдёт Y'.", type: "open", dimension: "immunity.big_assumption" },
+  { id: "itc5", text: "Это убеждение — оно всегда правда? Были ли исключения?", type: "open", dimension: "immunity.testing" },
+  { id: "itc6", text: "Есть ли ещё области где ты 'застрял' — знаешь что надо, но не можешь? Перечисли.", type: "open", dimension: "immunity.other_areas" },
+];
+
+const selfComplexity: Question[] = [
+  // Linville's self-complexity + identity fragility
+  { id: "sc_1", text: "Перечисли ВСЕ роли, домены и аспекты себя которые ощущаются как отдельные части (отец, предприниматель, музыкант, друг...)", type: "open", dimension: "self_complexity.aspects" },
+  { id: "sc_2", text: "Если бы твоя карьера исчезла завтра — какой процент твоей идентичности остался бы?", type: "scale", dimension: "self_complexity.career_dependency", scale: { min: 1, max: 5, minLabel: "Почти ничего (я = работа)", maxLabel: "Почти всё (работа — часть)" } },
+  { id: "sc_3", text: "Когда ты провалился в одной области жизни — насколько это 'заражает' другие области?", type: "scale", dimension: "self_complexity.contamination", scale: { min: 1, max: 5, minLabel: "Полностью — всё рушится", maxLabel: "Остаётся в той области" } },
+  { id: "sc_4", text: "Твои разные роли (друг, работник, партнёр) — это один и тот же человек, или в разных контекстах ты совсем другой?", type: "scale", dimension: "self_complexity.integration", scale: { min: 1, max: 5, minLabel: "Совсем другой", maxLabel: "Всегда один и тот же" } },
+  { id: "sc_5", text: "Какая одна потеря (человек, роль, способность) сломала бы тебя полностью?", type: "open", dimension: "self_complexity.single_point_failure" },
+];
+
+sessions.push({
+  id: "core",
+  title: "Core Architecture",
+  subtitle: "Ядро идентичности",
+  description: "Объектные отношения, нарративная идентичность, иммунитет к изменениям, сложность Я",
+  estimatedMinutes: 40,
+  icon: "💎",
+  sections: [
+    { id: "object_relations", title: "Объектные отношения", description: "Как ты конструируешь других людей в своём сознании", questions: objectRelations },
+    { id: "narrative_identity", title: "Нарративная идентичность", description: "McAdams: какую историю ты рассказываешь о своей жизни", questions: mcadamsNarrative },
+    { id: "immunity_to_change", title: "Иммунитет к изменениям", description: "Kegan: почему ты не можешь измениться даже когда хочешь", questions: immunityToChange },
+    { id: "self_complexity", title: "Сложность Я", description: "Linville: насколько хрупка твоя идентичность", questions: selfComplexity },
+  ],
+});
+
 // Helper: get all questions flat
 export function getAllQuestions(): Question[] {
   return sessions.flatMap(s => s.sections.flatMap(sec => sec.questions));

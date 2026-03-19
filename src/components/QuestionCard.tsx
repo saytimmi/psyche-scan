@@ -93,6 +93,12 @@ const choiceOptionsMap: Record<string, { label: string; value: string }[]> = {
     { label: "3-5 часов", value: "3-5" },
     { label: "5+ часов", value: "5+" },
   ],
+  nid6: [
+    { label: "Герой — я создаю свою историю", value: "hero" },
+    { label: "Наблюдатель — я смотрю как жизнь происходит", value: "observer" },
+    { label: "Жертва — обстоятельства сильнее меня", value: "victim" },
+    { label: "Искатель — я в пути, ещё не нашёл", value: "seeker" },
+  ],
 };
 
 function getChoiceOptions(questionId: string) {
