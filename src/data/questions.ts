@@ -373,6 +373,209 @@ const metaPreferences: Question[] = [
   { id: "meta5", text: "Опиши идеального помощника/коуча — каким он должен быть?", type: "open", dimension: "meta.ideal_coach" },
 ];
 
+
+// ============================================================
+// SESSION 6: EGO ARCHITECTURE
+// ============================================================
+
+const egoDevelopment: Question[] = [
+  // Adapted sentence completion (Loevinger/Cook-Greuter)
+  { id: "ego1", text: "Закончи предложение: 'Правила существуют для того чтобы...'", type: "open", dimension: "ego.rules" },
+  { id: "ego2", text: "Закончи: 'Когда меня критикуют, я...'", type: "open", dimension: "ego.criticism" },
+  { id: "ego3", text: "Закончи: 'Хороший человек — это тот кто...'", type: "open", dimension: "ego.morality" },
+  { id: "ego4", text: "Закончи: 'Когда я чувствую внутренний конфликт...'", type: "open", dimension: "ego.conflict" },
+  { id: "ego5", text: "Закончи: 'Мне трудно принять в себе...'", type: "open", dimension: "ego.acceptance" },
+  { id: "ego6", text: "Закончи: 'Смысл моей жизни...'", type: "open", dimension: "ego.meaning" },
+  { id: "ego7", text: "Закончи: 'Когда кто-то думает иначе чем я...'", type: "open", dimension: "ego.perspective" },
+  { id: "ego8", text: "Закончи: 'Моя самая большая ложь самому себе...'", type: "open", dimension: "ego.self_deception" },
+  { id: "ego9", text: "Я могу одновременно держать в голове две противоположные идеи и принимать обе", type: "scale", dimension: "ego.complexity", scale: { min: 1, max: 5, minLabel: "Совсем нет — нужна ясность", maxLabel: "Легко — мир полон парадоксов" } },
+  { id: "ego10", text: "Я ощущаю что моё 'я' — это процесс который постоянно меняется, а не фиксированная вещь", type: "scale", dimension: "ego.fluidity", scale: { min: 1, max: 5, minLabel: "Нет, я = я", maxLabel: "Да, я постоянно меняюсь" } },
+  { id: "ego11", text: "Я замечаю свои паттерны мышления КАК паттерны, а не просто 'правду'", type: "scale", dimension: "ego.meta_awareness", scale: { min: 1, max: 5, minLabel: "Мои мысли = реальность", maxLabel: "Мысли — это просто мысли" } },
+  { id: "ego12", text: "Когда я чувствую сильную уверенность в чём-то — я автоматически проверяю: может я ошибаюсь?", type: "scale", dimension: "ego.self_questioning", scale: { min: 1, max: 5, minLabel: "Нет, уверенность = правда", maxLabel: "Всегда проверяю" } },
+];
+
+const defenseMechanisms: Question[] = [
+  // Adapted from Defense Style Questionnaire (DSQ-40)
+  // Immature defenses
+  { id: "def1", text: "Когда мне плохо — я представляю идеальный сценарий где всё хорошо (фантазирование)", type: "scale", dimension: "defense.immature.fantasy", scale: { min: 1, max: 5, minLabel: "Никогда", maxLabel: "Постоянно" } },
+  { id: "def2", text: "Иногда я чувствую злость на кого-то, но срываюсь на другом человеке или вещи", type: "scale", dimension: "defense.immature.displacement", scale: { min: 1, max: 5, minLabel: "Никогда", maxLabel: "Часто" } },
+  { id: "def3", text: "Когда мне больно — я делаю вид (и для себя тоже) что ничего не произошло", type: "scale", dimension: "defense.immature.denial", scale: { min: 1, max: 5, minLabel: "Никогда", maxLabel: "Часто" } },
+  { id: "def4", text: "Я замечаю в других те качества, которые мне не нравятся в самом себе", type: "scale", dimension: "defense.immature.projection", scale: { min: 1, max: 5, minLabel: "Никогда", maxLabel: "Часто" } },
+  { id: "def5", text: "Когда я зол — я выражаю это не напрямую, а через сарказм, опоздания, 'забывание'", type: "scale", dimension: "defense.immature.passive_aggression", scale: { min: 1, max: 5, minLabel: "Никогда", maxLabel: "Часто" } },
+  // Neurotic defenses
+  { id: "def6", text: "Я объясняю свои эмоциональные реакции логическими причинами, даже когда причина — просто чувство", type: "scale", dimension: "defense.neurotic.rationalization", scale: { min: 1, max: 5, minLabel: "Никогда", maxLabel: "Постоянно" } },
+  { id: "def7", text: "Я анализирую свои чувства интеллектуально вместо того чтобы их проживать", type: "scale", dimension: "defense.neurotic.intellectualization", scale: { min: 1, max: 5, minLabel: "Никогда", maxLabel: "Постоянно" } },
+  { id: "def8", text: "Я делаю противоположное тому что чувствую (например: злюсь но веду себя подчёркнуто доброжелательно)", type: "scale", dimension: "defense.neurotic.reaction_formation", scale: { min: 1, max: 5, minLabel: "Никогда", maxLabel: "Часто" } },
+  { id: "def9", text: "Я подавляю неприятные мысли и чувства — просто выключаю их", type: "scale", dimension: "defense.neurotic.repression", scale: { min: 1, max: 5, minLabel: "Никогда", maxLabel: "Постоянно" } },
+  // Mature defenses
+  { id: "def10", text: "Я превращаю сложные переживания в творчество, работу или спорт", type: "scale", dimension: "defense.mature.sublimation", scale: { min: 1, max: 5, minLabel: "Никогда", maxLabel: "Часто" } },
+  { id: "def11", text: "Я могу посмеяться над своими проблемами — юмор помогает мне справляться", type: "scale", dimension: "defense.mature.humor", scale: { min: 1, max: 5, minLabel: "Никогда", maxLabel: "Часто" } },
+  { id: "def12", text: "Когда я знаю что будет сложно — я заранее эмоционально готовлюсь", type: "scale", dimension: "defense.mature.anticipation", scale: { min: 1, max: 5, minLabel: "Никогда", maxLabel: "Часто" } },
+];
+
+const schemaCoping: Question[] = [
+  // For each dominant schema pattern: surrender, avoidance, overcompensation
+  { id: "sc1", text: "Когда я чувствую что меня могут отвергнуть — я стараюсь быть ещё лучше и полезнее (подчинение)", type: "scale", dimension: "schema_coping.surrender", scale: { min: 1, max: 5, minLabel: "Нет", maxLabel: "Всегда" } },
+  { id: "sc2", text: "Когда я чувствую что меня могут отвергнуть — я дистанцируюсь первым (избегание)", type: "scale", dimension: "schema_coping.avoidance", scale: { min: 1, max: 5, minLabel: "Нет", maxLabel: "Всегда" } },
+  { id: "sc3", text: "Когда я чувствую что меня могут отвергнуть — я атакую или контролирую ситуацию (гиперкомпенсация)", type: "scale", dimension: "schema_coping.overcompensation", scale: { min: 1, max: 5, minLabel: "Нет", maxLabel: "Всегда" } },
+  { id: "sc4", text: "Когда я чувствую свою недостаточность — я работаю ещё больше и жёстче (подчинение)", type: "scale", dimension: "schema_coping.surrender_perf", scale: { min: 1, max: 5, minLabel: "Нет", maxLabel: "Всегда" } },
+  { id: "sc5", text: "Когда я чувствую свою недостаточность — я откладываю и избегаю ситуаций оценки (избегание)", type: "scale", dimension: "schema_coping.avoidance_perf", scale: { min: 1, max: 5, minLabel: "Нет", maxLabel: "Всегда" } },
+  { id: "sc6", text: "Когда я чувствую свою недостаточность — я демонстрирую превосходство и обесцениваю других (гиперкомпенсация)", type: "scale", dimension: "schema_coping.overcomp_perf", scale: { min: 1, max: 5, minLabel: "Нет", maxLabel: "Всегда" } },
+  { id: "sc7", text: "Когда мне не хватает эмоциональной близости — я молчу о потребностях и терплю (подчинение)", type: "scale", dimension: "schema_coping.surrender_dep", scale: { min: 1, max: 5, minLabel: "Нет", maxLabel: "Всегда" } },
+  { id: "sc8", text: "Когда мне не хватает эмоциональной близости — я закрываюсь и говорю 'мне не нужно' (избегание)", type: "scale", dimension: "schema_coping.avoidance_dep", scale: { min: 1, max: 5, minLabel: "Нет", maxLabel: "Всегда" } },
+  { id: "sc9", text: "Когда мне не хватает эмоциональной близости — я требую внимания, устраиваю сцены (гиперкомпенсация)", type: "scale", dimension: "schema_coping.overcomp_dep", scale: { min: 1, max: 5, minLabel: "Нет", maxLabel: "Всегда" } },
+];
+
+const shadowWork: Question[] = [
+  { id: "shd1", text: "Какие качества в других людях тебя РАЗДРАЖАЮТ больше всего? Назови 3.", type: "open", dimension: "shadow.projection" },
+  { id: "shd2", text: "Что ты НИКОГДА себе не позволяешь? (даже в мыслях)", type: "open", dimension: "shadow.forbidden" },
+  { id: "shd3", text: "Если бы ты мог быть ПОЛНОЙ ПРОТИВОПОЛОЖНОСТЬЮ себя на один день — кем бы ты был? Что бы делал?", type: "open", dimension: "shadow.opposite" },
+  { id: "shd4", text: "Какой комплимент тебе было бы НЕПРИЯТНО получить? Что тебе не хочется чтобы в тебе видели?", type: "open", dimension: "shadow.rejected_positive" },
+  { id: "shd5", text: "Если бы никто никогда не узнал — что бы ты делал по-другому в жизни?", type: "open", dimension: "shadow.hidden_desire" },
+  { id: "shd6", text: "О чём ты думаешь но стыдишься что думаешь?", type: "open", dimension: "shadow.shame_thoughts" },
+  { id: "shd7", text: "Вспомни человека которого ты не можешь простить. Что он сделал? Почему это так ранит?", type: "open", dimension: "shadow.unforgiven" },
+];
+
+const innerRoles: Question[] = [
+  { id: "role1", text: "В семье ты был: герой (спасал), козёл отпущения (виноват), потерянный ребёнок (невидимый), клоун (смешил), или взрослый ребёнок (ответственный за всех)?", type: "choice", dimension: "roles.family" },
+  { id: "role2", text: "В компании друзей ты обычно: лидер, советник, душа компании, наблюдатель, или провокатор?", type: "choice", dimension: "roles.social" },
+  { id: "role3", text: "На работе ты: стратег, исполнитель, креатор, медиатор, или бунтарь?", type: "choice", dimension: "roles.work" },
+  { id: "role4", text: "В стрессе ты становишься: контролёром, жертвой, спасателем, отшельником, или воином?", type: "choice", dimension: "roles.stress" },
+  { id: "role5", text: "Какая роль забирает у тебя больше всего энергии? Которую ты играешь но не хочешь?", type: "open", dimension: "roles.draining" },
+  { id: "role6", text: "Какая роль тебе запрещена? Которую ты хотел бы но 'не имеешь права'?", type: "open", dimension: "roles.forbidden_role" },
+];
+
+// ============================================================
+// SESSION 7: DEPTH SCAN
+// ============================================================
+
+const existential: Question[] = [
+  // Death
+  { id: "ex1", text: "Как часто ты думаешь о собственной смерти?", type: "scale", dimension: "existential.death_awareness", scale: { min: 1, max: 5, minLabel: "Никогда", maxLabel: "Часто" } },
+  { id: "ex2", text: "Осознание что жизнь конечна — как это влияет на твои решения?", type: "open", dimension: "existential.mortality_impact" },
+  // Freedom
+  { id: "ex3", text: "Я сам создаю свою жизнь — или она складывается из обстоятельств?", type: "scale", dimension: "existential.freedom", scale: { min: 1, max: 5, minLabel: "Обстоятельства решают", maxLabel: "Я создаю всё сам" } },
+  { id: "ex4", text: "Мне страшно от того что я полностью свободен в своём выборе", type: "scale", dimension: "existential.freedom_anxiety", scale: { min: 1, max: 5, minLabel: "Нет, свобода = кайф", maxLabel: "Да, свобода пугает" } },
+  // Isolation
+  { id: "ex5", text: "Даже среди близких людей я иногда чувствую фундаментальное одиночество", type: "scale", dimension: "existential.isolation", scale: { min: 1, max: 5, minLabel: "Никогда", maxLabel: "Часто" } },
+  { id: "ex6", text: "Есть ли часть тебя которую НИКТО не знает и не поймёт?", type: "open", dimension: "existential.unknowable_self" },
+  // Meaninglessness
+  { id: "ex7", text: "Бывают ли моменты когда всё кажется бессмысленным — не депрессия, а именно 'зачем всё это'?", type: "scale", dimension: "existential.meaninglessness", scale: { min: 1, max: 5, minLabel: "Никогда", maxLabel: "Регулярно" } },
+  { id: "ex8", text: "Откуда ты берёшь смысл когда становится тяжело?", type: "open", dimension: "existential.meaning_source" },
+];
+
+const meaningSystem: Question[] = [
+  { id: "mng1", text: "Зачем ты встаёшь по утрам? Не 'что делаешь', а ЗАЧЕМ.", type: "open", dimension: "meaning.purpose" },
+  { id: "mng2", text: "Если бы все материальные вопросы были решены навсегда — чем бы ты занимался?", type: "open", dimension: "meaning.post_material" },
+  { id: "mng3", text: "Что ты хочешь чтобы осталось после тебя?", type: "open", dimension: "meaning.legacy" },
+  { id: "mng4", text: "Что для тебя значит 'хорошо прожитая жизнь'?", type: "open", dimension: "meaning.good_life" },
+  { id: "mng5", text: "Моя жизнь имеет ясный смысл и направление", type: "scale", dimension: "meaning.clarity", scale: { min: 1, max: 7, minLabel: "Совсем нет", maxLabel: "Абсолютно" } },
+  { id: "mng6", text: "Я активно ищу смысл в жизни (ещё не нашёл)", type: "scale", dimension: "meaning.searching", scale: { min: 1, max: 7, minLabel: "Нет, не ищу", maxLabel: "Постоянно ищу" } },
+];
+
+const possibleSelves: Question[] = [
+  { id: "ps1", text: "Кем ты ХОЧЕШЬ стать через 5 лет? Опиши этого человека — не достижения, а каким он ЯВЛЯЕТСЯ.", type: "open", dimension: "possible_selves.hoped" },
+  { id: "ps2", text: "Кем ты БОИШЬСЯ стать? Худший сценарий через 5 лет.", type: "open", dimension: "possible_selves.feared" },
+  { id: "ps3", text: "Кем ты ОЖИДАЕШЬ стать реалистично?", type: "open", dimension: "possible_selves.expected" },
+  { id: "ps4", text: "Насколько тот кем ты хочешь стать отличается от того кто ты сейчас?", type: "scale", dimension: "possible_selves.gap", scale: { min: 1, max: 5, minLabel: "Почти не отличается", maxLabel: "Кардинально другой человек" } },
+  { id: "ps5", text: "Насколько ты веришь что можешь стать тем кем хочешь?", type: "scale", dimension: "possible_selves.self_efficacy", scale: { min: 1, max: 5, minLabel: "Не верю", maxLabel: "Абсолютно уверен" } },
+];
+
+const changeReadiness: Question[] = [
+  // Adapted URICA — stages of change per domain
+  { id: "chg1", text: "Мой стиль отношений (привязанности) — это проблема которую я хочу решить", type: "scale", dimension: "change.relationships", scale: { min: 1, max: 5, minLabel: "Нет проблемы", maxLabel: "Активно работаю над этим" } },
+  { id: "chg2", text: "Моя прокрастинация/продуктивность — это проблема которую я хочу решить", type: "scale", dimension: "change.productivity", scale: { min: 1, max: 5, minLabel: "Нет проблемы", maxLabel: "Активно работаю над этим" } },
+  { id: "chg3", text: "Мои эмоциональные реакции — это проблема которую я хочу решить", type: "scale", dimension: "change.emotions", scale: { min: 1, max: 5, minLabel: "Нет проблемы", maxLabel: "Активно работаю над этим" } },
+  { id: "chg4", text: "Моя неспособность устанавливать границы — это проблема которую я хочу решить", type: "scale", dimension: "change.boundaries", scale: { min: 1, max: 5, minLabel: "Нет проблемы", maxLabel: "Активно работаю над этим" } },
+  { id: "chg5", text: "Мой перфекционизм / стандарты — это проблема которую я хочу решить", type: "scale", dimension: "change.perfectionism", scale: { min: 1, max: 5, minLabel: "Нет проблемы", maxLabel: "Активно работаю над этим" } },
+  { id: "chg6", text: "Моё физическое здоровье / привычки — это проблема которую я хочу решить", type: "scale", dimension: "change.health", scale: { min: 1, max: 5, minLabel: "Нет проблемы", maxLabel: "Активно работаю над этим" } },
+  { id: "chg7", text: "Был ли у тебя опыт УСПЕШНОГО изменения чего-то важного в себе? Расскажи.", type: "open", dimension: "change.past_success" },
+];
+
+const transformResources: Question[] = [
+  { id: "res1", text: "Есть ли у тебя человек которому ты можешь показать свою слабость без страха?", type: "boolean", dimension: "resources.safe_person" },
+  { id: "res2", text: "Ты работаешь или работал с терапевтом/коучем?", type: "choice", dimension: "resources.therapy" },
+  { id: "res3", text: "У тебя есть финансовая стабильность чтобы фокусироваться на росте, а не выживании?", type: "boolean", dimension: "resources.financial" },
+  { id: "res4", text: "Есть ли у тебя сообщество/группа где тебя принимают таким какой ты есть?", type: "boolean", dimension: "resources.community" },
+  { id: "res5", text: "Есть ли практика которая помогает тебе восстанавливаться (медитация, спорт, природа, творчество)?", type: "open", dimension: "resources.practice" },
+  { id: "res6", text: "Сколько часов в неделю ты реально готов тратить на работу над собой?", type: "choice", dimension: "resources.time" },
+  { id: "res7", text: "Что может тебя остановить от изменений? Главное препятствие.", type: "open", dimension: "resources.obstacle" },
+];
+
+// ============================================================
+// SESSION 8: BODY & META
+// ============================================================
+
+const nervousSystem: Question[] = [
+  // Polyvagal assessment
+  { id: "ns1", text: "Я легко чувствую себя в безопасности рядом с другими людьми", type: "scale", dimension: "nervous.ventral", scale: { min: 1, max: 5, minLabel: "Редко", maxLabel: "Часто" } },
+  { id: "ns2", text: "Мне легко расслабиться после стрессовой ситуации", type: "scale", dimension: "nervous.ventral_recovery", scale: { min: 1, max: 5, minLabel: "Очень трудно", maxLabel: "Легко" } },
+  { id: "ns3", text: "Моё тело часто в состоянии 'боевой готовности' — сердце бьётся, мышцы напряжены", type: "scale", dimension: "nervous.sympathetic", scale: { min: 1, max: 5, minLabel: "Никогда", maxLabel: "Постоянно" } },
+  { id: "ns4", text: "При сильном стрессе я 'отключаюсь' — становлюсь вялым, отстранённым, как в тумане", type: "scale", dimension: "nervous.dorsal", scale: { min: 1, max: 5, minLabel: "Никогда", maxLabel: "Часто" } },
+  { id: "ns5", text: "Я чувствительна/чувствителен к громким звукам, яркому свету, толпе", type: "scale", dimension: "nervous.sensory_sensitivity", scale: { min: 1, max: 5, minLabel: "Нет", maxLabel: "Очень" } },
+  { id: "ns6", text: "Мне нужно больше времени на восстановление после социальных ситуаций чем большинству людей", type: "scale", dimension: "nervous.recovery_time", scale: { min: 1, max: 5, minLabel: "Нет", maxLabel: "Да, значительно" } },
+];
+
+const bodyAwareness: Question[] = [
+  // Adapted from MAIA (Multidimensional Assessment of Interoceptive Awareness)
+  { id: "body1", text: "Я замечаю физические ощущения в теле до того как осознаю эмоцию", type: "scale", dimension: "body.noticing", scale: { min: 1, max: 5, minLabel: "Никогда", maxLabel: "Всегда" } },
+  { id: "body2", text: "Когда мне тревожно — я могу точно сказать ГДЕ в теле это ощущение", type: "scale", dimension: "body.locating", scale: { min: 1, max: 5, minLabel: "Нет", maxLabel: "Точно" } },
+  { id: "body3", text: "Я использую своё тело как источник информации для принятия решений ('gut feeling')", type: "scale", dimension: "body.trusting", scale: { min: 1, max: 5, minLabel: "Никогда", maxLabel: "Часто" } },
+  { id: "body4", text: "Я склонен игнорировать сигналы тела (голод, усталость, боль) когда занят", type: "scale", dimension: "body.ignoring", scale: { min: 1, max: 5, minLabel: "Нет, я слушаю тело", maxLabel: "Да, постоянно" } },
+  { id: "body5", text: "Моё тело и я — это одно целое. Или я живу 'в голове'?", type: "scale", dimension: "body.embodiment", scale: { min: 1, max: 5, minLabel: "Живу в голове", maxLabel: "Полностью в теле" } },
+];
+
+const selfCompassion: Question[] = [
+  // Adapted from Kristin Neff's Self-Compassion Scale
+  { id: "scomp1", text: "Когда я ошибаюсь — я отношусь к себе с пониманием, как отнёсся бы к другу", type: "scale", dimension: "self_compassion.kindness", scale: { min: 1, max: 5, minLabel: "Никогда — я себя критикую", maxLabel: "Всегда" } },
+  { id: "scomp2", text: "Когда мне трудно — я напоминаю себе что все люди проходят через трудности", type: "scale", dimension: "self_compassion.common_humanity", scale: { min: 1, max: 5, minLabel: "Нет — чувствую себя одиноким в этом", maxLabel: "Да" } },
+  { id: "scomp3", text: "Когда больно — я могу быть с этой болью не убегая и не застревая в ней", type: "scale", dimension: "self_compassion.mindfulness", scale: { min: 1, max: 5, minLabel: "Нет — убегаю или тону", maxLabel: "Да" } },
+  { id: "scomp4", text: "Я говорю себе жёсткие, унижающие вещи когда ошибаюсь", type: "scale", dimension: "self_compassion.self_judgment", scale: { min: 1, max: 5, minLabel: "Никогда", maxLabel: "Постоянно" } },
+  { id: "scomp5", text: "Когда я страдаю — я чувствую что другим легче чем мне", type: "scale", dimension: "self_compassion.isolation", scale: { min: 1, max: 5, minLabel: "Нет", maxLabel: "Всегда" } },
+  { id: "scomp6", text: "Я зацикливаюсь на своих ошибках и прокручиваю их снова и снова", type: "scale", dimension: "self_compassion.over_identification", scale: { min: 1, max: 5, minLabel: "Нет", maxLabel: "Постоянно" } },
+];
+
+const psychFlexibility: Question[] = [
+  // Adapted from AAQ-II (Acceptance and Action Questionnaire)
+  { id: "flex1", text: "Мои болезненные воспоминания мешают мне жить полноценной жизнью", type: "scale", dimension: "flexibility.fusion", scale: { min: 1, max: 7, minLabel: "Совсем нет", maxLabel: "Полностью да" } },
+  { id: "flex2", text: "Я боюсь своих чувств", type: "scale", dimension: "flexibility.avoidance", scale: { min: 1, max: 7, minLabel: "Совсем нет", maxLabel: "Полностью" } },
+  { id: "flex3", text: "Я беспокоюсь что не смогу контролировать свою тревогу или печаль", type: "scale", dimension: "flexibility.control", scale: { min: 1, max: 7, minLabel: "Совсем нет", maxLabel: "Полностью" } },
+  { id: "flex4", text: "Мои тяжёлые переживания мешают мне жить так как я хочу", type: "scale", dimension: "flexibility.impact", scale: { min: 1, max: 7, minLabel: "Совсем нет", maxLabel: "Полностью" } },
+  { id: "flex5", text: "Я могу действовать в соответствии с ценностями ДАЖЕ когда мне больно или страшно", type: "scale", dimension: "flexibility.values_action", scale: { min: 1, max: 7, minLabel: "Нет — боль останавливает", maxLabel: "Да — действую несмотря на боль" } },
+];
+
+const metacognition: Question[] = [
+  // Adapted from Metacognitive Awareness Inventory
+  { id: "mtc1", text: "Я замечаю КОГДА начинаю думать по привычному шаблону, а не объективно", type: "scale", dimension: "meta.awareness", scale: { min: 1, max: 5, minLabel: "Никогда", maxLabel: "Часто" } },
+  { id: "mtc2", text: "Я могу 'отступить назад' и посмотреть на ситуацию как наблюдатель, а не участник", type: "scale", dimension: "meta.decentering", scale: { min: 1, max: 5, minLabel: "Не могу", maxLabel: "Легко" } },
+  { id: "mtc3", text: "Когда я принимаю решение — я осознаю какие предвзятости могут на меня влиять", type: "scale", dimension: "meta.bias_awareness", scale: { min: 1, max: 5, minLabel: "Не думаю об этом", maxLabel: "Всегда проверяю" } },
+  { id: "mtc4", text: "Я регулярно переоцениваю свои убеждения — готов ли я изменить мнение при новых данных?", type: "scale", dimension: "meta.belief_update", scale: { min: 1, max: 5, minLabel: "Мои убеждения стабильны", maxLabel: "Постоянно обновляю" } },
+  { id: "mtc5", text: "Я понимаю КАК я учусь лучше всего и использую это осознанно", type: "scale", dimension: "meta.learning", scale: { min: 1, max: 5, minLabel: "Не задумывался", maxLabel: "Полностью осознаю" } },
+];
+
+const locusOfControl: Question[] = [
+  // Adapted Rotter's Locus of Control
+  { id: "loc1", text: "Мои успехи — результат моих усилий, а не удачи или обстоятельств", type: "scale", dimension: "locus.internal_success", scale: { min: 1, max: 5, minLabel: "Повезло", maxLabel: "Я заработал" } },
+  { id: "loc2", text: "Мои неудачи — результат моих ошибок, а не невезения", type: "scale", dimension: "locus.internal_failure", scale: { min: 1, max: 5, minLabel: "Невезение", maxLabel: "Мои ошибки" } },
+  { id: "loc3", text: "Я могу значительно изменить свою жизнь если захочу", type: "scale", dimension: "locus.agency", scale: { min: 1, max: 5, minLabel: "Мало что зависит от меня", maxLabel: "Всё в моих руках" } },
+  { id: "loc4", text: "Судьба / вселенная / высшие силы играют важную роль в моей жизни", type: "scale", dimension: "locus.external_fate", scale: { min: 1, max: 5, minLabel: "Нет — только мои действия", maxLabel: "Да — многое предопределено" } },
+  { id: "loc5", text: "Другие люди имеют больше влияния на мою жизнь чем я сам", type: "scale", dimension: "locus.external_others", scale: { min: 1, max: 5, minLabel: "Нет", maxLabel: "Да" } },
+];
+
+const validityScale: Question[] = [
+  // Social desirability / lie detection
+  { id: "val_v1", text: "Я никогда не говорю о людях плохо за их спиной", type: "scale", dimension: "validity.lie1", scale: { min: 1, max: 5, minLabel: "Бывает", maxLabel: "Никогда (точно)" } },
+  { id: "val_v2", text: "Я никогда не испытывал зависти к чужому успеху", type: "scale", dimension: "validity.lie2", scale: { min: 1, max: 5, minLabel: "Бывало", maxLabel: "Никогда" } },
+  { id: "val_v3", text: "Я всегда держу обещания, без исключений", type: "scale", dimension: "validity.lie3", scale: { min: 1, max: 5, minLabel: "Иногда нарушаю", maxLabel: "Всегда (100%)" } },
+  { id: "val_v4", text: "Я никогда не думал ни о ком плохо", type: "scale", dimension: "validity.lie4", scale: { min: 1, max: 5, minLabel: "Конечно думал", maxLabel: "Никогда" } },
+  { id: "val_v5", text: "Все мои поступки мотивированы добрыми намерениями", type: "scale", dimension: "validity.lie5", scale: { min: 1, max: 5, minLabel: "Не всегда", maxLabel: "Всегда (100%)" } },
+  { id: "val_v6", text: "Я никогда не испытывал злости без причины", type: "scale", dimension: "validity.lie6", scale: { min: 1, max: 5, minLabel: "Бывало", maxLabel: "Никогда" } },
+  // Consistency checks (should match earlier answers)
+  { id: "val_v7", text: "Мне легко в компании незнакомых людей", type: "scale", dimension: "validity.consistency_extraversion", scale: { min: 1, max: 5, minLabel: "Совсем нет", maxLabel: "Очень легко" } },
+  { id: "val_v8", text: "Я часто тревожусь", type: "scale", dimension: "validity.consistency_neuroticism", scale: { min: 1, max: 5, minLabel: "Нет", maxLabel: "Да" } },
+];
+
+
 // ============================================================
 // SESSION CONFIGS
 // ============================================================
@@ -452,6 +655,53 @@ export const sessions: SessionConfig[] = [
       { id: "money", title: "Отношение к деньгам", description: "Финансовое поведение и установки", questions: money },
       { id: "stress", title: "Стресс-профиль", description: "Как реагируешь, как справляешься", questions: stressProfile },
       { id: "meta", title: "Настройки AI-помощника", description: "Как ты хочешь чтобы с тобой работали", questions: metaPreferences },
+    ],
+  },
+  {
+    id: "ego",
+    title: "Ego Architecture",
+    subtitle: "Структура эго и защиты",
+    description: "Уровень развития сознания, защитные механизмы, теневые качества и внутренние роли",
+    estimatedMinutes: 45,
+    icon: "🪞",
+    sections: [
+      { id: "ego_dev", title: "Уровень развития эго", description: "Loevinger: как устроено твоё сознание", questions: egoDevelopment },
+      { id: "defenses", title: "Защитные механизмы", description: "Как ты защищаешь психику от боли", questions: defenseMechanisms },
+      { id: "schema_coping", title: "Стратегии схем", description: "Подчинение, избегание или гиперкомпенсация", questions: schemaCoping },
+      { id: "shadow", title: "Тень", description: "Подавленные качества и отвергнутые части", questions: shadowWork },
+      { id: "roles", title: "Внутренние роли", description: "Маски которые ты носишь", questions: innerRoles },
+    ],
+  },
+  {
+    id: "depth",
+    title: "Depth Scan",
+    subtitle: "Экзистенциальная глубина",
+    description: "Смысл жизни, отношение к смерти, свободе, одиночеству, трансформационная готовность",
+    estimatedMinutes: 40,
+    icon: "🕳️",
+    sections: [
+      { id: "existential", title: "Экзистенциальные данности", description: "Смерть, свобода, изоляция, бессмысленность", questions: existential },
+      { id: "meaning", title: "Система смыслов", description: "Откуда берёшь смысл и цель", questions: meaningSystem },
+      { id: "possible_selves", title: "Возможные Я", description: "Кем хочешь стать, кем боишься стать", questions: possibleSelves },
+      { id: "change_readiness", title: "Готовность к изменениям", description: "Стадия изменений по каждому блоку", questions: changeReadiness },
+      { id: "resources", title: "Ресурсы для трансформации", description: "На чём строить изменения", questions: transformResources },
+    ],
+  },
+  {
+    id: "soma",
+    title: "Body & Meta",
+    subtitle: "Тело, метакогниция, гибкость",
+    description: "Нервная система, тело, самосострадание, психологическая гибкость и метапознание",
+    estimatedMinutes: 35,
+    icon: "🫀",
+    sections: [
+      { id: "nervous_system", title: "Нервная система", description: "Polyvagal: вентральный, симпатический, дорсальный", questions: nervousSystem },
+      { id: "body_awareness", title: "Тело и интероцепция", description: "Насколько ты чувствуешь своё тело", questions: bodyAwareness },
+      { id: "self_compassion", title: "Самосострадание", description: "Kristin Neff: можешь ли ты быть добрым к себе", questions: selfCompassion },
+      { id: "psych_flexibility", title: "Психологическая гибкость", description: "ACT: принятие vs избегание опыта", questions: psychFlexibility },
+      { id: "metacognition", title: "Метакогниция", description: "Насколько ты осознаёшь своё мышление", questions: metacognition },
+      { id: "locus", title: "Локус контроля", description: "Управляешь жизнью или жизнь управляет тобой", questions: locusOfControl },
+      { id: "validity", title: "Калибровка", description: "Контрольные вопросы", questions: validityScale },
     ],
   },
 ];

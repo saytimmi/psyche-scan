@@ -58,6 +58,41 @@ const choiceOptionsMap: Record<string, { label: string; value: string }[]> = {
     { label: "Поддерживающе, с эмпатией", value: "supportive" },
     { label: "Аналитически — дай данные, я решу сам", value: "analytical" },
   ],
+  role1: [
+    { label: "Герой — спасал ситуацию, был опорой", value: "hero" },
+    { label: "Козёл отпущения — был виноват во всём", value: "scapegoat" },
+    { label: "Потерянный ребёнок — невидимый, тихий", value: "lost_child" },
+    { label: "Клоун — смешил, разряжал напряжение", value: "mascot" },
+  ],
+  role2: [
+    { label: "Лидер — веду за собой", value: "leader" },
+    { label: "Советник — ко мне приходят за помощью", value: "advisor" },
+    { label: "Душа компании — создаю атмосферу", value: "entertainer" },
+    { label: "Наблюдатель — смотрю со стороны", value: "observer" },
+  ],
+  role3: [
+    { label: "Стратег — вижу картину и направление", value: "strategist" },
+    { label: "Исполнитель — делаю чтобы работало", value: "executor" },
+    { label: "Креатор — придумываю новое", value: "creator" },
+    { label: "Медиатор — соединяю людей и процессы", value: "mediator" },
+  ],
+  role4: [
+    { label: "Контролёр — беру всё в свои руки", value: "controller" },
+    { label: "Жертва — чувствую беспомощность", value: "victim" },
+    { label: "Спасатель — бросаюсь помогать другим", value: "rescuer" },
+    { label: "Отшельник — ухожу в себя", value: "hermit" },
+  ],
+  res2: [
+    { label: "Да, сейчас работаю", value: "current" },
+    { label: "Работал раньше", value: "past" },
+    { label: "Нет, никогда", value: "never" },
+  ],
+  res6: [
+    { label: "0 — нет времени", value: "0" },
+    { label: "1-2 часа", value: "1-2" },
+    { label: "3-5 часов", value: "3-5" },
+    { label: "5+ часов", value: "5+" },
+  ],
 };
 
 function getChoiceOptions(questionId: string) {
