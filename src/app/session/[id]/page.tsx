@@ -317,10 +317,44 @@ export default function SessionPage() {
     );
   }
 
+  // Exit confirmation
+  const [showExitConfirm, setShowExitConfirm] = useState(false);
+
   // Question flow
   return (
-    <main className="min-h-screen flex flex-col px-4 py-8">
-      <div className="flex items-center justify-between max-w-2xl mx-auto w-full mb-8">
+    <main className="min-h-screen flex flex-col px-4 py-8 relative">
+      {/* Exit confirmation overlay */}
+      {showExitConfirm && (
+        <div className="fixed inset-0 z-50 bg-background/80 backdrop-blur-sm flex items-center justify-center px-4">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="bg-surface border border-border rounded-2xl p-6 max-w-sm w-full shadow-premium-lg text-center"
+          >
+            <p className="font-display text-xl mb-2">Выйти из теста?</p>
+            <p className="text-sm text-muted mb-6">
+              Прогресс сохранён ({Object.keys(answers).length} ответов).
+              Ты сможешь продолжить с того же места.
+            </p>
+            <div className="space-y-3">
+              <button
+                onClick={() => router.push("/")}
+                className="w-full px-5 py-3 bg-accent text-white rounded-xl font-medium hover:bg-accent-dim transition-colors"
+              >
+                Сохранить и выйти
+              </button>
+              <button
+                onClick={() => setShowExitConfirm(false)}
+                className="w-full px-5 py-3 border border-border text-muted rounded-xl hover:text-foreground transition-colors"
+              >
+                Продолжить тест
+              </button>
+            </div>
+          </motion.div>
+        </div>
+      )}
+
+      <div className="flex items-center justify-between max-w-2xl mx-auto w-full mb-4">
         <button
           onClick={handleBack}
           disabled={currentIndex === 0}
@@ -335,7 +369,7 @@ export default function SessionPage() {
           )}
         </div>
         <button
-          onClick={() => router.push("/")}
+          onClick={() => setShowExitConfirm(true)}
           className="text-sm text-muted hover:text-foreground transition-colors"
         >
           Выйти

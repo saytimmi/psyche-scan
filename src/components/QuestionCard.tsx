@@ -177,6 +177,23 @@ export function QuestionCard({
       transition={{ duration: 0.3 }}
       className="w-full max-w-2xl mx-auto"
     >
+      {/* Timer — centered, prominent */}
+      <div className="flex flex-col items-center mb-6">
+        <div className={`relative flex items-center justify-center transition-colors ${timerColor}`}>
+          <svg width="56" height="56" viewBox="0 0 56 56">
+            <circle cx="28" cy="28" r="24" fill="none" stroke="currentColor" strokeWidth="2" opacity="0.1" />
+            <circle
+              cx="28" cy="28" r="24" fill="none" stroke="currentColor" strokeWidth="2.5"
+              strokeDasharray={`${2 * Math.PI * 24}`}
+              strokeDashoffset={`${2 * Math.PI * 24 * (1 - timerPercent / 100)}`}
+              strokeLinecap="round"
+              style={{ transform: "rotate(-90deg)", transformOrigin: "center", transition: "stroke-dashoffset 1s linear" }}
+            />
+          </svg>
+          <span className="absolute text-sm font-mono">{timeLeft}</span>
+        </div>
+      </div>
+
       {/* Progress bar */}
       <div className="flex items-center justify-between mb-2 text-xs text-muted">
         <span>{questionNumber} / {totalQuestions}</span>
@@ -185,7 +202,7 @@ export function QuestionCard({
         </span>
         <span>{Math.round((questionNumber / totalQuestions) * 100)}%</span>
       </div>
-      <div className="w-full h-1 bg-surface-2 rounded-full mb-6">
+      <div className="w-full h-1 bg-surface-2 rounded-full mb-8">
         <motion.div
           className="h-full bg-accent rounded-full"
           initial={{ width: 0 }}
@@ -194,30 +211,8 @@ export function QuestionCard({
         />
       </div>
 
-      {/* Timer */}
-      <div className="flex justify-end mb-4">
-        <div className={`flex items-center gap-2 text-xs font-mono transition-colors ${timerColor}`}>
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" className="opacity-60">
-            <circle cx="7" cy="7" r="6" stroke="currentColor" strokeWidth="1.2" />
-            <path d="M7 4v3.5l2 1.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
-          </svg>
-          {timeLeft}s
-          {/* Timer ring */}
-          <svg width="20" height="20" viewBox="0 0 20 20" className="opacity-40">
-            <circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" strokeWidth="1.5" opacity="0.15" />
-            <circle
-              cx="10" cy="10" r="8" fill="none" stroke="currentColor" strokeWidth="1.5"
-              strokeDasharray={`${2 * Math.PI * 8}`}
-              strokeDashoffset={`${2 * Math.PI * 8 * (1 - timerPercent / 100)}`}
-              strokeLinecap="round"
-              style={{ transform: "rotate(-90deg)", transformOrigin: "center", transition: "stroke-dashoffset 1s linear" }}
-            />
-          </svg>
-        </div>
-      </div>
-
       {/* Question */}
-      <h2 className="font-display text-xl md:text-2xl mb-8 leading-relaxed">
+      <h2 className="font-display text-xl md:text-2xl mb-8 leading-relaxed text-center">
         {question.text}
       </h2>
 

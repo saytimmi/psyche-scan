@@ -71,7 +71,7 @@ export default function Home() {
                 Что я получу?
               </motion.button>
             </Link>
-            <Link href={`/session/${sessions[0].id}`}>
+            <Link href="#sessions">
               <motion.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
@@ -189,7 +189,7 @@ export default function Home() {
       <div className="gradient-line max-w-xl mx-auto" />
 
       {/* ── HOW IT WORKS ── */}
-      <section className="px-6 py-28 max-w-4xl mx-auto">
+      <section id="sessions" className="px-6 py-28 max-w-4xl mx-auto scroll-mt-20">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
