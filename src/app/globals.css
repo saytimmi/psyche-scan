@@ -1,47 +1,136 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=JetBrains+Mono:wght@400;500&display=swap');
 
 :root {
-  --background: #050508;
-  --foreground: #e8e8ed;
-  --accent: #6366f1;
-  --accent-dim: #4f46e5;
-  --surface: #111118;
-  --surface-2: #1a1a24;
-  --border: #2a2a3a;
-  --muted: #71717a;
+  --background: #06060a;
+  --foreground: #ececf0;
+  --accent: #a78bfa;
+  --accent-bright: #c4b5fd;
+  --accent-dim: #7c3aed;
+  --accent-glow: rgba(167, 139, 250, 0.15);
+  --surface: #0e0e14;
+  --surface-2: #16161f;
+  --surface-3: #1e1e2a;
+  --border: #222233;
+  --border-light: #2d2d44;
+  --muted: #6b6b80;
+  --muted-light: #8b8ba0;
+  --warm: #f5f0e8;
+  --shadow-color: rgba(0, 0, 0, 0.6);
+  --font-display: 'Instrument Serif', Georgia, serif;
+  --font-body: 'DM Sans', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-accent: var(--accent);
+  --color-accent-bright: var(--accent-bright);
   --color-accent-dim: var(--accent-dim);
+  --color-accent-glow: var(--accent-glow);
   --color-surface: var(--surface);
   --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
   --color-border: var(--border);
+  --color-border-light: var(--border-light);
   --color-muted: var(--muted);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-muted-light: var(--muted-light);
+  --color-warm: var(--warm);
+  --font-display: var(--font-display);
+  --font-body: var(--font-body);
+  --font-mono: var(--font-mono);
 }
+
+* { box-sizing: border-box; }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-sans), system-ui, sans-serif;
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Custom scrollbar */
-::-webkit-scrollbar { width: 6px; }
+/* Premium scrollbar */
+::-webkit-scrollbar { width: 5px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--muted); }
 
-/* Scale animation */
-@keyframes scale-in {
-  from { transform: scale(0.95); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
+/* Noise texture overlay */
+.noise::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  opacity: 0.025;
+  pointer-events: none;
+  z-index: 9999;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-.animate-scale-in {
-  animation: scale-in 0.3s ease-out;
+/* Premium shadow classes */
+.shadow-premium {
+  box-shadow:
+    0 1px 2px rgba(0,0,0,0.3),
+    0 4px 8px rgba(0,0,0,0.25),
+    0 12px 24px rgba(0,0,0,0.2),
+    0 24px 48px rgba(0,0,0,0.15);
+}
+
+.shadow-premium-lg {
+  box-shadow:
+    0 2px 4px rgba(0,0,0,0.3),
+    0 8px 16px rgba(0,0,0,0.25),
+    0 20px 40px rgba(0,0,0,0.2),
+    0 40px 80px rgba(0,0,0,0.15),
+    0 0 0 1px rgba(255,255,255,0.03);
+}
+
+.shadow-glow {
+  box-shadow:
+    0 0 20px var(--accent-glow),
+    0 0 60px var(--accent-glow),
+    0 8px 32px rgba(0,0,0,0.4);
+}
+
+/* Text shadow for hero */
+.text-shadow-hero {
+  text-shadow:
+    0 2px 4px rgba(0,0,0,0.5),
+    0 4px 24px var(--accent-glow);
+}
+
+/* Gradient line */
+.gradient-line {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  opacity: 0.3;
+}
+
+/* Gradient text */
+.text-gradient {
+  background: linear-gradient(135deg, var(--accent-bright) 0%, var(--accent) 50%, var(--accent-dim) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Selection */
+::selection {
+  background: var(--accent);
+  color: white;
+}
+
+/* Smooth transitions on cards */
+.card-hover {
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+}
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 4px 8px rgba(0,0,0,0.3),
+    0 12px 24px rgba(0,0,0,0.25),
+    0 24px 48px rgba(0,0,0,0.2),
+    0 0 40px var(--accent-glow);
 }
