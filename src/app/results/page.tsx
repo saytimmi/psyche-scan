@@ -6,6 +6,51 @@ import { scoreProfile, generateSummary, type ProfileResult, type RawAnswer } fro
 import { motion } from "framer-motion";
 import Link from "next/link";
 
+// ── Translation map ──
+const translations: Record<string, string> = {
+  // Big Five
+  openness: "Открытость", conscientiousness: "Добросовестность",
+  extraversion: "Экстраверсия", agreeableness: "Доброжелательность",
+  neuroticism: "Нейротизм",
+  // Facets
+  intellect: "Интеллект", imagination: "Воображение", adventurousness: "Авантюрность",
+  aesthetics: "Эстетика", liberalism: "Либерализм",
+  dutifulness: "Обязательность", orderliness: "Организованность",
+  self_discipline: "Самодисциплина", achievement_striving: "Стремление к достижениям",
+  cautiousness: "Осторожность",
+  gregariousness: "Общительность", assertiveness: "Напористость",
+  activity_level: "Активность", excitement_seeking: "Поиск острых ощущений",
+  friendliness: "Дружелюбие",
+  trust: "Доверие", cooperation: "Кооперация", sympathy: "Сочувствие",
+  modesty: "Скромность", altruism: "Альтруизм",
+  anxiety: "Тревожность", anger: "Раздражительность", depression: "Депрессивность",
+  self_consciousness: "Застенчивость", immoderation: "Несдержанность",
+  // Schemas
+  abandonment: "Покинутость", mistrust: "Недоверие",
+  emotional_deprivation: "Эмоц. депривация", defectiveness: "Дефективность",
+  social_isolation: "Социальная изоляция", failure: "Несостоятельность",
+  entitlement: "Привилегированность", insufficient_self_control: "Недостаток самоконтроля",
+  subjugation: "Подчинение", self_sacrifice: "Самопожертвование",
+  unrelenting_standards: "Завышенные стандарты", emotional_inhibition: "Подавление эмоций",
+  punitiveness: "Карательность", negativity: "Негативизм",
+  vulnerability: "Уязвимость", dependence: "Зависимость", enmeshment: "Слияние",
+  // DERS
+  non_acceptance: "Непринятие эмоций", goals: "Потеря целей при эмоциях",
+  impulse: "Импульсивность", awareness: "Осознанность",
+  strategies: "Отсутствие стратегий", clarity: "Ясность эмоций",
+  // Values
+  self_direction_thought: "Свобода мысли", stimulation: "Стимуляция",
+  power_resources: "Власть (ресурсы)", achievement: "Достижение",
+  security: "Безопасность", tradition: "Традиции",
+  universalism: "Универсализм", benevolence: "Доброта",
+  self_direction_action: "Свобода действий", power_dominance: "Власть (влияние)",
+  hedonism: "Гедонизм", conformity: "Конформность",
+};
+
+function t(key: string): string {
+  return translations[key] ?? key.replace(/_/g, " ");
+}
+
 function SchemaBar({ name, score, level }: { name: string; score: number; level: string }) {
   const width = (score / 6) * 100;
   const color =
@@ -15,8 +60,8 @@ function SchemaBar({ name, score, level }: { name: string; score: number; level:
 
   return (
     <div className="flex items-center gap-3">
-      <span className="text-sm text-muted w-48 shrink-0 capitalize">
-        {name.replace(/_/g, " ")}
+      <span className="text-sm text-muted w-48 shrink-0">
+        {t(name)}
       </span>
       <div className="flex-1 h-3 bg-surface-2 rounded-full overflow-hidden">
         <motion.div
@@ -33,30 +78,30 @@ function SchemaBar({ name, score, level }: { name: string; score: number; level:
 
 function Big5Radar({ profile }: { profile: ProfileResult }) {
   const traits = [
-    { label: "O", full: "Openness", score: profile.big5.openness.score },
-    { label: "C", full: "Conscientiousness", score: profile.big5.conscientiousness.score },
-    { label: "E", full: "Extraversion", score: profile.big5.extraversion.score },
-    { label: "A", full: "Agreeableness", score: profile.big5.agreeableness.score },
-    { label: "N", full: "Neuroticism", score: profile.big5.neuroticism.score },
+    { label: "O", full: t("openness"), score: profile.big5.openness.score },
+    { label: "C", full: t("conscientiousness"), score: profile.big5.conscientiousness.score },
+    { label: "E", full: t("extraversion"), score: profile.big5.extraversion.score },
+    { label: "A", full: t("agreeableness"), score: profile.big5.agreeableness.score },
+    { label: "N", full: t("neuroticism"), score: profile.big5.neuroticism.score },
   ];
-  const level = (s: number) => s >= 0.7 ? "High" : s >= 0.4 ? "Mid" : "Low";
+  const level = (s: number) => s >= 0.7 ? "Выс." : s >= 0.4 ? "Ср." : "Низ.";
 
   return (
     <div className="space-y-3">
-      {traits.map((t) => (
-        <div key={t.label} className="flex items-center gap-3">
-          <span className="text-sm font-mono text-accent w-6">{t.label}</span>
-          <span className="text-sm text-muted w-40">{t.full}</span>
+      {traits.map((tr) => (
+        <div key={tr.label} className="flex items-center gap-3">
+          <span className="text-sm font-mono text-accent w-6">{tr.label}</span>
+          <span className="text-sm text-muted w-40">{tr.full}</span>
           <div className="flex-1 h-3 bg-surface-2 rounded-full overflow-hidden">
             <motion.div
               className="h-full bg-accent rounded-full"
               initial={{ width: 0 }}
-              animate={{ width: `${t.score * 100}%` }}
+              animate={{ width: `${tr.score * 100}%` }}
               transition={{ duration: 0.6, delay: 0.1 }}
             />
           </div>
           <span className="text-sm font-mono text-muted w-16 text-right">
-            {level(t.score)} ({Math.round(t.score * 100)}%)
+            {level(tr.score)} ({Math.round(tr.score * 100)}%)
           </span>
         </div>
       ))}
@@ -70,6 +115,7 @@ export default function ResultsPage() {
   const [passport, setPassport] = useState<string | null>(null);
   const [generating, setGenerating] = useState(false);
   const [genError, setGenError] = useState<string | null>(null);
+  const [showRawData, setShowRawData] = useState(false);
 
   const handleGeneratePassport = async () => {
     if (!profile) return;
@@ -184,15 +230,15 @@ export default function ResultsPage() {
             if (!data.facets || Object.keys(data.facets).length === 0) return null;
             return (
               <div key={domain} className="mt-4">
-                <p className="text-xs text-muted mb-2 capitalize">{domain} facets:</p>
+                <p className="text-xs text-muted mb-2">{t(domain)} — грани:</p>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
                   {Object.entries(data.facets).map(([facet, score]) => (
                     <div
                       key={facet}
                       className="bg-surface-2 rounded-lg px-3 py-2 text-xs"
                     >
-                      <span className="text-muted capitalize">
-                        {facet.replace(/_/g, " ")}
+                      <span className="text-muted">
+                        {t(facet)}
                       </span>
                       <span className="float-right font-mono text-foreground">
                         {Math.round((score as number) * 100)}%
@@ -268,7 +314,7 @@ export default function ResultsPage() {
                       : "bg-surface-2 text-muted"
                   }`}
                 >
-                  #{i + 1} {v.facet.replace(/_/g, " ")}
+                  #{i + 1} {t(v.facet)}
                   <span className="ml-2 font-mono text-xs opacity-60">
                     {v.score}/6
                   </span>
@@ -321,8 +367,8 @@ export default function ResultsPage() {
                   score >= 0.5 ? "text-orange-400" : "text-green-400";
                 return (
                   <div key={key} className="bg-surface-2 rounded-xl p-4">
-                    <p className="text-xs text-muted mb-1 capitalize">
-                      {key.replace(/_/g, " ")}
+                    <p className="text-xs text-muted mb-1">
+                      {t(key)}
                     </p>
                     <p className={`text-xl font-mono ${color}`}>
                       {Math.round(score * 100)}%
@@ -334,28 +380,26 @@ export default function ResultsPage() {
           </motion.section>
         )}
 
-        {/* ACE */}
-        {profile.ace.score > 0 && (
-          <motion.section
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.55 }}
-            className="bg-surface border border-border rounded-2xl p-6"
-          >
-            <h2 className="text-lg font-semibold mb-2">ACE Score</h2>
-            <p className="text-3xl font-mono mb-2">
-              {profile.ace.score}
-              <span className="text-sm text-muted">/10</span>
-            </p>
-            <p className="text-xs text-muted">
-              {profile.ace.score >= 4
-                ? "Высокий (4+). Связан с повышенным риском. Рекомендуется работа с терапевтом."
-                : profile.ace.score >= 1
-                ? "Умеренный. Может влиять на текущие паттерны."
-                : "Низкий."}
-            </p>
-          </motion.section>
-        )}
+        {/* ACE — always show */}
+        <motion.section
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.55 }}
+          className="bg-surface border border-border rounded-2xl p-6"
+        >
+          <h2 className="text-lg font-semibold mb-2">ACE Score</h2>
+          <p className="text-3xl font-mono mb-2">
+            {profile.ace.score}
+            <span className="text-sm text-muted">/10</span>
+          </p>
+          <p className="text-xs text-muted">
+            {profile.ace.score >= 4
+              ? "Высокий (4+). Связан с повышенным риском. Рекомендуется работа с терапевтом."
+              : profile.ace.score >= 1
+              ? "Умеренный. Может влиять на текущие паттерны."
+              : "Низкий. Минимальное влияние неблагоприятного детского опыта."}
+          </p>
+        </motion.section>
 
         {/* SDT */}
         <motion.section
@@ -435,19 +479,29 @@ export default function ResultsPage() {
           )}
         </motion.section>
 
-        {/* Raw Summary */}
+        {/* Raw Summary — collapsible */}
         <motion.section
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.75 }}
           className="bg-surface border border-border rounded-2xl p-6"
         >
-          <h2 className="text-lg font-semibold mb-4 text-muted">
-            Сырые данные
-          </h2>
-          <pre className="text-xs text-muted/70 whitespace-pre-wrap font-mono leading-relaxed">
-            {generateSummary(profile)}
-          </pre>
+          <button
+            onClick={() => setShowRawData(!showRawData)}
+            className="flex items-center justify-between w-full text-left"
+          >
+            <h2 className="text-lg font-semibold text-muted">
+              Сырые данные
+            </h2>
+            <span className="text-muted text-sm">
+              {showRawData ? "Скрыть ▲" : "Показать ▼"}
+            </span>
+          </button>
+          {showRawData && (
+            <pre className="text-xs text-muted/70 whitespace-pre-wrap font-mono leading-relaxed mt-4">
+              {generateSummary(profile)}
+            </pre>
+          )}
         </motion.section>
 
         {/* Narratives */}

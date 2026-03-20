@@ -115,6 +115,13 @@ function getTimerDuration(type: string): number {
   return 10; // scale/likert/boolean
 }
 
+// Middle label for scales with 5+ points
+function getMiddleLabel(totalPoints: number): string | null {
+  if (totalPoints === 5) return "Среднее";
+  if (totalPoints >= 6) return "Нейтрально";
+  return null;
+}
+
 interface QuestionCardProps {
   question: Question;
   questionNumber: number;
@@ -138,6 +145,8 @@ export function QuestionCard({
     typeof initialValue === "string" ? initialValue : ""
   );
 
+  const isOpenEnded = question.type === "open";
+
   // Timer
   const timerDuration = getTimerDuration(question.type);
   const [timeLeft, setTimeLeft] = useState(timerDuration);
@@ -145,13 +154,15 @@ export function QuestionCard({
 
   useEffect(() => {
     setTimeLeft(timerDuration);
+    // Don't run timer for open-ended questions
+    if (isOpenEnded) return;
     timerRef.current = setInterval(() => {
       setTimeLeft((prev) => (prev > 0 ? prev - 1 : 0));
     }, 1000);
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
     };
-  }, [question.id, timerDuration]);
+  }, [question.id, timerDuration, isOpenEnded]);
 
   // Reset text value when question changes
   useEffect(() => {
@@ -159,14 +170,16 @@ export function QuestionCard({
   }, [question.id, initialValue]);
 
   const timerPercent = (timeLeft / timerDuration) * 100;
-  const timerColor =
-    timerPercent > 50 ? "text-muted/40" :
-    timerPercent > 20 ? "text-amber-500/60" : "text-red-500/60";
+  // Always gentle color — no amber/red transitions
+  const timerColor = "text-muted/30";
 
   const scale = question.scale;
   const min = scale?.min ?? 1;
   const max = scale?.max ?? 5;
   const points = Array.from({ length: max - min + 1 }, (_, i) => min + i);
+  const totalPoints = points.length;
+  const middlePoint = Math.ceil((min + max) / 2);
+  const middleLabel = getMiddleLabel(totalPoints);
   const selectedNumber = typeof initialValue === "number" ? initialValue : null;
 
   return (
@@ -177,22 +190,24 @@ export function QuestionCard({
       transition={{ duration: 0.3 }}
       className="w-full max-w-2xl mx-auto"
     >
-      {/* Timer — centered, prominent */}
-      <div className="flex flex-col items-center mb-6">
-        <div className={`relative flex items-center justify-center transition-colors ${timerColor}`}>
-          <svg width="56" height="56" viewBox="0 0 56 56">
-            <circle cx="28" cy="28" r="24" fill="none" stroke="currentColor" strokeWidth="2" opacity="0.1" />
-            <circle
-              cx="28" cy="28" r="24" fill="none" stroke="currentColor" strokeWidth="2.5"
-              strokeDasharray={`${2 * Math.PI * 24}`}
-              strokeDashoffset={`${2 * Math.PI * 24 * (1 - timerPercent / 100)}`}
-              strokeLinecap="round"
-              style={{ transform: "rotate(-90deg)", transformOrigin: "center", transition: "stroke-dashoffset 1s linear" }}
-            />
-          </svg>
-          <span className="absolute text-sm font-mono">{timeLeft}</span>
+      {/* Timer — hidden for open-ended questions */}
+      {!isOpenEnded && (
+        <div className="flex flex-col items-center mb-6">
+          <div className={`relative flex items-center justify-center transition-colors ${timerColor}`}>
+            <svg width="56" height="56" viewBox="0 0 56 56">
+              <circle cx="28" cy="28" r="24" fill="none" stroke="currentColor" strokeWidth="2" opacity="0.1" />
+              <circle
+                cx="28" cy="28" r="24" fill="none" stroke="currentColor" strokeWidth="2.5"
+                strokeDasharray={`${2 * Math.PI * 24}`}
+                strokeDashoffset={`${2 * Math.PI * 24 * (1 - timerPercent / 100)}`}
+                strokeLinecap="round"
+                style={{ transform: "rotate(-90deg)", transformOrigin: "center", transition: "stroke-dashoffset 1s linear" }}
+              />
+            </svg>
+            <span className="absolute text-sm font-mono">{timeLeft}</span>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Progress bar */}
       <div className="flex items-center justify-between mb-2 text-xs text-muted">
@@ -221,6 +236,7 @@ export function QuestionCard({
         <div className="space-y-4">
           <div className="flex justify-between text-xs text-muted px-1">
             <span>{scale?.minLabel}</span>
+            {middleLabel && <span>{middleLabel}</span>}
             <span>{scale?.maxLabel}</span>
           </div>
           <div className="flex gap-2 justify-center flex-wrap">
@@ -233,6 +249,8 @@ export function QuestionCard({
                   transition-all duration-200
                   ${selectedNumber === point
                     ? "bg-accent text-white scale-110 shadow-lg shadow-accent/30"
+                    : point === middlePoint && middleLabel
+                    ? "bg-surface-2 text-muted hover:bg-border hover:text-foreground ring-1 ring-border"
                     : "bg-surface-2 text-muted hover:bg-border hover:text-foreground"
                   }
                 `}

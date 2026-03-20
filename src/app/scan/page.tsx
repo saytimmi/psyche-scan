@@ -103,6 +103,11 @@ export default function ScanPage() {
                         В процессе ({answered}/{total})
                       </div>
                     )}
+                    {completedCount === 0 && !isDone && !inProgress && session.id === "foundation" && (
+                      <div className="absolute top-4 right-4 px-3 py-1 bg-accent/15 text-accent text-xs rounded-full font-medium animate-pulse">
+                        Рекомендуем начать здесь
+                      </div>
+                    )}
 
                     <div className="flex items-start gap-5">
                       <div className={`shrink-0 w-14 h-14 rounded-xl flex items-center justify-center text-2xl ${

@@ -94,18 +94,18 @@ const attachmentAvoidance: Question[] = [
 ];
 
 const values: Question[] = [
-  { id: "val1", text: "Ему важно придумывать новое и подходить к вещам по-своему", type: "likert6", dimension: "values", facet: "self_direction_thought", scale: { min: 1, max: 6, minLabel: "Совсем не похож на меня", maxLabel: "Очень похож на меня" } },
-  { id: "val2", text: "Ему важно чтобы жизнь была полна приключений и ярких впечатлений", type: "likert6", dimension: "values", facet: "stimulation", scale: { min: 1, max: 6, minLabel: "Совсем не похож на меня", maxLabel: "Очень похож на меня" } },
-  { id: "val3", text: "Ему важно быть богатым, иметь дорогие вещи", type: "likert6", dimension: "values", facet: "power_resources", scale: { min: 1, max: 6, minLabel: "Совсем не похож на меня", maxLabel: "Очень похож на меня" } },
-  { id: "val4", text: "Ему важно чтобы его уважали и признавали его достижения", type: "likert6", dimension: "values", facet: "achievement", scale: { min: 1, max: 6, minLabel: "Совсем не похож на меня", maxLabel: "Очень похож на меня" } },
-  { id: "val5", text: "Ему важна безопасность и стабильность в жизни", type: "likert6", dimension: "values", facet: "security", scale: { min: 1, max: 6, minLabel: "Совсем не похож на меня", maxLabel: "Очень похож на меня" } },
-  { id: "val6", text: "Ему важно следовать традициям и обычаям", type: "likert6", dimension: "values", facet: "tradition", scale: { min: 1, max: 6, minLabel: "Совсем не похож на меня", maxLabel: "Очень похож на меня" } },
-  { id: "val7", text: "Ему важно заботиться о природе и людях вокруг", type: "likert6", dimension: "values", facet: "universalism", scale: { min: 1, max: 6, minLabel: "Совсем не похож на меня", maxLabel: "Очень похож на меня" } },
-  { id: "val8", text: "Ему важно чтобы к каждому относились справедливо", type: "likert6", dimension: "values", facet: "benevolence", scale: { min: 1, max: 6, minLabel: "Совсем не похож на меня", maxLabel: "Очень похож на меня" } },
-  { id: "val9", text: "Ему важно принимать решения самому, без чьих-то указаний", type: "likert6", dimension: "values", facet: "self_direction_action", scale: { min: 1, max: 6, minLabel: "Совсем не похож на меня", maxLabel: "Очень похож на меня" } },
-  { id: "val10", text: "Ему важно влиять на других людей и контролировать ситуацию", type: "likert6", dimension: "values", facet: "power_dominance", scale: { min: 1, max: 6, minLabel: "Совсем не похож на меня", maxLabel: "Очень похож на меня" } },
-  { id: "val11", text: "Ему важно наслаждаться жизнью и удовольствиями", type: "likert6", dimension: "values", facet: "hedonism", scale: { min: 1, max: 6, minLabel: "Совсем не похож на меня", maxLabel: "Очень похож на меня" } },
-  { id: "val12", text: "Ему важно подчиняться правилам даже когда никто не видит", type: "likert6", dimension: "values", facet: "conformity", scale: { min: 1, max: 6, minLabel: "Совсем не похож на меня", maxLabel: "Очень похож на меня" } },
+  { id: "val1", text: "Мне важно придумывать новое и подходить к вещам по-своему", type: "likert6", dimension: "values", facet: "self_direction_thought", scale: { min: 1, max: 6, minLabel: "Совсем не про меня", maxLabel: "Точно про меня" } },
+  { id: "val2", text: "Мне важно чтобы жизнь была полна приключений и ярких впечатлений", type: "likert6", dimension: "values", facet: "stimulation", scale: { min: 1, max: 6, minLabel: "Совсем не про меня", maxLabel: "Точно про меня" } },
+  { id: "val3", text: "Мне важно быть богатым, иметь дорогие вещи", type: "likert6", dimension: "values", facet: "power_resources", scale: { min: 1, max: 6, minLabel: "Совсем не про меня", maxLabel: "Точно про меня" } },
+  { id: "val4", text: "Мне важно чтобы меня уважали и признавали мои достижения", type: "likert6", dimension: "values", facet: "achievement", scale: { min: 1, max: 6, minLabel: "Совсем не про меня", maxLabel: "Точно про меня" } },
+  { id: "val5", text: "Мне важна безопасность и стабильность в жизни", type: "likert6", dimension: "values", facet: "security", scale: { min: 1, max: 6, minLabel: "Совсем не про меня", maxLabel: "Точно про меня" } },
+  { id: "val6", text: "Мне важно следовать традициям и обычаям", type: "likert6", dimension: "values", facet: "tradition", scale: { min: 1, max: 6, minLabel: "Совсем не про меня", maxLabel: "Точно про меня" } },
+  { id: "val7", text: "Мне важно заботиться о природе и людях вокруг", type: "likert6", dimension: "values", facet: "universalism", scale: { min: 1, max: 6, minLabel: "Совсем не про меня", maxLabel: "Точно про меня" } },
+  { id: "val8", text: "Мне важно чтобы к каждому относились справедливо", type: "likert6", dimension: "values", facet: "benevolence", scale: { min: 1, max: 6, minLabel: "Совсем не про меня", maxLabel: "Точно про меня" } },
+  { id: "val9", text: "Мне важно принимать решения самому, без чьих-то указаний", type: "likert6", dimension: "values", facet: "self_direction_action", scale: { min: 1, max: 6, minLabel: "Совсем не про меня", maxLabel: "Точно про меня" } },
+  { id: "val10", text: "Мне важно влиять на других людей и контролировать ситуацию", type: "likert6", dimension: "values", facet: "power_dominance", scale: { min: 1, max: 6, minLabel: "Совсем не про меня", maxLabel: "Точно про меня" } },
+  { id: "val11", text: "Мне важно наслаждаться жизнью и удовольствиями", type: "likert6", dimension: "values", facet: "hedonism", scale: { min: 1, max: 6, minLabel: "Совсем не про меня", maxLabel: "Точно про меня" } },
+  { id: "val12", text: "Мне важно подчиняться правилам даже когда никто не видит", type: "likert6", dimension: "values", facet: "conformity", scale: { min: 1, max: 6, minLabel: "Совсем не про меня", maxLabel: "Точно про меня" } },
 ];
 
 // ============================================================

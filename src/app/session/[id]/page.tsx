@@ -5,7 +5,7 @@ import { useState, useCallback, useMemo, useEffect } from "react";
 import { sessions, getTotalQuestionCount } from "@/data/questions";
 import { QuestionCard } from "@/components/QuestionCard";
 import { motion, AnimatePresence } from "framer-motion";
-import type { Question } from "@/data/questions";
+import type { Question, Section } from "@/data/questions";
 
 // Session descriptions for the summary after completion
 const sessionInsights: Record<string, { learned: string; icon: string }> = {
@@ -40,6 +40,16 @@ function loadSavedIndex(sessionId: string): number {
   }
 }
 
+// Get the section for a given question index
+function getSectionForIndex(sections: Section[], index: number): Section | null {
+  let count = 0;
+  for (const section of sections) {
+    count += section.questions.length;
+    if (index < count) return section;
+  }
+  return null;
+}
+
 export default function SessionPage() {
   const params = useParams();
   const router = useRouter();
@@ -57,6 +67,9 @@ export default function SessionPage() {
     return Object.keys(saved).length === 0;
   });
   const [completed, setCompleted] = useState(false);
+  const [showSectionTransition, setShowSectionTransition] = useState(false);
+  const [pendingNextIndex, setPendingNextIndex] = useState<number | null>(null);
+  const [nextSection, setNextSection] = useState<Section | null>(null);
 
   const allQuestions = useMemo(
     () => session?.sections.flatMap((s) => s.questions) ?? [],
@@ -67,12 +80,7 @@ export default function SessionPage() {
 
   const currentSection = useMemo(() => {
     if (!session) return null;
-    let count = 0;
-    for (const section of session.sections) {
-      count += section.questions.length;
-      if (currentIndex < count) return section;
-    }
-    return null;
+    return getSectionForIndex(session.sections, currentIndex);
   }, [session, currentIndex]);
 
   // Save answers incrementally to localStorage (prevents data loss on refresh)
@@ -95,7 +103,20 @@ export default function SessionPage() {
       // Auto-advance for non-text questions
       const advance = () => {
         if (currentIndex < allQuestions.length - 1) {
-          setCurrentIndex((prev) => prev + 1);
+          const nextIdx = currentIndex + 1;
+          // Check if next question belongs to a different section
+          if (session) {
+            const curSection = getSectionForIndex(session.sections, currentIndex);
+            const nxtSection = getSectionForIndex(session.sections, nextIdx);
+            if (curSection && nxtSection && curSection.id !== nxtSection.id) {
+              // Show section transition interstitial
+              setNextSection(nxtSection);
+              setPendingNextIndex(nextIdx);
+              setShowSectionTransition(true);
+              return;
+            }
+          }
+          setCurrentIndex(nextIdx);
         } else {
           // Session complete — mark completed
           localStorage.setItem(`psyche_answers_${sessionId}`, JSON.stringify(newAnswers));
@@ -105,13 +126,22 @@ export default function SessionPage() {
       };
 
       if (currentQuestion?.type !== "open") {
-        setTimeout(advance, 300);
+        setTimeout(advance, 600);
       } else {
         advance();
       }
     },
-    [currentIndex, allQuestions, answers, sessionId, currentQuestion]
+    [currentIndex, allQuestions, answers, sessionId, currentQuestion, session]
   );
+
+  const handleContinueFromTransition = useCallback(() => {
+    if (pendingNextIndex !== null) {
+      setCurrentIndex(pendingNextIndex);
+      setPendingNextIndex(null);
+      setNextSection(null);
+      setShowSectionTransition(false);
+    }
+  }, [pendingNextIndex]);
 
   const handleBack = useCallback(() => {
     if (currentIndex > 0) {
@@ -206,6 +236,46 @@ export default function SessionPage() {
     );
   }
 
+  // Section transition interstitial
+  if (showSectionTransition && nextSection) {
+    const sectionIndex = session.sections.findIndex((s) => s.id === nextSection.id);
+    const isAceSection = nextSection.id === "ace";
+
+    return (
+      <main className="min-h-screen flex items-center justify-center px-4">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.4 }}
+          className="max-w-md w-full text-center"
+        >
+          <div className="text-4xl mb-4 opacity-60">
+            {sectionIndex + 1}
+          </div>
+          <h2 className="font-display text-2xl mb-2">{nextSection.title}</h2>
+          {nextSection.description && (
+            <p className="text-muted text-sm mb-6">{nextSection.description}</p>
+          )}
+
+          {isAceSection && (
+            <div className="bg-surface border border-amber-500/20 rounded-xl p-4 mb-6 text-left">
+              <p className="text-sm text-amber-400/80 leading-relaxed">
+                Следующие вопросы касаются сложных тем детского опыта. Отвечай как можешь.
+              </p>
+            </div>
+          )}
+
+          <button
+            onClick={handleContinueFromTransition}
+            className="px-8 py-4 bg-accent text-white rounded-xl font-medium text-lg hover:bg-accent-dim transition-colors"
+          >
+            Далее
+          </button>
+        </motion.div>
+      </main>
+    );
+  }
+
   // Completion screen with profile summary
   if (completed) {
     const sessionIndex = sessions.findIndex((s) => s.id === sessionId);
@@ -228,7 +298,14 @@ export default function SessionPage() {
         >
           {/* Session done */}
           <div className="text-center mb-8">
-            <div className="text-5xl mb-4">{insight?.icon ?? "✅"}</div>
+            <motion.div
+              className="text-5xl mb-4 inline-block"
+              initial={{ scale: 0.5, opacity: 0 }}
+              animate={{ scale: [0.5, 1.2, 1], opacity: 1 }}
+              transition={{ duration: 0.6, ease: "easeOut" }}
+            >
+              {insight?.icon ?? "✅"}
+            </motion.div>
             <h1 className="font-display text-3xl mb-2">{session.title} — готово!</h1>
             <p className="text-sm text-muted">{Object.keys(answers).length} ответов сохранено</p>
           </div>
@@ -236,7 +313,7 @@ export default function SessionPage() {
           {/* What was learned */}
           {insight && (
             <div className="bg-surface border border-accent/20 rounded-2xl p-5 mb-6">
-              <p className="text-xs text-accent uppercase tracking-wider mb-2">Система теперь знает</p>
+              <p className="text-xs text-accent uppercase tracking-wider mb-2">Что мы узнали</p>
               <p className="text-sm text-foreground/80 leading-relaxed">{insight.learned}</p>
             </div>
           )}

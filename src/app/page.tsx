@@ -3,6 +3,7 @@
 import { sessions, getTotalQuestionCount } from "@/data/questions";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
 
 const fadeUp = {
   initial: { opacity: 0, y: 30 },
@@ -17,9 +18,19 @@ export default function Home() {
   const totalQuestions = getTotalQuestionCount();
   const totalMinutes = sessions.reduce((a, s) => a + s.estimatedMinutes, 0);
 
+  // Hydration-safe completed status
+  const [completedMap, setCompletedMap] = useState<Record<string, boolean>>({});
+  useEffect(() => {
+    const map: Record<string, boolean> = {};
+    for (const s of sessions) {
+      map[s.id] = localStorage.getItem(`psyche_completed_${s.id}`) === "true";
+    }
+    setCompletedMap(map);
+  }, []);
+
   return (
     <main className="noise min-h-screen">
-      {/* ── HERO ── */}
+      {/* -- HERO -- */}
       <section className="relative min-h-[92vh] flex flex-col items-center justify-center px-6 overflow-hidden">
         {/* Background glow */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-accent/[0.04] blur-[120px] pointer-events-none" />
@@ -57,27 +68,27 @@ export default function Home() {
           </p>
 
           <p className="text-sm text-muted mb-10">
-            {totalQuestions} вопросов &middot; {sessions.length} сессий &middot; ~{Math.round(totalMinutes / 60)} часа &middot; AI-анализ
+            {totalQuestions} вопросов &middot; {sessions.length} сессий по 5-15 минут &middot; AI-анализ
           </p>
 
-          {/* CTA */}
+          {/* CTA — primary is "Начать сканирование", secondary is "Что я получу?" */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link href="#what-you-get">
+            <Link href="/scan">
               <motion.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 className="px-8 py-4 bg-accent text-white rounded-2xl text-lg font-medium shadow-glow hover:bg-accent-dim transition-colors"
               >
-                Что я получу?
+                Начать сканирование
               </motion.button>
             </Link>
-            <Link href="/scan">
+            <Link href="#what-you-get">
               <motion.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 className="px-8 py-4 border border-border-light rounded-2xl text-lg text-muted-light hover:text-foreground hover:border-accent/30 transition-all"
               >
-                Начать сканирование
+                Что я получу?
               </motion.button>
             </Link>
           </div>
@@ -100,10 +111,10 @@ export default function Home() {
         </motion.div>
       </section>
 
-      {/* ── DIVIDER ── */}
+      {/* -- DIVIDER -- */}
       <div className="gradient-line max-w-xl mx-auto" />
 
-      {/* ── PROBLEM ── */}
+      {/* -- PROBLEM -- */}
       <section className="px-6 py-28 max-w-3xl mx-auto">
         <motion.div
           variants={stagger}
@@ -129,7 +140,7 @@ export default function Home() {
         </motion.div>
       </section>
 
-      {/* ── WHAT YOU GET ── */}
+      {/* -- WHAT YOU GET -- */}
       <section id="what-you-get" className="px-6 py-28 scroll-mt-20">
         <div className="max-w-5xl mx-auto">
           <motion.div
@@ -185,10 +196,10 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── DIVIDER ── */}
+      {/* -- DIVIDER -- */}
       <div className="gradient-line max-w-xl mx-auto" />
 
-      {/* ── HOW IT WORKS ── */}
+      {/* -- HOW IT WORKS -- */}
       <section id="sessions" className="px-6 py-28 max-w-4xl mx-auto scroll-mt-20">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -208,7 +219,7 @@ export default function Home() {
           className="space-y-4"
         >
           {sessions.map((session, i) => {
-            const isDone = typeof window !== "undefined" && localStorage.getItem(`psyche_completed_${session.id}`) === "true";
+            const isDone = completedMap[session.id] ?? false;
             return (
             <motion.div
               key={session.id}
@@ -244,10 +255,10 @@ export default function Home() {
         </motion.div>
       </section>
 
-      {/* ── DIVIDER ── */}
+      {/* -- DIVIDER -- */}
       <div className="gradient-line max-w-xl mx-auto" />
 
-      {/* ── SCIENCE ── */}
+      {/* -- SCIENCE -- */}
       <section className="px-6 py-28 max-w-4xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -271,7 +282,7 @@ export default function Home() {
           className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4"
         >
           {[
-            { name: "Big Five", desc: "5 главных черт характера — от общительности до тревожности. Самый надёжный тест личности в мире.", stat: "Точность 87-93%", icon: "🧬" },
+            { name: "Big Five", desc: "5 главных черт характера — от общительности до тревожности. Самый надёжный тест личности в мире.", stat: "Надёжность 87-93%", icon: "🧬" },
             { name: "Привязанность", desc: "Как ты строишь близкие отношения. Предсказывает реакцию на стресс, конфликт и близость.", stat: "Предсказывает 30-40%", icon: "🔗" },
             { name: "Эмоции", desc: "Как ты справляешься с чувствами — или не справляешься. Ловит импульсивность и подавление.", stat: "Надёжность 93-95%", icon: "🌊" },
             { name: "Глубинные схемы", desc: "Убеждения из детства: 'я недостоин', 'мир опасен'. Работают на автопилоте.", stat: "18 паттернов", icon: "🔮" },
@@ -295,7 +306,7 @@ export default function Home() {
         </motion.div>
       </section>
 
-      {/* ── FINAL CTA ── */}
+      {/* -- FINAL CTA -- */}
       <section className="px-6 py-32 text-center">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -309,7 +320,7 @@ export default function Home() {
             <span className="italic text-gradient">полную картину?</span>
           </h2>
           <p className="text-muted-light mb-10 text-lg">
-            {sessions.length} сессий. ~{Math.round(totalMinutes / 60)} часа. Можно за несколько дней.
+            {sessions.length} сессий по 5-15 минут. Можно за несколько дней.
             <br />
             В конце — полный Personality Passport и YAML для AI-бота.
           </p>
@@ -325,7 +336,7 @@ export default function Home() {
         </motion.div>
       </section>
 
-      {/* ── FOOTER ── */}
+      {/* -- FOOTER -- */}
       <footer className="px-6 py-10 border-t border-border">
         <div className="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-muted/50">
           <p className="font-display text-sm text-muted">Psyche Scan</p>
