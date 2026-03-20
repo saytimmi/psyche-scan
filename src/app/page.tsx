@@ -71,7 +71,7 @@ export default function Home() {
                 Что я получу?
               </motion.button>
             </Link>
-            <Link href="#sessions">
+            <Link href="/scan">
               <motion.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
@@ -313,7 +313,7 @@ export default function Home() {
             <br />
             В конце — полный Personality Passport и YAML для AI-бота.
           </p>
-          <Link href={`/session/${sessions[0].id}`}>
+          <Link href="/scan">
             <motion.button
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}

@@ -306,10 +306,10 @@ export default function SessionPage() {
             )}
 
             <button
-              onClick={() => router.push("/")}
+              onClick={() => router.push("/scan")}
               className="w-full px-6 py-4 bg-surface border border-border text-muted rounded-xl font-medium hover:bg-surface-2 transition-colors"
             >
-              Выбрать другую сессию
+              Выбрать другой тест
             </button>
           </div>
         </motion.div>
