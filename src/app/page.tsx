@@ -50,25 +50,25 @@ export default function Home() {
             className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-border-light bg-surface/80 backdrop-blur-sm mb-10"
           >
             <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
-            <span className="text-xs tracking-wide text-muted-light uppercase">Evidence-based profiling</span>
+            <span className="text-xs tracking-wide text-muted-light uppercase">Научно обоснованный подход</span>
           </motion.div>
 
           {/* Title */}
           <h1 className="font-display text-6xl sm:text-7xl md:text-8xl leading-[0.9] tracking-tight mb-8 text-shadow-hero">
-            <span className="text-gradient">Узнай себя</span>
+            <span className="text-gradient">Почему ты</span>
             <br />
-            <span className="text-foreground/90 italic">по-настоящему</span>
+            <span className="text-foreground/90 italic">снова застрял?</span>
           </h1>
 
           {/* Subtitle */}
           <p className="text-lg md:text-xl text-muted-light max-w-xl mx-auto mb-4 leading-relaxed">
-            Глубинное сканирование личности на основе
-            <span className="text-foreground font-medium"> клинической психологии</span>.
-            Не тест — полная карта того, как устроено твоё сознание.
+            Те же ошибки. Те же конфликты. Те же откладывания.
+            <br />
+            Это не лень и не обстоятельства. Это программа, которая работает в фоне. Здесь ты её увидишь.
           </p>
 
           <p className="text-sm text-muted mb-10">
-            {totalQuestions} вопросов &middot; {sessions.length} сессий по 5-15 минут &middot; AI-анализ
+            {sessions.length} коротких сессий &middot; можно за несколько вечеров &middot; в конце — полный разбор
           </p>
 
           {/* CTA — primary is "Начать сканирование", secondary is "Что я получу?" */}
@@ -124,18 +124,18 @@ export default function Home() {
           className="space-y-8"
         >
           <motion.p variants={fadeUp} transition={{ duration: 0.6 }} className="font-display text-3xl md:text-4xl leading-snug text-foreground/90">
-            Ты думаешь что знаешь себя.
+            У тебя бывает так?
           </motion.p>
-          <motion.p variants={fadeUp} transition={{ duration: 0.6 }} className="font-display text-3xl md:text-4xl leading-snug text-muted">
-            Но исследования показывают: корреляция между тем, что люди
-            <span className="italic text-accent-bright"> говорят</span> о себе, и тем что
-            <span className="italic text-accent-bright"> делают</span> — всего <span className="text-foreground font-medium">r = 0.20</span>.
-          </motion.p>
-          <motion.p variants={fadeUp} transition={{ duration: 0.6 }} className="text-lg text-muted-light leading-relaxed">
-            Мы врём себе. Не специально — мозг просто так работает. Защитные механизмы, слепые зоны, подавленные качества. Всё это управляет тобой, пока ты этого не видишь.
-          </motion.p>
+          <motion.div variants={fadeUp} transition={{ duration: 0.6 }} className="space-y-4 text-lg text-muted-light leading-relaxed">
+            <p>Ставишь цель — и через две недели забиваешь. Опять.</p>
+            <p>Знаешь что надо поговорить — но молчишь. Опять.</p>
+            <p>Начинаешь проект на энтузиазме — и бросаешь на полпути. Опять.</p>
+          </motion.div>
           <motion.p variants={fadeUp} transition={{ duration: 0.6 }} className="text-lg text-foreground/80 leading-relaxed">
-            Psyche Scan снимает эту слепоту. Не через один поверхностный тест, а через {sessions.length} слоёв глубинного анализа — от нейрофизиологии до экзистенциальных вопросов.
+            Это не потому что ты ленивый или слабый. У тебя внутри работает программа — набор убеждений, страхов и привычек из детства. Ты их не выбирал. Ты их даже не видишь. Но они каждый день решают за тебя.
+          </motion.p>
+          <motion.p variants={fadeUp} transition={{ duration: 0.6 }} className="text-lg text-accent-bright/80 leading-relaxed">
+            Здесь ты их увидишь. Не через один поверхностный тест вроде "какой ты цвет" — а через {sessions.length} блоков вопросов, которые реально используют психологи и терапевты.
           </motion.p>
         </motion.div>
       </section>
@@ -150,13 +150,12 @@ export default function Home() {
             transition={{ duration: 0.6 }}
             className="text-center mb-20"
           >
-            <p className="text-xs tracking-[0.3em] uppercase text-accent mb-4">Конечный результат</p>
+            <p className="text-xs tracking-[0.3em] uppercase text-accent mb-4">Что ты получишь в конце</p>
             <h2 className="font-display text-4xl md:text-5xl leading-tight">
-              Personality Passport
+              Документ о тебе
             </h2>
-            <p className="text-muted-light mt-4 max-w-lg mx-auto">
-              Полный документ о том кто ты, как работаешь и как трансформироваться.
-              Генерируется AI на основе всех твоих ответов.
+            <p className="text-muted-light mt-4 max-w-2xl mx-auto">
+              Не "ты экстраверт, поздравляем". А конкретный разбор: откуда твои паттерны, что тебя тормозит, что с этим делать, и готовый файл чтобы AI-ассистент моментально понимал кто ты.
             </p>
           </motion.div>
 
@@ -168,15 +167,15 @@ export default function Home() {
             className="grid grid-cols-1 md:grid-cols-3 gap-5"
           >
             {[
-              { num: "01", title: "Кто ты", desc: "Живой портрет — не сухие цифры, а точное описание как ты устроен. Big Five, привязанность, ценности, таланты.", color: "from-violet-500/10 to-transparent" },
-              { num: "02", title: "Суперсилы", desc: "3-5 главных сильных сторон. Не общие фразы — конкретно, что делает тебя уникальным и где твоё естественное преимущество.", color: "from-emerald-500/10 to-transparent" },
-              { num: "03", title: "Тень и блоки", desc: "Защитные механизмы, схемы из детства, подавленные качества. То, что управляет тобой на автопилоте.", color: "from-amber-500/10 to-transparent" },
-              { num: "04", title: "Эго-конструкция", desc: "Уровень развития сознания, внутренние роли, маски. Как устроено твоё 'Я' и где его ограничения.", color: "from-rose-500/10 to-transparent" },
-              { num: "05", title: "Слепые зоны", desc: "Где ты врёшь себе. Конкретные противоречия между тем что говоришь и что делаешь. Шкала валидности ловит самообман.", color: "from-cyan-500/10 to-transparent" },
-              { num: "06", title: "Карта трансформации", desc: "Что менять, в каком порядке, есть ли ресурсы. Стадия готовности по каждому блоку. Конкретный план, не мотивашка.", color: "from-fuchsia-500/10 to-transparent" },
-              { num: "07", title: "Тело и нервная система", desc: "Polyvagal профиль, интероцепция, окно толерантности. Без этого когнитивные интервенции работают на 50%.", color: "from-orange-500/10 to-transparent" },
-              { num: "08", title: "YAML для AI-бота", desc: "Готовый профиль для system prompt. Скопировал — и любой AI-ассистент моментально становится 'твоим'. Знает как с тобой работать.", color: "from-indigo-500/10 to-transparent" },
-              { num: "09", title: "Инструкция для людей", desc: "'Как со мной работать' — для коллег, партнёра, друзей. Что делать, чего не делать, как лучше доносить информацию.", color: "from-teal-500/10 to-transparent" },
+              { num: "01", title: "Портрет", desc: "Простым языком — какой ты человек. Не гороскоп, а реальное описание. Прочитаешь и скажешь 'блин, точно'.", color: "from-violet-500/10 to-transparent" },
+              { num: "02", title: "Сильные стороны", desc: "То, что у тебя получается легко, а другие мучаются. Ты это не замечаешь — потому что для тебя это 'норма'. А это твоя суперсила.", color: "from-emerald-500/10 to-transparent" },
+              { num: "03", title: "Где тормозишь", desc: "Убеждения из детства типа 'я должен быть идеальным' или 'показать слабость = опасно'. Они рулят тобой каждый день. Увидишь какие именно.", color: "from-amber-500/10 to-transparent" },
+              { num: "04", title: "Роли и маски", desc: "На работе ты один, с друзьями другой, один дома — третий. Какие роли ты играешь, какие навязаны, от какой устал.", color: "from-rose-500/10 to-transparent" },
+              { num: "05", title: "Где врёшь себе", desc: "Говоришь 'мне норм одному' а внутри одиноко. Говоришь 'я не боюсь' а сам избегаешь. Увидишь конкретные расхождения.", color: "from-cyan-500/10 to-transparent" },
+              { num: "06", title: "Что делать", desc: "Не просто 'работай над собой'. А конкретно: с чего начать, что важнее, готов ли ты вообще и есть ли на это ресурс.", color: "from-fuchsia-500/10 to-transparent" },
+              { num: "07", title: "Тело", desc: "Стресс живёт не в голове — а в теле. Узнаешь свой тип реакции: бьёшь, бежишь или замираешь. И почему 'просто успокойся' не работает.", color: "from-orange-500/10 to-transparent" },
+              { num: "08", title: "Файл для AI", desc: "Готовый профиль который можно скормить ChatGPT, Claude или любому боту. Он моментально начнёт понимать тебя — без недель общения.", color: "from-indigo-500/10 to-transparent" },
+              { num: "09", title: "Инструкция", desc: "Короткий документ 'как со мной общаться' — для коллег, партнёра, друзей. Что работает, что бесит, как лучше доносить критику.", color: "from-teal-500/10 to-transparent" },
             ].map((item) => (
               <motion.div
                 key={item.num}
@@ -266,11 +265,10 @@ export default function Home() {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <p className="text-xs tracking-[0.3em] uppercase text-accent mb-4">Почему это работает</p>
-          <h2 className="font-display text-4xl md:text-5xl mb-4">Только доказанное наукой</h2>
+          <p className="text-xs tracking-[0.3em] uppercase text-accent mb-4">Почему это не очередной тест</p>
+          <h2 className="font-display text-4xl md:text-5xl mb-4">Без гороскопов</h2>
           <p className="text-muted-light max-w-2xl mx-auto">
-            Мы не используем MBTI, Эннеаграмму и DISC — они не подтверждены исследованиями.
-            Каждый вопрос здесь основан на методике, проверенной на тысячах людей в реальных научных исследованиях.
+            MBTI — ненадёжный (половина людей получает другой тип через месяц). Эннеаграмма — не подтверждена наукой. Мы используем только то, что реально проверено на десятках тысяч людей.
           </p>
         </motion.div>
 
@@ -315,14 +313,14 @@ export default function Home() {
           className="max-w-2xl mx-auto"
         >
           <h2 className="font-display text-4xl md:text-5xl mb-6 leading-tight">
-            Готов увидеть
+            Хватит гадать.
             <br />
-            <span className="italic text-gradient">полную картину?</span>
+            <span className="italic text-gradient">Пора разобраться.</span>
           </h2>
           <p className="text-muted-light mb-10 text-lg">
-            {sessions.length} сессий по 5-15 минут. Можно за несколько дней.
+            {sessions.length} блоков по 5-15 минут. Можно растянуть на неделю.
             <br />
-            В конце — полный Personality Passport и YAML для AI-бота.
+            Чем честнее ответишь — тем точнее результат.
           </p>
           <Link href="/scan">
             <motion.button
