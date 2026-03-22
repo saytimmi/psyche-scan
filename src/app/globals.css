@@ -59,15 +59,19 @@ h1, h2, h3, h4 {
 
 /* Tile hover effect — Dropbox style bg swap */
 .tile {
-  transition: background 0.5s var(--swoop), color 0.5s var(--swoop), transform 0.5s var(--swoop);
+  transition: background 0.5s var(--swoop), color 0.5s var(--swoop), transform 0.5s var(--swoop), box-shadow 0.5s var(--swoop);
+  border: 1px solid var(--border) !important;
 }
 .tile:hover {
-  background: var(--bg-dark);
+  background: var(--bg-dark) !important;
   color: white;
   transform: scale(0.98);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.12);
 }
-.tile:hover .tile-label { color: rgba(255,255,255,0.5); }
-.tile:hover .tile-num { color: rgba(255,255,255,0.3); }
+.tile:hover h3 { color: white; }
+.tile:hover p { color: rgba(255,255,255,0.6) !important; }
+.tile:hover .tile-label { color: rgba(255,255,255,0.4) !important; }
+.tile:hover .tile-num { color: rgba(255,255,255,0.3) !important; }
 
 /* Section padding — generous like Dropbox (120px desktop) */
 .section-pad {

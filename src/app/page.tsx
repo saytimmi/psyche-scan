@@ -23,9 +23,9 @@ function Reveal({
 }) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 40 }}
+      initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-80px" }}
+      viewport={{ once: true, amount: 0.1 }}
       transition={{ duration: 0.7, ease: SWOOP, delay }}
       className={className}
     >
@@ -143,9 +143,9 @@ export default function Home() {
                 { rule: "Буду идеальным — будут любить", result: "Вкалываешь до выгорания" },
                 { rule: "Люди уходят", result: "Не привязываешься" },
               ].map((item) => (
-                <div key={item.rule} className="rounded-xl p-6" style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)" }}>
-                  <p className="text-white text-sm font-medium mb-2">&ldquo;{item.rule}&rdquo;</p>
-                  <p style={{ color: "rgba(255,255,255,0.4)" }} className="text-sm">→ {item.result}</p>
+                <div key={item.rule} className="rounded-xl p-8" style={{ background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.12)" }}>
+                  <p className="text-white text-lg font-display mb-3">&ldquo;{item.rule}&rdquo;</p>
+                  <p style={{ color: "rgba(255,255,255,0.5)" }} className="text-base">→ {item.result}</p>
                 </div>
               ))}
             </div>
@@ -159,16 +159,16 @@ export default function Home() {
 
           <Reveal delay={0.3}>
             <div className="mt-10 rounded-xl p-6 md:p-8" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)" }}>
-              <p className="text-white font-medium mb-4">Поэтому ты:</p>
+              <p className="text-white text-lg font-medium mb-6">Поэтому ты:</p>
               {[
                 ["Бросаешь проекты", "страх провала"],
                 ["Молчишь вместо того чтобы сказать", "страх отвержения"],
                 ["Откладываешь", "перфекционизм из детства"],
                 ["Выбираешь одинаковых партнёров", "привязанность, которую повторяешь"],
               ].map(([action, reason]) => (
-                <p key={action} className="text-sm mb-2">
-                  <span className="text-white">• {action}</span>
-                  <span style={{ color: "rgba(255,255,255,0.3)" }}> — {reason}</span>
+                <p key={action} className="text-base mb-3">
+                  <span className="text-white font-medium">• {action}</span>
+                  <span style={{ color: "rgba(255,255,255,0.4)" }}> — {reason}</span>
                 </p>
               ))}
             </div>
@@ -202,7 +202,7 @@ export default function Home() {
             </p>
           </Reveal>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {sessions.map((session, i) => {
               const isDone = completedMap[session.id] ?? false;
               const qCount = session.sections.reduce((a, s) => a + s.questions.length, 0);
@@ -221,7 +221,7 @@ export default function Home() {
               return (
                 <Reveal key={session.id} delay={i * 0.05}>
                   <Link href={`/session/${session.id}`}>
-                    <div className="tile rounded-xl p-6 h-full cursor-pointer" style={{
+                    <div className="tile rounded-xl p-7 h-full cursor-pointer" style={{
                       background: "var(--bg-alt)",
                       border: isDone ? "1px solid var(--accent)" : "1px solid transparent",
                     }}>
@@ -278,11 +278,11 @@ export default function Home() {
               { num: "06", title: "Что делать", text: "Конкретно: с чего начать, что важнее, готов ли ты и есть ли ресурс. Не 'работай над собой'." },
             ].map((item, i) => (
               <Reveal key={item.num} delay={i * 0.06}>
-                <div className="flex gap-6 md:gap-10 py-8 border-b" style={{ borderColor: "var(--border)" }}>
-                  <span className="font-mono text-sm shrink-0 pt-1" style={{ color: "var(--text-muted)" }}>{item.num}</span>
+                <div className="flex gap-8 md:gap-12 py-10 border-b" style={{ borderColor: "var(--border)" }}>
+                  <span className="font-mono text-sm shrink-0 pt-2" style={{ color: "var(--text-muted)" }}>{item.num}</span>
                   <div>
-                    <h3 className="font-display text-2xl md:text-3xl mb-2">{item.title}</h3>
-                    <p style={{ color: "var(--text-secondary)" }} className="text-base leading-relaxed max-w-lg">{item.text}</p>
+                    <h3 className="font-display text-3xl md:text-4xl mb-3">{item.title}</h3>
+                    <p style={{ color: "var(--text-secondary)" }} className="text-lg leading-relaxed max-w-lg">{item.text}</p>
                   </div>
                 </div>
               </Reveal>
@@ -319,8 +319,8 @@ export default function Home() {
                 "Говорит в стиле, который ТЕБЕ помогает",
                 "Учитывает твои ценности",
               ].map((item) => (
-                <div key={item} className="rounded-xl p-5" style={{ background: "rgba(255,255,255,0.12)" }}>
-                  <p className="text-white text-sm font-medium">{item}</p>
+                <div key={item} className="rounded-xl p-6" style={{ background: "rgba(255,255,255,0.12)", border: "1px solid rgba(255,255,255,0.15)" }}>
+                  <p className="text-white text-base font-medium">{item}</p>
                 </div>
               ))}
             </div>
@@ -368,8 +368,8 @@ export default function Home() {
               ].map((s, i) => (
                 <Reveal key={s.label} delay={i * 0.08}>
                   <div>
-                    <p className="font-display" style={{ fontSize: "clamp(36px, 5vw, 56px)", color: "var(--text)" }}>{s.val}</p>
-                    <p className="text-xs uppercase tracking-wider mt-1" style={{ color: "var(--text-muted)" }}>{s.label}</p>
+                    <p className="font-display" style={{ fontSize: "clamp(48px, 7vw, 80px)", color: "var(--text)" }}>{s.val}</p>
+                    <p className="text-sm uppercase tracking-wider mt-2" style={{ color: "var(--text-muted)" }}>{s.label}</p>
                   </div>
                 </Reveal>
               ))}
