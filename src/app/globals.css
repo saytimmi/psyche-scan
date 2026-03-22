@@ -3,21 +3,22 @@
 @import "tw-animate-css";
 
 :root {
+  --bg: #0A0A0A;
+  --bg-card: #141414;
+  --bg-card-hover: #1E1E1E;
+  --accent: #D2FF00;
+  --accent-dim: #A8CC00;
+  --text: #FFFFFF;
+  --text-70: rgba(255,255,255,0.7);
+  --text-40: rgba(255,255,255,0.4);
+  --text-20: rgba(255,255,255,0.2);
+  --text-10: rgba(255,255,255,0.1);
+  --border: rgba(255,255,255,0.08);
+  --border-hover: rgba(255,255,255,0.15);
   --font-display: 'Instrument Serif', Georgia, serif;
   --font-body: 'DM Sans', system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
-  --bg: #FAFAF8;
-  --bg-alt: #F0EFEB;
-  --bg-dark: #1A1A1A;
-  --text: #1A1A1A;
-  --text-secondary: #6B6B6B;
-  --text-muted: #9A9A9A;
-  --accent: #2463EB;
-  --accent-light: #EBF0FF;
-  --border: #E5E5E0;
-  --swoop: cubic-bezier(0.6, 0, 0, 1);
-  --ease: cubic-bezier(0.4, 0, 0, 1);
-  --radius: 12px;
+  --ease: cubic-bezier(0.65, 0.05, 0, 1);
 }
 
 @theme inline {
@@ -33,63 +34,72 @@ body {
   color: var(--text);
   font-family: var(--font-body);
   font-size: 16px;
-  line-height: 1.5;
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
 }
 
-::selection {
-  background: var(--accent);
-  color: white;
+h1, h2, h3 {
+  font-family: var(--font-display);
+  line-height: 0.9;
+  letter-spacing: -0.03em;
 }
 
-/* Headings — large, tight tracking like Dropbox Sharp Grotesk */
-h1, h2, h3, h4 {
-  font-family: var(--font-display);
-  letter-spacing: -0.02em;
-  line-height: 1.1;
+::selection { background: var(--accent); color: var(--bg); }
+
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--text-20); border-radius: 10px; }
+
+/* Tile — exact Lando Norris hover pattern */
+.tile {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  transition: all 0.5s var(--ease);
+}
+.tile:hover {
+  background: var(--accent);
+  color: var(--bg);
+  border-color: var(--accent);
+}
+.tile:hover * { color: var(--bg) !important; }
+
+/* Accent button */
+.btn-accent {
+  background: var(--accent);
+  color: var(--bg);
+  font-weight: 600;
+  border-radius: 12px;
+  transition: all 0.3s var(--ease);
+}
+.btn-accent:hover {
+  background: var(--accent-dim);
+  transform: scale(0.98);
+}
+
+/* Ghost button */
+.btn-ghost {
+  background: transparent;
+  color: var(--text-70);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  transition: all 0.3s var(--ease);
+}
+.btn-ghost:hover {
+  border-color: var(--text-40);
   color: var(--text);
 }
 
-/* Scrollbar minimal */
-::-webkit-scrollbar { width: 4px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
-
-/* Tile hover effect — Dropbox style bg swap */
-.tile {
-  transition: background 0.5s var(--swoop), color 0.5s var(--swoop), transform 0.5s var(--swoop), box-shadow 0.5s var(--swoop);
-  border: 1px solid var(--border) !important;
-}
-.tile:hover {
-  background: var(--bg-dark) !important;
-  color: white;
-  transform: scale(0.98);
-  box-shadow: 0 8px 30px rgba(0,0,0,0.12);
-}
-.tile:hover h3 { color: white; }
-.tile:hover p { color: rgba(255,255,255,0.6) !important; }
-.tile:hover .tile-label { color: rgba(255,255,255,0.4) !important; }
-.tile:hover .tile-num { color: rgba(255,255,255,0.3) !important; }
-
-/* Section padding — generous like Dropbox (120px desktop) */
-.section-pad {
-  padding: clamp(60px, 10vw, 120px) clamp(24px, 5vw, 120px);
+/* Section spacing */
+.section {
+  padding: clamp(80px, 12vw, 140px) clamp(24px, 5vw, 80px);
 }
 
-/* Dark section */
-.section-dark {
-  background: var(--bg-dark);
-  color: white;
+/* Divider */
+.divider {
+  height: 1px;
+  background: var(--border);
+  margin: 0 clamp(24px, 5vw, 80px);
 }
-.section-dark h2, .section-dark h3 { color: white; }
-.section-dark p { color: rgba(255,255,255,0.6); }
-
-/* Accent section */
-.section-accent {
-  background: var(--accent);
-  color: white;
-}
-.section-accent h2 { color: white; }
-.section-accent p { color: rgba(255,255,255,0.8); }
