@@ -2,19 +2,21 @@
 @import "tailwindcss";
 
 :root {
-  --background: #050507;
-  --foreground: #ececf0;
-  --accent: #a78bfa;
-  --accent-bright: #c4b5fd;
-  --accent-dim: #7c3aed;
-  --accent-glow: rgba(167, 139, 250, 0.15);
-  --surface: #0a0a10;
-  --surface-2: #101018;
-  --surface-3: #18182a;
-  --border: #161628;
-  --border-light: #222244;
-  --muted: #505068;
-  --muted-light: #7878a0;
+  /* Warm Depth palette — cognac/amber, not AI-purple */
+  --background: #0e0e0c;
+  --background-alt: #141412;
+  --foreground: #e8e2d9;
+  --accent: #c9956b;
+  --accent-bright: #ddb892;
+  --accent-dim: #a07548;
+  --accent-glow: rgba(201, 149, 107, 0.12);
+  --surface: #1a1917;
+  --surface-2: #21211e;
+  --surface-3: #2a2926;
+  --border: #252420;
+  --border-light: #33322d;
+  --muted: #6b6560;
+  --muted-light: #9e9890;
   --font-display: 'Instrument Serif', Georgia, serif;
   --font-body: 'DM Sans', system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
@@ -22,6 +24,7 @@
 
 @theme inline {
   --color-background: var(--background);
+  --color-background-alt: var(--background-alt);
   --color-foreground: var(--foreground);
   --color-accent: var(--accent);
   --color-accent-bright: var(--accent-bright);
@@ -40,8 +43,7 @@
 }
 
 * { box-sizing: border-box; }
-
-html { scroll-behavior: initial; }
+html { scroll-behavior: smooth; }
 
 body {
   background: var(--background);
@@ -52,17 +54,15 @@ body {
   overflow-x: hidden;
 }
 
-/* Scrollbar — nearly invisible */
-::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 10px; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.06); border-radius: 10px; }
 
-/* Noise overlay */
 .noise::before {
   content: '';
   position: fixed;
   inset: 0;
-  opacity: 0.018;
+  opacity: 0.02;
   pointer-events: none;
   z-index: 9999;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
@@ -73,46 +73,20 @@ body {
   color: white;
 }
 
-/* Animated gradient text */
-.text-gradient {
-  background: linear-gradient(90deg, #c4b5fd, #a78bfa, #e879f9, #a78bfa, #c4b5fd);
-  background-size: 300% 100%;
+/* Accent text */
+.text-accent-gradient {
+  background: linear-gradient(135deg, var(--accent-bright), var(--accent), var(--accent-dim));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  animation: gradient-shift 6s ease infinite;
-}
-@keyframes gradient-shift {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
 }
 
-/* CTA glow pulse */
+/* CTA glow */
 @keyframes glow-pulse {
-  0%, 100% { box-shadow: 0 0 20px rgba(167,139,250,0.15), 0 0 60px rgba(167,139,250,0.08); }
-  50% { box-shadow: 0 0 30px rgba(167,139,250,0.25), 0 0 80px rgba(167,139,250,0.12); }
+  0%, 100% { box-shadow: 0 0 16px rgba(201,149,107,0.12), 0 0 48px rgba(201,149,107,0.06); }
+  50% { box-shadow: 0 0 24px rgba(201,149,107,0.2), 0 0 64px rgba(201,149,107,0.1); }
 }
 .cta-glow { animation: glow-pulse 3s ease-in-out infinite; }
 
-/* Shadows */
-.shadow-glow {
-  box-shadow: 0 0 20px var(--accent-glow), 0 0 60px var(--accent-glow), 0 8px 32px rgba(0,0,0,0.5);
-}
-
-/* Ring breathing animation */
-@keyframes ring-breathe {
-  0%, 100% { opacity: 0.06; transform: scale(1); }
-  50% { opacity: 0.12; transform: scale(1.02); }
-}
-
-/* Bento card hover */
-.bento-card {
-  transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1),
-              box-shadow 0.5s cubic-bezier(0.23, 1, 0.32, 1),
-              border-color 0.5s cubic-bezier(0.23, 1, 0.32, 1);
-}
-.bento-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 8px 30px rgba(0,0,0,0.4), 0 0 40px var(--accent-glow);
-  border-color: rgba(255,255,255,0.06);
-}
+/* Section alt bg */
+.section-alt { background: var(--background-alt); }
