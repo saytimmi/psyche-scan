@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
+import { SmoothScroll } from "@/components/SmoothScroll";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Psyche Scan — Deep Personality Profiling",
-  description: "8-layer evidence-based personality assessment powered by AI. Big Five, Attachment, Schemas, Ego Development, Defense Mechanisms, Polyvagal — full psychological profile.",
+  title: "Psyche Scan — Глубинное сканирование личности",
+  description: "9 слоёв. 330 вопросов. 22+ научных фреймворка. Полный психологический профиль с AI-анализом.",
 };
 
 export default function RootLayout({
@@ -13,7 +14,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ru" className="h-full antialiased">
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <SmoothScroll />
+        {children}
+      </body>
     </html>
   );
 }
