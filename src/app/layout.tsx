@@ -4,7 +4,7 @@ import "./globals.css";
 import { Geist } from "next/font/google";
 import { cn } from "@/lib/utils";
 
-const geist = Geist({subsets:['latin'],variable:'--font-sans'});
+const geist = Geist({ subsets: ['latin'], variable: '--font-sans' });
 
 export const metadata: Metadata = {
   title: "Psyche Scan — Глубинное сканирование личности",
@@ -17,8 +17,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ru" className={cn("h-full antialiased", "font-sans", geist.variable)}>
-      <body className="min-h-full flex flex-col">
+    <html lang="ru" className={cn("dark antialiased", geist.variable)}>
+      <body className="min-h-screen">
         <SmoothScroll />
         {children}
       </body>
