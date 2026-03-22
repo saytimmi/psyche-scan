@@ -1,14 +1,10 @@
 import type { Metadata } from "next";
 import { SmoothScroll } from "@/components/SmoothScroll";
 import "./globals.css";
-import { Geist } from "next/font/google";
-import { cn } from "@/lib/utils";
-
-const geist = Geist({ subsets: ['latin'], variable: '--font-sans' });
 
 export const metadata: Metadata = {
-  title: "Psyche Scan — Глубинное сканирование личности",
-  description: "9 слоёв. 330 вопросов. 22+ научных фреймворка. Полный психологический профиль с AI-анализом.",
+  title: "Psyche Scan — Инструкция к себе",
+  description: "9 слоёв. 330 вопросов. 22+ научных фреймворка. Глубинное сканирование личности с AI-анализом.",
 };
 
 export default function RootLayout({
@@ -17,7 +13,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ru" className={cn("dark antialiased", geist.variable)}>
+    <html lang="ru" className="antialiased">
       <body className="min-h-screen">
         <SmoothScroll />
         {children}
