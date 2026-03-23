@@ -40,26 +40,34 @@ const MASKS = {
   glow: "0 0 40px rgba(234,179,8,0.12)",
 };
 
-// ── 14 ФРАЗ — реальные боли, простым языком ──
-const phraseConfigs: PhraseConfig[] = [
-  // СТРАХИ (orange) — то что реально пугает
-  { text: "«меня бросят»", top: -20, side: "right", offset: 190, layer: "fears" },
-  { text: "«я не справлюсь»", top: 30, side: "left", offset: 200, layer: "fears" },
-  { text: "«узнают какой я на самом деле»", top: 80, side: "right", offset: 210, layer: "fears" },
-  { text: "«останусь один»", top: 125, side: "left", offset: 180, layer: "fears" },
-  { text: "«я хуже всех»", top: 170, side: "right", offset: 170, layer: "fears" },
-  // ЗАЩИТЫ (red) — что делаешь чтобы не чувствовать
-  { text: "«мне всё равно»", top: 220, side: "left", offset: 200, layer: "defenses" },
-  { text: "«я сам разберусь»", top: 265, side: "right", offset: 185, layer: "defenses" },
-  { text: "«это не больно»", top: 310, side: "left", offset: 175, layer: "defenses" },
-  { text: "«мне никто не нужен»", top: 355, side: "right", offset: 195, layer: "defenses" },
-  // МАСКИ (yellow) — что показываешь миру
-  { text: "«у меня всё хорошо»", top: 405, side: "left", offset: 205, layer: "masks" },
-  { text: "«я сильный»", top: 445, side: "right", offset: 170, layer: "masks" },
-  { text: "«мне не нужна помощь»", top: 485, side: "left", offset: 195, layer: "masks" },
-  { text: "«я в порядке»", top: 525, side: "right", offset: 175, layer: "masks" },
-  { text: "«всё под контролем»", top: 565, side: "left", offset: 185, layer: "masks" },
+// ── depth: 1 = ближе (крупный, яркий), 3 = дальше (мелкий, тусклый) ──
+// ── Рассыпаны вокруг ЭГО как галактика ──
+const phraseConfigs: (PhraseConfig & { depth: number; rotate: number })[] = [
+  // СТРАХИ — вокруг ядра, ближе всего
+  { text: "«меня бросят»", top: 5, side: "right", offset: 170, layer: "fears", depth: 1, rotate: -2 },
+  { text: "«я не справлюсь»", top: 90, side: "left", offset: 230, layer: "fears", depth: 2, rotate: 1.5 },
+  { text: "«узнают какой я на самом деле»", top: 55, side: "right", offset: 280, layer: "fears", depth: 3, rotate: -1 },
+  { text: "«останусь один»", top: 160, side: "left", offset: 160, layer: "fears", depth: 1, rotate: 2 },
+  { text: "«я хуже всех»", top: 140, side: "right", offset: 200, layer: "fears", depth: 2, rotate: -1.5 },
+  // ЗАЩИТЫ — средний слой
+  { text: "«мне всё равно»", top: 230, side: "left", offset: 280, layer: "defenses", depth: 3, rotate: 1 },
+  { text: "«я сам разберусь»", top: 270, side: "right", offset: 165, layer: "defenses", depth: 1, rotate: -2.5 },
+  { text: "«это не больно»", top: 310, side: "left", offset: 190, layer: "defenses", depth: 2, rotate: 0.5 },
+  { text: "«мне никто не нужен»", top: 350, side: "right", offset: 250, layer: "defenses", depth: 3, rotate: -0.5 },
+  // МАСКИ — внешний слой, дальше всего
+  { text: "«у меня всё хорошо»", top: 400, side: "left", offset: 175, layer: "masks", depth: 1, rotate: 1.5 },
+  { text: "«я сильный»", top: 440, side: "right", offset: 260, layer: "masks", depth: 3, rotate: -1 },
+  { text: "«мне не нужна помощь»", top: 480, side: "left", offset: 240, layer: "masks", depth: 2, rotate: 2 },
+  { text: "«я в порядке»", top: 520, side: "right", offset: 180, layer: "masks", depth: 1, rotate: -1.5 },
+  { text: "«всё под контролем»", top: 560, side: "left", offset: 210, layer: "masks", depth: 2, rotate: 0.5 },
 ];
+
+// Depth → visual properties
+function depthStyle(depth: number) {
+  if (depth === 1) return { scale: 1.1, opacity: 1, fontSize: 15, blur: 0 };
+  if (depth === 2) return { scale: 0.9, opacity: 0.7, fontSize: 13, blur: 0.3 };
+  return { scale: 0.75, opacity: 0.45, fontSize: 12, blur: 0.6 };
+}
 
 function getLayerStyle(layer: "fears" | "defenses" | "masks") {
   if (layer === "fears") return FEARS;
@@ -96,18 +104,19 @@ export function AbsorptionScene() {
       tl.to(egoRef.current, { opacity: 1, duration: 0.08 }, 0);
     }
 
-    // 2. Phrases fly in rapid-fire and STAY
+    // 2. Phrases fly in rapid-fire and STAY — with depth-aware opacity
     const total = phraseConfigs.length;
     phraseRefs.current.forEach((el, i) => {
       if (!el) return;
       const cfg = phraseConfigs[i];
+      const d = depthStyle(cfg.depth);
       const startPos = 0.06 + i * 0.035;
-      const fromX = cfg.side === "right" ? 350 : -350;
+      const fromX = cfg.side === "right" ? 300 + cfg.depth * 50 : -(300 + cfg.depth * 50);
 
       tl.fromTo(
         el,
-        { opacity: 0, x: fromX, scale: 0.85 },
-        { opacity: 1, x: 0, scale: 1, duration: 0.04, ease: "power3.out" },
+        { opacity: 0, x: fromX },
+        { opacity: d.opacity, x: 0, duration: 0.04, ease: "power3.out" },
         startPos
       );
 
@@ -325,21 +334,25 @@ export function AbsorptionScene() {
             </span>
           </div>
 
-          {/* ── Flying phrases ── */}
+          {/* ── Flying phrases — galaxy depth ── */}
           {phraseConfigs.map((cfg, i) => {
             const layerStyle = getLayerStyle(cfg.layer);
+            const d = depthStyle(cfg.depth);
             const pos: React.CSSProperties = {
               position: "absolute",
               top: cfg.top,
-              padding: "10px 18px",
-              borderRadius: 10,
-              fontSize: 14,
-              fontWeight: 500,
+              padding: cfg.depth === 1 ? "10px 18px" : cfg.depth === 2 ? "8px 14px" : "6px 12px",
+              borderRadius: cfg.depth === 1 ? 10 : 8,
+              fontSize: d.fontSize,
+              fontWeight: cfg.depth === 1 ? 600 : 500,
               whiteSpace: "nowrap",
               opacity: 0,
               color: layerStyle.color,
               background: layerStyle.bg,
               border: `1px solid ${layerStyle.border}`,
+              transform: `rotate(${cfg.rotate}deg) scale(${d.scale})`,
+              filter: d.blur > 0 ? `blur(${d.blur}px)` : undefined,
+              zIndex: 4 - cfg.depth,
             };
             if (cfg.side === "right") pos.right = -cfg.offset;
             else pos.left = -cfg.offset;
