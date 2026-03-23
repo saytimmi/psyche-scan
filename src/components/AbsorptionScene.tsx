@@ -16,63 +16,43 @@ interface PhraseStyle {
   border: string;
 }
 
-const phrases: { text: string; style: PhraseStyle; direction: number }[] = [
-  {
-    text: "«я должен быть сильным»",
-    style: {
-      top: -10,
-      right: -200,
-      color: "#f97316",
-      bg: "rgba(249,115,22,0.06)",
-      border: "rgba(249,115,22,0.15)",
-    },
-    direction: 1,
-  },
-  {
-    text: "«меня не любят таким»",
-    style: {
-      top: 70,
-      left: -210,
-      color: "#dc2626",
-      bg: "rgba(220,38,38,0.06)",
-      border: "rgba(220,38,38,0.15)",
-    },
-    direction: -1,
-  },
-  {
-    text: "«мир опасен»",
-    style: {
-      top: 155,
-      right: -160,
-      color: "#fbbf24",
-      bg: "rgba(251,191,36,0.06)",
-      border: "rgba(251,191,36,0.15)",
-    },
-    direction: 1,
-  },
-  {
-    text: "«я недостаточно хорош»",
-    style: {
-      top: 240,
-      left: -210,
-      color: "#f97316",
-      bg: "rgba(249,115,22,0.06)",
-      border: "rgba(249,115,22,0.15)",
-    },
-    direction: -1,
-  },
-  {
-    text: "«нельзя доверять»",
-    style: {
-      top: 320,
-      right: -190,
-      color: "#dc2626",
-      bg: "rgba(220,38,38,0.06)",
-      border: "rgba(220,38,38,0.15)",
-    },
-    direction: 1,
-  },
+const phraseTexts = [
+  "«я должен справляться сам»",
+  "«меня такого не полюбят»",
+  "«покажу слабость — отвернутся»",
+  "«я хуже других»",
+  "«нельзя доверять»",
+  "«мир опасен»",
+  "«если расслаблюсь — всё рухнет»",
+  "«я не заслуживаю»",
+  "«чувства — слабость»",
+  "«лучше не привязываться»",
+  "«я должен быть идеальным»",
+  "«моё мнение не важно»",
 ];
+
+const colors = [
+  { color: "#f97316", bg: "rgba(249,115,22,0.06)", border: "rgba(249,115,22,0.15)" },
+  { color: "#dc2626", bg: "rgba(220,38,38,0.06)", border: "rgba(220,38,38,0.15)" },
+  { color: "#fbbf24", bg: "rgba(251,191,36,0.06)", border: "rgba(251,191,36,0.15)" },
+];
+
+// Distribute phrases around the silhouette — alternating left/right
+const phrases: { text: string; style: PhraseStyle; direction: number }[] = phraseTexts.map((text, i) => {
+  const isRight = i % 2 === 0;
+  const verticalSpread = -30 + i * 38; // spread from top to bottom
+  const horizontalOffset = 160 + Math.random() * 60;
+  const c = colors[i % 3];
+  return {
+    text,
+    style: {
+      top: verticalSpread,
+      ...(isRight ? { right: -horizontalOffset } : { left: -horizontalOffset }),
+      ...c,
+    },
+    direction: isRight ? 1 : -1,
+  };
+});
 
 const layers = [
   {
@@ -133,47 +113,53 @@ export function AbsorptionScene() {
       tl.to(egoRef.current, { opacity: 1, duration: 0.1 }, 0);
     }
 
-    // 2. Each phrase flies in and STAYS (no fade out)
+    // 2. Each phrase flies in and STAYS
+    const phraseCount = phraseRefs.current.length;
+    const phraseStart = 0.08;
+    const phraseGap = 0.04; // tighter gaps = more rapid fire
     phraseRefs.current.forEach((el, i) => {
-      if (!el) return;
-      const startPos = 0.1 + i * 0.08;
-      const fromX = phrases[i].direction * 250;
+      if (!el || !phrases[i]) return;
+      const startPos = phraseStart + i * phraseGap;
+      const fromX = phrases[i].direction * 300;
 
-      // Animate IN — stays at opacity 1
       tl.fromTo(
         el,
-        { opacity: 0, x: fromX },
-        { opacity: 1, x: 0, duration: 0.08, ease: "power2.out" },
+        { opacity: 0, x: fromX, scale: 0.8 },
+        { opacity: 1, x: 0, scale: 1, duration: 0.05, ease: "power3.out" },
         startPos
       );
 
-      // Flash core border on each phrase arrival
-      tl.to(
-        coreRef.current,
-        {
-          borderColor: "rgba(249,115,22,0.35)",
-          boxShadow: "0 0 50px rgba(249,115,22,0.15)",
-          duration: 0.02,
-        },
-        startPos + 0.06
-      );
-      tl.to(
-        coreRef.current,
-        {
-          borderColor: "rgba(255,255,255,0.08)",
-          boxShadow: "0 0 40px rgba(249,115,22,0.08)",
-          duration: 0.03,
-        },
-        startPos + 0.08
-      );
+      // Flash core on every 3rd phrase
+      if (i % 3 === 0) {
+        tl.to(
+          coreRef.current,
+          {
+            borderColor: "rgba(249,115,22,0.4)",
+            boxShadow: "0 0 50px rgba(249,115,22,0.15)",
+            duration: 0.015,
+          },
+          startPos + 0.03
+        );
+        tl.to(
+          coreRef.current,
+          {
+            borderColor: "rgba(255,255,255,0.08)",
+            boxShadow: "0 0 40px rgba(249,115,22,0.08)",
+            duration: 0.025,
+          },
+          startPos + 0.045
+        );
+      }
     });
+
+    const layersStart = phraseStart + phraseCount * phraseGap + 0.05;
 
     // 3. Layer fears appear
     if (fearsRef.current) {
       tl.to(
         fearsRef.current,
-        { opacity: 1, scale: 1, duration: 0.1, ease: "power2.out" },
-        0.55
+        { opacity: 1, scale: 1, duration: 0.08, ease: "power2.out" },
+        layersStart
       );
     }
 
@@ -181,8 +167,8 @@ export function AbsorptionScene() {
     if (defensesRef.current) {
       tl.to(
         defensesRef.current,
-        { opacity: 1, scale: 1, duration: 0.1, ease: "power2.out" },
-        0.63
+        { opacity: 1, scale: 1, duration: 0.08, ease: "power2.out" },
+        layersStart + 0.08
       );
     }
 
@@ -190,29 +176,29 @@ export function AbsorptionScene() {
     if (masksRef.current) {
       tl.to(
         masksRef.current,
-        { opacity: 1, scale: 1, duration: 0.1, ease: "power2.out" },
-        0.71
+        { opacity: 1, scale: 1, duration: 0.08, ease: "power2.out" },
+        layersStart + 0.16
       );
     }
 
-    // 6. Core intensify glow + EGO pulses
+    // 6. Core intensify glow
     tl.to(
       coreRef.current,
       {
         boxShadow:
           "0 0 60px rgba(249,115,22,0.2), 0 0 120px rgba(220,38,38,0.1)",
         borderColor: "rgba(249,115,22,0.2)",
-        duration: 0.15,
+        duration: 0.1,
       },
-      0.78
+      layersStart + 0.22
     );
 
     // 7. Bottom text
     tl.fromTo(
       textRef.current,
       { opacity: 0, y: 20 },
-      { opacity: 1, y: 0, duration: 0.12 },
-      0.88
+      { opacity: 1, y: 0, duration: 0.1 },
+      layersStart + 0.3
     );
 
     return () => {
@@ -222,9 +208,9 @@ export function AbsorptionScene() {
   }, []);
 
   return (
-    <div ref={containerRef} style={{ height: "300vh" }}>
+    <div ref={containerRef} style={{ height: "400vh" }}>
       <div className="sticky top-0 h-screen flex items-center justify-center overflow-hidden">
-        <div className="relative" style={{ width: 280, height: 420 }}>
+        <div className="relative" style={{ width: 300, height: 460 }}>
           {/* Silhouette core */}
           <div
             ref={coreRef}

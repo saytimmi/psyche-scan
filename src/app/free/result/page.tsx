@@ -1,3 +1,9 @@
+/**
+ * FREE LEAD MAGNET — Result page (9 sequential screens)
+ * Route: /free/result
+ * Calls /api/generate-free-profile for AI-powered results
+ * Upsell links to /scan (full paid scan)
+ */
 "use client";
 
 import { useState, useEffect, useCallback } from "react";

@@ -1,3 +1,9 @@
+/**
+ * FREE LEAD MAGNET — Landing page
+ * Route: /free
+ * Standalone page, NOT part of main landing (src/app/page.tsx)
+ * Links to: /free/test → /free/result
+ */
 "use client"
 import { motion } from "framer-motion"
 import Link from "next/link"

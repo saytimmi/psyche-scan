@@ -1,3 +1,8 @@
+/**
+ * FREE LEAD MAGNET — Test flow (25 questions)
+ * Route: /free/test
+ * After completion → redirects to /free/result
+ */
 "use client";
 
 import { useState, useEffect } from "react";
