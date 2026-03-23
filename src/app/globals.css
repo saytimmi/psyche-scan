@@ -103,3 +103,35 @@ h1, h2, h3 {
   background: var(--border);
   margin: 0 clamp(24px, 5vw, 80px);
 }
+
+/* Marquee — infinite horizontal scroll */
+@keyframes marquee-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee-scroll 30s linear infinite;
+}
+.marquee-track:hover { animation-play-state: paused; }
+
+/* Stagger grid — masonry-like with varied sizes */
+.stagger-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+@media (max-width: 768px) {
+  .stagger-grid { grid-template-columns: 1fr; }
+}
+.stagger-grid > :nth-child(1) { grid-column: span 2; grid-row: span 2; }
+.stagger-grid > :nth-child(5) { grid-column: span 2; }
+
+/* Full-width accent strip */
+.accent-strip {
+  background: var(--accent);
+  color: var(--bg);
+  padding: clamp(40px, 6vw, 80px) clamp(24px, 5vw, 80px);
+  overflow: hidden;
+}
