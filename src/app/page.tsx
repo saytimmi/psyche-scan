@@ -3,8 +3,12 @@
 import Link from "next/link";
 import { motion, useScroll, useMotionValueEvent } from "motion/react";
 import { useState, useRef } from "react";
-import { EmberParticles } from "@/components/EmberParticles";
+import EmberParticles from "@/components/EmberParticles";
 import { Reveal } from "@/components/Reveal";
+import { AbsorptionScene } from "@/components/AbsorptionScene";
+import { BlurredPassport } from "@/components/BlurredPassport";
+import { ComparisonColumns } from "@/components/ComparisonColumns";
+import { CinematicMarquee } from "@/components/CinematicMarquee";
 
 const patterns = [
   {
@@ -204,13 +208,355 @@ export default function Home() {
         </div>
       </section>
 
-      {/* AbsorptionScene */}
-      {/* BlurredPassport */}
-      {/* ComparisonColumns */}
-      {/* Trust */}
-      {/* Process */}
-      {/* CTA */}
-      {/* Footer */}
+      {/* ── ABSORPTION ── */}
+      <AbsorptionScene />
+
+      {/* ── BLURRED PASSPORT ── */}
+      <BlurredPassport />
+
+      {/* ── COMPARISON ── */}
+      <ComparisonColumns />
+
+      {/* ── TRUST ── */}
+      <section className="section">
+        <div style={{ maxWidth: 700, margin: "0 auto", textAlign: "center" }}>
+          <Reveal>
+            <h2
+              style={{
+                fontFamily: "var(--font-display)",
+                fontSize: "clamp(2rem, 5vw, 3rem)",
+                fontWeight: 500,
+                lineHeight: 1.1,
+                letterSpacing: "-0.02em",
+              }}
+            >
+              22 клинических теста.
+            </h2>
+            <p
+              className="mt-3"
+              style={{ fontSize: 16, color: "var(--text-30)" }}
+            >
+              Те же, что используют психологи. Только бесплатно.
+            </p>
+          </Reveal>
+        </div>
+        <div className="mt-10" style={{ margin: "40px -24px 0" }}>
+          <CinematicMarquee />
+        </div>
+        <div
+          className="mt-10"
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            gap: 48,
+            flexWrap: "wrap",
+          }}
+        >
+          <Reveal>
+            <div style={{ textAlign: "center" }}>
+              <div
+                style={{
+                  fontFamily: "var(--font-display)",
+                  fontSize: "clamp(2rem, 5vw, 3.5rem)",
+                  fontWeight: 600,
+                  color: "var(--ember)",
+                  lineHeight: 1,
+                }}
+              >
+                330
+              </div>
+              <div
+                style={{
+                  fontFamily: "var(--font-mono)",
+                  fontSize: 10,
+                  color: "var(--text-15)",
+                  letterSpacing: "0.1em",
+                  textTransform: "uppercase" as const,
+                  marginTop: 8,
+                }}
+              >
+                вопросов
+              </div>
+            </div>
+          </Reveal>
+          <Reveal delay={0.1}>
+            <div style={{ textAlign: "center" }}>
+              <div
+                style={{
+                  fontFamily: "var(--font-display)",
+                  fontSize: "clamp(2rem, 5vw, 3.5rem)",
+                  fontWeight: 600,
+                  color: "var(--ember)",
+                  lineHeight: 1,
+                }}
+              >
+                9
+              </div>
+              <div
+                style={{
+                  fontFamily: "var(--font-mono)",
+                  fontSize: 10,
+                  color: "var(--text-15)",
+                  letterSpacing: "0.1em",
+                  textTransform: "uppercase" as const,
+                  marginTop: 8,
+                }}
+              >
+                слоёв
+              </div>
+            </div>
+          </Reveal>
+          <Reveal delay={0.2}>
+            <div style={{ textAlign: "center" }}>
+              <div
+                style={{
+                  fontFamily: "var(--font-display)",
+                  fontSize: "clamp(2rem, 5vw, 3.5rem)",
+                  fontWeight: 600,
+                  color: "var(--ember)",
+                  lineHeight: 1,
+                }}
+              >
+                $0
+              </div>
+              <div
+                style={{
+                  fontFamily: "var(--font-mono)",
+                  fontSize: 10,
+                  color: "var(--text-15)",
+                  letterSpacing: "0.1em",
+                  textTransform: "uppercase" as const,
+                  marginTop: 8,
+                }}
+              >
+                вместо $174
+              </div>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ── PROCESS ── */}
+      <section className="section">
+        <div style={{ maxWidth: 520, margin: "0 auto" }}>
+          <Reveal>
+            <h2
+              style={{
+                fontFamily: "var(--font-display)",
+                fontSize: "clamp(2rem, 5vw, 3rem)",
+                fontWeight: 500,
+                lineHeight: 1.1,
+                textAlign: "center",
+                marginBottom: 56,
+              }}
+            >
+              Это просто.
+            </h2>
+          </Reveal>
+
+          {[
+            {
+              num: "1",
+              title: "Отвечаешь на вопросы",
+              desc: "По 15 минут за раз. За вечер или за неделю.",
+            },
+            {
+              num: "2",
+              title: "AI собирает портрет",
+              desc: "22 теста → единый документ. Не типология — настоящее описание.",
+            },
+            {
+              num: "3",
+              title: "Получаешь инструкцию к себе",
+              desc: "Что с тобой, почему, и что делать. Конкретно.",
+            },
+          ].map((step, i) => (
+            <Reveal key={step.num} delay={i * 0.15}>
+              <div style={{ display: "flex", gap: 20, alignItems: "flex-start" }}>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                  }}
+                >
+                  <div
+                    style={{
+                      width: 40,
+                      height: 40,
+                      borderRadius: "50%",
+                      background: "linear-gradient(135deg, var(--ember), var(--ember-deep))",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontWeight: 700,
+                      fontSize: 15,
+                      flexShrink: 0,
+                    }}
+                  >
+                    {step.num}
+                  </div>
+                  {i < 2 && (
+                    <div
+                      style={{
+                        width: 1,
+                        height: 40,
+                        background:
+                          "linear-gradient(to bottom, rgba(249,115,22,0.3), transparent)",
+                        margin: "8px 0",
+                      }}
+                    />
+                  )}
+                </div>
+                <div style={{ paddingTop: 8 }}>
+                  <div
+                    style={{
+                      fontFamily: "var(--font-display)",
+                      fontSize: 18,
+                      fontWeight: 500,
+                    }}
+                  >
+                    {step.title}
+                  </div>
+                  <div
+                    style={{
+                      fontSize: 14,
+                      color: "var(--text-30)",
+                      marginTop: 4,
+                    }}
+                  >
+                    {step.desc}
+                  </div>
+                </div>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+      </section>
+
+      {/* ── FINAL CTA ── */}
+      <section
+        className="section"
+        style={{
+          minHeight: "80vh",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          textAlign: "center",
+          position: "relative",
+          overflow: "hidden",
+        }}
+      >
+        <div
+          style={{
+            position: "absolute",
+            width: 500,
+            height: 500,
+            background:
+              "radial-gradient(circle, rgba(249,115,22,0.06), rgba(220,38,38,0.03) 40%, transparent 70%)",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            animation: "glow-pulse 4s ease-in-out infinite",
+          }}
+        />
+        <Reveal>
+          <h2
+            style={{
+              fontFamily: "var(--font-display)",
+              fontSize: "clamp(2.5rem, 7vw, 5rem)",
+              fontWeight: 600,
+              lineHeight: 1.05,
+              letterSpacing: "-0.03em",
+              position: "relative",
+              zIndex: 1,
+            }}
+          >
+            Хватит гадать.
+            <br />
+            <span style={{ color: "var(--ember)" }}>Узнай.</span>
+          </h2>
+        </Reveal>
+        <Reveal delay={0.15}>
+          <Link href="/scan">
+            <button
+              className="btn-ember"
+              style={{
+                marginTop: 40,
+                padding: "18px 48px",
+                fontSize: 18,
+                borderRadius: 14,
+                position: "relative",
+                zIndex: 1,
+                cursor: "pointer",
+                border: "none",
+              }}
+            >
+              Пройти сканирование
+            </button>
+          </Link>
+        </Reveal>
+        <Reveal delay={0.25}>
+          <p
+            style={{
+              marginTop: 20,
+              fontSize: 13,
+              color: "var(--text-15)",
+              position: "relative",
+              zIndex: 1,
+            }}
+          >
+            Бесплатно · 5 минут на первую сессию · результат сразу
+          </p>
+          <p
+            style={{
+              marginTop: 12,
+              fontSize: 11,
+              color: "var(--text-08)",
+              fontFamily: "var(--font-mono)",
+              position: "relative",
+              zIndex: 1,
+            }}
+          >
+            2,847 человек уже прошли сканирование
+          </p>
+        </Reveal>
+      </section>
+
+      {/* ── FOOTER ── */}
+      <footer
+        style={{
+          borderTop: "1px solid var(--text-04)",
+          padding: "32px",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          fontSize: 13,
+          color: "var(--text-15)",
+          flexWrap: "wrap",
+          gap: 16,
+        }}
+      >
+        <span
+          style={{
+            fontFamily: "var(--font-display)",
+            color: "var(--ember)",
+            fontSize: 16,
+          }}
+        >
+          Psyche Scan
+        </span>
+        <span>Не заменяет терапию</span>
+        <div style={{ display: "flex", gap: 20 }}>
+          <Link href="/scan" style={{ color: "var(--text-15)", textDecoration: "none" }}>
+            Тесты
+          </Link>
+          <Link href="/results" style={{ color: "var(--text-15)", textDecoration: "none" }}>
+            Результаты
+          </Link>
+        </div>
+      </footer>
     </main>
   );
 }
