@@ -138,9 +138,9 @@ export default function Home() {
               letterSpacing: "-0.03em",
             }}
           >
-            Ты не знаешь
+            Ты многое о себе
             <br />
-            почему ты такой.
+            <span style={{ color: "var(--ember)" }}>не знаешь.</span>
           </motion.h1>
 
           <motion.p
@@ -150,11 +150,11 @@ export default function Home() {
             className="mt-6 md:text-lg leading-relaxed"
             style={{ color: "var(--text-30)" }}
           >
-            Почему срываешься на близких.
+            Внутри тебя работает операционная система —
             <br />
-            Почему тянешь с решениями.
+            она решает за тебя, что чувствовать, кого выбирать
             <br />
-            Почему одни отношения — как под копирку.
+            и почему ты снова наступаешь на те же грабли.
           </motion.p>
 
           <motion.p
@@ -164,14 +164,11 @@ export default function Home() {
             className="mt-5 md:text-xl"
             style={{
               fontFamily: "var(--font-display)",
-              fontSize: undefined,
               color: "var(--text-60)",
             }}
           >
-            Внутри тебя —{" "}
-            <span style={{ color: "var(--ember)" }}>операционная система</span>,
-            <br />
-            которую ты ни разу не открывал.
+            Её можно увидеть.{" "}
+            <span style={{ color: "var(--ember)" }}>Через нейробиологические тесты.</span>
           </motion.p>
 
           <motion.div
@@ -187,7 +184,7 @@ export default function Home() {
               textTransform: "uppercase" as const,
             }}
           >
-            ОТКРОЙ
+            УЗНАЙ КАК ТЫ УСТРОЕН
             <div className="animate-bounce mt-1">↓</div>
           </motion.div>
         </div>
@@ -206,12 +203,12 @@ export default function Home() {
                 letterSpacing: "-0.03em",
               }}
             >
-              С рождения до 7 лет
+              Каждый раз, когда что-то
               <br />
-              мозг записал набор правил.
+              повторялось и подтверждалось —
               <br />
-              <span style={{ color: "var(--text-30)" }}>
-                Ты вырос. Правила — нет.
+              <span style={{ color: "var(--ember)" }}>
+                мозг превращал это в правило.
               </span>
             </h2>
           </Reveal>
@@ -223,12 +220,13 @@ export default function Home() {
                 fontSize: "clamp(1rem, 2vw, 1.15rem)",
                 color: "var(--text-30)",
                 lineHeight: 1.7,
-                maxWidth: 600,
+                maxWidth: 640,
               }}
             >
-              Не слова — ощущения. Из них мозг построил модель мира.
-              Набор правил, по которым ты живёшь до сих пор.
-              Узнаёшь хотя бы одно?
+              Не один момент — а сотни повторений. Мама не пришла, папа накричал,
+              в школе засмеяли. Каждый раз нейронная связь укреплялась.
+              К 6-7 годам — это уже автопилот. Сейчас тебе 25, 30, 40 —
+              а программа та же. Узнаёшь?
             </p>
           </Reveal>
 

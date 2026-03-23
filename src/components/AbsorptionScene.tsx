@@ -369,7 +369,7 @@ export function AbsorptionScene() {
           })}
         </div>
 
-        {/* Bottom text */}
+        {/* Bottom text — large, glowing, impossible to miss */}
         <div
           ref={textRef}
           style={{
@@ -378,13 +378,29 @@ export function AbsorptionScene() {
             left: 0,
             right: 0,
             textAlign: "center",
-            fontFamily: "var(--font-display)",
-            fontSize: "clamp(1.2rem, 3vw, 1.8rem)",
             opacity: 0,
           }}
         >
-          Всё это внутри тебя.{" "}
-          <span style={{ color: "var(--ember)" }}>Прямо сейчас.</span>
+          <div style={{
+            fontFamily: "var(--font-display)",
+            fontSize: "clamp(1.8rem, 4vw, 3rem)",
+            fontWeight: 600,
+            letterSpacing: "-0.02em",
+            lineHeight: 1.2,
+          }}>
+            Всё это внутри тебя.
+          </div>
+          <div style={{
+            fontFamily: "var(--font-display)",
+            fontSize: "clamp(2rem, 5vw, 3.5rem)",
+            fontWeight: 600,
+            color: "var(--ember)",
+            letterSpacing: "-0.02em",
+            textShadow: "0 0 40px rgba(255,107,43,0.3), 0 0 80px rgba(255,107,43,0.1)",
+            marginTop: 4,
+          }}>
+            Прямо сейчас.
+          </div>
         </div>
       </div>
     </div>
