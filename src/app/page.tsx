@@ -122,211 +122,262 @@ export default function Home() {
       </motion.nav>
 
       {/* ── HERO ── */}
-      <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden">
-        {/* Atmospheric layers */}
+      <section
+        className="relative overflow-hidden"
+        style={{ minHeight: "100vh", display: "grid", placeItems: "center" }}
+      >
+        {/* ═══ BACKGROUND LAYERS ═══ */}
+
+        {/* Gradient mesh — organic blobs that drift slowly */}
+        <div style={{ position: "absolute", inset: 0, overflow: "hidden", pointerEvents: "none" }}>
+          {/* Primary ember blob — top right */}
+          <div style={{
+            position: "absolute",
+            top: "-15%",
+            right: "-10%",
+            width: "60vw",
+            height: "60vw",
+            maxWidth: 700,
+            maxHeight: 700,
+            borderRadius: "40% 60% 55% 45% / 55% 40% 60% 45%",
+            background: "radial-gradient(ellipse, rgba(249,115,22,0.12) 0%, rgba(220,38,38,0.06) 50%, transparent 80%)",
+            filter: "blur(80px)",
+            animation: "mesh-drift 20s ease-in-out infinite",
+          }} />
+          {/* Secondary deep red blob — bottom left */}
+          <div style={{
+            position: "absolute",
+            bottom: "-20%",
+            left: "-15%",
+            width: "50vw",
+            height: "50vw",
+            maxWidth: 600,
+            maxHeight: 600,
+            borderRadius: "55% 45% 40% 60% / 45% 55% 45% 55%",
+            background: "radial-gradient(ellipse, rgba(220,38,38,0.08) 0%, rgba(249,115,22,0.03) 60%, transparent 85%)",
+            filter: "blur(90px)",
+            animation: "mesh-drift-2 25s ease-in-out infinite",
+          }} />
+          {/* Warm accent — center-ish, smaller */}
+          <div style={{
+            position: "absolute",
+            top: "50%",
+            left: "40%",
+            transform: "translate(-50%, -50%)",
+            width: "30vw",
+            height: "30vw",
+            maxWidth: 400,
+            maxHeight: 400,
+            borderRadius: "50%",
+            background: "radial-gradient(circle, rgba(251,191,36,0.04) 0%, transparent 70%)",
+            filter: "blur(60px)",
+            animation: "mesh-drift 30s ease-in-out infinite reverse",
+          }} />
+        </div>
+
+        {/* Ember particles on top of mesh */}
         <EmberParticles />
 
-        {/* Large blurred ember orb — center background glow */}
-        <div
-          style={{
-            position: "absolute",
-            top: "40%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            width: "min(70vw, 600px)",
-            height: "min(70vw, 600px)",
-            borderRadius: "50%",
-            background: "radial-gradient(circle, rgba(249,115,22,0.07) 0%, rgba(220,38,38,0.04) 40%, transparent 70%)",
-            filter: "blur(60px)",
-            pointerEvents: "none",
-          }}
-        />
+        {/* Film grain overlay */}
+        <div style={{
+          position: "absolute",
+          inset: "-50%",
+          width: "200%",
+          height: "200%",
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E")`,
+          backgroundSize: "128px 128px",
+          pointerEvents: "none",
+          opacity: 0.4,
+          animation: "grain 8s steps(10) infinite",
+          zIndex: 2,
+        }} />
 
-        {/* Subtle concentric rings — depth hint */}
-        <div
-          style={{
-            position: "absolute",
-            top: "40%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            width: 320,
-            height: 320,
-            borderRadius: "50%",
-            border: "1px solid rgba(249,115,22,0.04)",
-            pointerEvents: "none",
-          }}
-        />
-        <div
-          style={{
-            position: "absolute",
-            top: "40%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            width: 500,
-            height: 500,
-            borderRadius: "50%",
-            border: "1px solid rgba(249,115,22,0.025)",
-            pointerEvents: "none",
-          }}
-        />
-        <div
-          style={{
-            position: "absolute",
-            top: "40%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            width: 700,
-            height: 700,
-            borderRadius: "50%",
-            border: "1px solid rgba(249,115,22,0.015)",
-            pointerEvents: "none",
-          }}
-        />
+        {/* Vignette */}
+        <div style={{
+          position: "absolute",
+          inset: 0,
+          background: "radial-gradient(ellipse 70% 60% at 50% 50%, transparent 40%, rgba(5,5,5,0.6) 100%)",
+          pointerEvents: "none",
+          zIndex: 3,
+        }} />
 
-        {/* Content */}
-        <div className="relative z-10 px-6 flex flex-col items-center" style={{ maxWidth: 800 }}>
-          {/* Eyebrow */}
+        {/* ═══ CONTENT — left-aligned on desktop, centered on mobile ═══ */}
+        <div
+          className="relative"
+          style={{
+            zIndex: 10,
+            width: "100%",
+            maxWidth: 1200,
+            padding: "0 clamp(24px, 6vw, 80px)",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "flex-start",
+          }}
+        >
+          {/* Eyebrow with line */}
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.1, duration: 0.8 }}
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.2, duration: 0.8, ease: [0.23, 1, 0.32, 1] }}
             style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 16,
+              marginBottom: 32,
+            }}
+          >
+            <div style={{
+              width: 40,
+              height: 1,
+              background: "var(--ember)",
+              animation: "line-draw 1s var(--ease) 0.3s both",
+              transformOrigin: "left",
+            }} />
+            <span style={{
               fontFamily: "var(--font-mono)",
               fontSize: 11,
               color: "var(--ember)",
-              letterSpacing: "0.3em",
+              letterSpacing: "0.25em",
               textTransform: "uppercase" as const,
-              marginBottom: 40,
-            }}
-          >
-            DEEP PERSONALITY SCAN
+            }}>
+              PSYCHE SCAN
+            </span>
           </motion.div>
 
-          {/* H1 — cinematic, big, with breathing room */}
+          {/* H1 — massive, left-aligned, two visual weights */}
           <motion.h1
-            initial={{ opacity: 0, y: 40 }}
+            initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3, duration: 1.2, ease: [0.23, 1, 0.32, 1] }}
+            transition={{ delay: 0.4, duration: 1.2, ease: [0.23, 1, 0.32, 1] }}
             style={{
               fontFamily: "var(--font-display)",
-              fontSize: "clamp(3rem, 8vw, 6rem)",
+              fontSize: "clamp(2.8rem, 7.5vw, 5.5rem)",
               fontWeight: 600,
-              lineHeight: 1,
+              lineHeight: 0.95,
               letterSpacing: "-0.04em",
-              textAlign: "center",
             }}
           >
-            Ты многое о себе
+            Ты многое
             <br />
-            <span style={{ color: "var(--ember)" }}>не знаешь.</span>
+            о себе{" "}
+            <span style={{
+              color: "var(--ember)",
+              fontStyle: "italic",
+              textShadow: "0 0 60px rgba(249,115,22,0.15)",
+            }}>
+              не знаешь.
+            </span>
           </motion.h1>
 
-          {/* Spacer */}
-          <motion.div
-            initial={{ scaleX: 0 }}
-            animate={{ scaleX: 1 }}
-            transition={{ delay: 0.8, duration: 1, ease: [0.23, 1, 0.32, 1] }}
-            style={{
-              width: 60,
-              height: 1,
-              background: "linear-gradient(90deg, transparent, var(--ember), transparent)",
-              margin: "36px 0",
-            }}
-          />
-
-          {/* Sub — clear visual separation from H1 */}
+          {/* Subtitle — offset right, creates asymmetry */}
           <motion.p
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1, duration: 1, ease: [0.23, 1, 0.32, 1] }}
+            transition={{ delay: 0.9, duration: 1, ease: [0.23, 1, 0.32, 1] }}
             style={{
-              fontSize: "clamp(1rem, 2.2vw, 1.2rem)",
+              marginTop: 40,
+              marginLeft: "clamp(0px, 3vw, 40px)",
+              fontSize: "clamp(1rem, 1.8vw, 1.15rem)",
               color: "var(--text-30)",
-              lineHeight: 1.8,
-              textAlign: "center",
-              maxWidth: 520,
+              lineHeight: 1.9,
+              maxWidth: 460,
             }}
           >
             Внутри тебя работает операционная система.
             <br />
-            Она решает за тебя — что чувствовать,
+            Она решает — что чувствовать, кого выбирать
             <br />
-            кого выбирать, и от чего бежать.
+            и от чего бежать. Без твоего ведома.
           </motion.p>
 
-          {/* CTA line — separated, bold */}
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.3, duration: 1, ease: [0.23, 1, 0.32, 1] }}
-            style={{
-              fontFamily: "var(--font-display)",
-              fontSize: "clamp(1.1rem, 2.5vw, 1.4rem)",
-              color: "var(--text-60)",
-              textAlign: "center",
-              marginTop: 28,
-            }}
-          >
-            Узнай всё.{" "}
-            <span style={{
-              color: "var(--ember)",
-              textShadow: "0 0 30px rgba(249,115,22,0.2)",
-            }}>
-              Через нейробиологические тесты.
-            </span>
-          </motion.p>
-
-          {/* CTA Button — proper button, not just text */}
+          {/* CTA — two-part line with color break */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.6, duration: 1, ease: [0.23, 1, 0.32, 1] }}
-            style={{ marginTop: 48 }}
+            transition={{ delay: 1.2, duration: 1, ease: [0.23, 1, 0.32, 1] }}
+            style={{
+              marginTop: 48,
+              marginLeft: "clamp(0px, 3vw, 40px)",
+              display: "flex",
+              flexDirection: "column",
+              gap: 20,
+            }}
           >
-            <Link href="/scan">
-              <button
-                className="btn-ember"
-                style={{
-                  padding: "16px 40px",
-                  fontSize: 16,
-                  borderRadius: 12,
-                  border: "none",
-                  cursor: "pointer",
-                  boxShadow: "0 0 30px rgba(249,115,22,0.15), 0 4px 20px rgba(0,0,0,0.3)",
-                }}
-              >
-                Пройти сканирование
-              </button>
-            </Link>
-            <div
-              style={{
+            <p style={{
+              fontFamily: "var(--font-display)",
+              fontSize: "clamp(1.15rem, 2.2vw, 1.4rem)",
+              color: "var(--text-60)",
+              lineHeight: 1.4,
+            }}>
+              Можно узнать всё.{" "}
+              <span style={{
+                color: "var(--ember)",
+                textShadow: "0 0 40px rgba(249,115,22,0.15)",
+              }}>
+                Через 22 нейробиологических теста.
+              </span>
+            </p>
+
+            <div style={{ display: "flex", alignItems: "center", gap: 24, flexWrap: "wrap" }}>
+              <Link href="/scan">
+                <button
+                  className="btn-ember"
+                  style={{
+                    padding: "16px 36px",
+                    fontSize: 15,
+                    fontWeight: 600,
+                    borderRadius: 10,
+                    border: "none",
+                    cursor: "pointer",
+                    boxShadow: "0 0 40px rgba(249,115,22,0.12), 0 2px 16px rgba(0,0,0,0.4)",
+                    letterSpacing: "0.02em",
+                  }}
+                >
+                  Пройти сканирование
+                </button>
+              </Link>
+              <span style={{
                 fontFamily: "var(--font-mono)",
                 fontSize: 11,
                 color: "var(--text-15)",
-                letterSpacing: "0.1em",
-                marginTop: 16,
-                textAlign: "center",
-              }}
-            >
-              бесплатно · 330 вопросов · результат сразу
+                letterSpacing: "0.05em",
+              }}>
+                бесплатно · результат сразу
+              </span>
             </div>
           </motion.div>
 
-          {/* Scroll hint — at very bottom */}
+          {/* Scroll indicator — bottom left */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 2.2, duration: 1 }}
+            transition={{ delay: 2, duration: 1.5 }}
             style={{
-              marginTop: 56,
-              fontFamily: "var(--font-mono)",
-              fontSize: 10,
-              color: "var(--text-08)",
-              letterSpacing: "0.2em",
-              textAlign: "center",
+              position: "absolute",
+              bottom: "-15vh",
+              left: "clamp(24px, 6vw, 80px)",
+              display: "flex",
+              alignItems: "center",
+              gap: 12,
             }}
           >
-            <div className="animate-bounce">↓</div>
+            <div style={{
+              width: 1,
+              height: 40,
+              background: "linear-gradient(to bottom, var(--ember), transparent)",
+              animation: "line-draw 1.5s var(--ease) 2.2s both",
+              transformOrigin: "top",
+            }} />
+            <span style={{
+              fontFamily: "var(--font-mono)",
+              fontSize: 9,
+              color: "var(--text-08)",
+              letterSpacing: "0.25em",
+              textTransform: "uppercase" as const,
+              writingMode: "vertical-lr" as const,
+            }}>
+              SCROLL
+            </span>
           </motion.div>
         </div>
       </section>

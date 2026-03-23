@@ -94,3 +94,32 @@ h1, h2, h3 {
   0%, 100% { text-shadow: 0 0 8px rgba(249,115,22,0.4), 0 0 24px rgba(249,115,22,0.2); }
   50% { text-shadow: 0 0 16px rgba(249,115,22,0.7), 0 0 48px rgba(249,115,22,0.4); }
 }
+
+/* Hero gradient mesh — organic, pulsing background */
+@keyframes mesh-drift {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  25% { transform: translate(30px, -20px) scale(1.05); }
+  50% { transform: translate(-20px, 15px) scale(0.97); }
+  75% { transform: translate(15px, 25px) scale(1.03); }
+}
+@keyframes mesh-drift-2 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(-40px, 20px) scale(1.08); }
+  66% { transform: translate(25px, -30px) scale(0.95); }
+}
+
+/* Film grain overlay */
+@keyframes grain {
+  0%, 100% { transform: translate(0, 0); }
+  10% { transform: translate(-5%, -10%); }
+  30% { transform: translate(3%, -15%); }
+  50% { transform: translate(12%, 9%); }
+  70% { transform: translate(9%, 4%); }
+  90% { transform: translate(-1%, 7%); }
+}
+
+/* Horizontal line draw */
+@keyframes line-draw {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
