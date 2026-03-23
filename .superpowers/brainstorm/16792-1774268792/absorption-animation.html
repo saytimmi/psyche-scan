@@ -1,0 +1,90 @@
+<h2>Анимация "поглощения" — варианты</h2>
+<p class="subtitle">Силуэт человека впитывает конструкции при скролле. Какой стиль ближе?</p>
+
+<div class="cards">
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-image" style="height:320px;background:#0a0a0a;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;">
+      <!-- Human silhouette -->
+      <div style="position:relative;width:120px;height:240px;">
+        <div style="width:120px;height:240px;background:linear-gradient(to bottom,rgba(249,115,22,0.15),rgba(220,38,38,0.08));border-radius:60px 60px 40px 40px;border:1px solid rgba(249,115,22,0.3);display:flex;align-items:center;justify-content:center;">
+          <div style="font-size:11px;color:rgba(255,255,255,0.2);text-align:center;padding:12px;">чистый<br>холст</div>
+        </div>
+        <!-- Flying labels -->
+        <div style="position:absolute;top:-10px;right:-100px;padding:4px 10px;background:rgba(249,115,22,0.15);border:1px solid rgba(249,115,22,0.3);border-radius:6px;font-size:10px;color:#f97316;transform:rotate(-5deg);animation:float1 3s ease-in-out infinite;">"будь идеальным"</div>
+        <div style="position:absolute;top:60px;left:-110px;padding:4px 10px;background:rgba(220,38,38,0.15);border:1px solid rgba(220,38,38,0.3);border-radius:6px;font-size:10px;color:#dc2626;transform:rotate(3deg);animation:float2 4s ease-in-out infinite;">"не показывай слабость"</div>
+        <div style="position:absolute;top:130px;right:-90px;padding:4px 10px;background:rgba(251,191,36,0.15);border:1px solid rgba(251,191,36,0.3);border-radius:6px;font-size:10px;color:#fbbf24;transform:rotate(-2deg);animation:float3 3.5s ease-in-out infinite;">"люди уходят"</div>
+        <div style="position:absolute;bottom:10px;left:-80px;padding:4px 10px;background:rgba(249,115,22,0.15);border:1px solid rgba(249,115,22,0.3);border-radius:6px;font-size:10px;color:#f97316;transform:rotate(4deg);animation:float1 2.8s ease-in-out infinite 0.5s;">"ты недостаточно"</div>
+        <div style="position:absolute;top:30px;right:-70px;padding:4px 10px;background:rgba(220,38,38,0.15);border:1px solid rgba(220,38,38,0.3);border-radius:6px;font-size:10px;color:#dc2626;transform:rotate(-3deg);animation:float2 3.2s ease-in-out infinite 1s;">"будь сильным"</div>
+      </div>
+      <style>
+        @keyframes float1 { 0%,100% { transform: translateY(0) rotate(-5deg); } 50% { transform: translateY(-8px) rotate(-3deg); } }
+        @keyframes float2 { 0%,100% { transform: translateY(0) rotate(3deg); } 50% { transform: translateY(-10px) rotate(5deg); } }
+        @keyframes float3 { 0%,100% { transform: translateY(0) rotate(-2deg); } 50% { transform: translateY(-6px) rotate(0deg); } }
+      </style>
+    </div>
+    <div class="card-body">
+      <h3>A. Текстовые ярлыки</h3>
+      <p>Реальные фразы-программы ("будь идеальным", "не показывай слабость") летят к силуэту и <strong>впитываются</strong> при скролле. Прямой, читаемый, понятный.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-image" style="height:320px;background:#0a0a0a;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;">
+      <!-- Human silhouette with layers -->
+      <div style="position:relative;width:160px;height:240px;display:flex;align-items:center;justify-content:center;">
+        <!-- Core -->
+        <div style="width:80px;height:180px;background:rgba(255,255,255,0.05);border-radius:40px 40px 30px 30px;position:absolute;z-index:4;border:1px solid rgba(255,255,255,0.1);"></div>
+        <!-- Layer 1 -->
+        <div style="width:100px;height:200px;background:rgba(249,115,22,0.06);border-radius:50px 50px 35px 35px;position:absolute;z-index:3;border:1px dashed rgba(249,115,22,0.2);">
+          <div style="position:absolute;top:10px;left:50%;transform:translateX(-50%);font-size:8px;color:rgba(249,115,22,0.4);white-space:nowrap;">страхи</div>
+        </div>
+        <!-- Layer 2 -->
+        <div style="width:120px;height:220px;background:rgba(220,38,38,0.04);border-radius:60px 60px 40px 40px;position:absolute;z-index:2;border:1px dashed rgba(220,38,38,0.15);">
+          <div style="position:absolute;top:6px;left:50%;transform:translateX(-50%);font-size:8px;color:rgba(220,38,38,0.4);white-space:nowrap;">защиты</div>
+        </div>
+        <!-- Layer 3 -->
+        <div style="width:140px;height:238px;background:rgba(251,191,36,0.03);border-radius:70px 70px 45px 45px;position:absolute;z-index:1;border:1px dashed rgba(251,191,36,0.12);">
+          <div style="position:absolute;top:4px;left:50%;transform:translateX(-50%);font-size:8px;color:rgba(251,191,36,0.4);white-space:nowrap;">маски</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B. Слои обрастания</h3>
+      <p>Силуэт человека обрастает слоями при скролле: сначала "страхи", потом "защиты", потом "маски". Каждый слой — полупрозрачная оболочка. Луковица, которую Psyche Scan снимает.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="card-image" style="height:320px;background:#0a0a0a;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;">
+      <!-- Human with particle absorption -->
+      <div style="position:relative;width:160px;height:240px;display:flex;align-items:center;justify-content:center;">
+        <div style="width:100px;height:200px;border-radius:50px 50px 35px 35px;position:relative;overflow:hidden;">
+          <!-- Gradient fill simulating absorption -->
+          <div style="position:absolute;bottom:0;left:0;right:0;height:70%;background:linear-gradient(to top, rgba(249,115,22,0.4), rgba(220,38,38,0.2), transparent);transition:height 2s;"></div>
+          <div style="position:absolute;inset:0;border:1px solid rgba(255,255,255,0.15);border-radius:50px 50px 35px 35px;"></div>
+        </div>
+        <!-- Particles coming in -->
+        <div style="position:absolute;width:6px;height:6px;background:#f97316;border-radius:50%;top:20px;left:10px;animation:particle1 2s ease-in infinite;opacity:0.6;"></div>
+        <div style="position:absolute;width:4px;height:4px;background:#dc2626;border-radius:50%;top:40px;right:15px;animation:particle2 2.5s ease-in infinite;opacity:0.5;"></div>
+        <div style="position:absolute;width:5px;height:5px;background:#fbbf24;border-radius:50%;top:80px;left:5px;animation:particle1 1.8s ease-in infinite 0.3s;opacity:0.4;"></div>
+        <div style="position:absolute;width:3px;height:3px;background:#f97316;border-radius:50%;bottom:40px;right:10px;animation:particle2 2.2s ease-in infinite 0.7s;opacity:0.6;"></div>
+        <div style="position:absolute;width:5px;height:5px;background:#dc2626;border-radius:50%;top:120px;right:5px;animation:particle1 3s ease-in infinite 1s;opacity:0.3;"></div>
+      </div>
+      <style>
+        @keyframes particle1 { 0% { transform: translateX(-20px) scale(1); opacity: 0.6; } 100% { transform: translateX(40px) scale(0); opacity: 0; } }
+        @keyframes particle2 { 0% { transform: translateX(20px) scale(1); opacity: 0.5; } 100% { transform: translateX(-40px) scale(0); opacity: 0; } }
+      </style>
+    </div>
+    <div class="card-body">
+      <h3>C. Частицы + заполнение</h3>
+      <p>Абстрактные частицы летят к силуэту и он "заполняется" цветом снизу вверх при скролле. Без текста — чисто визуальная метафора. Рядом подписи появляются отдельно.</p>
+    </div>
+  </div>
+</div>
+
+<div style="margin-top:32px;padding:20px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:12px;">
+  <h3 style="font-size:15px;color:rgba(255,255,255,0.6);margin-bottom:8px;">Как это работает при скролле</h3>
+  <p style="color:rgba(255,255,255,0.4);font-size:13px;line-height:1.6;">
+    Секция занимает ~300vh (3 экрана). Силуэт <strong style="color:rgba(255,255,255,0.7);">sticky по центру</strong>. При скролле конструкции одна за одной прилетают и впитываются. К концу секции человек "полон" — и появляется текст: "Это всё внутри тебя прямо сейчас. Psyche Scan находит каждый слой."
+  </p>
+</div>

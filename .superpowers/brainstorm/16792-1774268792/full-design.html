@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Psyche Scan — Full Design</title>
+<link href="https://api.fontshare.com/v2/css?f[]=zodiak@200,300,400,500,600,700&f[]=general-sans@300,400,500,600,700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #050505; color: #fff; font-family: 'General Sans', sans-serif; font-size: 15px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+
+  .page-title {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(5,5,5,0.9); backdrop-filter: blur(20px);
+    padding: 12px 24px; text-align: center;
+    font-size: 11px; color: #f97316; letter-spacing: 0.15em; text-transform: uppercase;
+    font-family: monospace; border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+
+  section {
+    min-height: 100vh;
+    padding: 80px 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+
+  .section-num {
+    font-family: monospace;
+    font-size: 11px;
+    color: #f97316;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .section-title {
+    font-family: 'Zodiak', serif;
+    font-size: 24px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.9);
+    margin-bottom: 8px;
+  }
+
+  .section-desc {
+    color: rgba(255,255,255,0.35);
+    font-size: 13px;
+    margin-bottom: 32px;
+    max-width: 500px;
+  }
+
+  .tech-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 6px;
+    font-size: 10px;
+    font-family: monospace;
+    letter-spacing: 0.05em;
+    margin-right: 6px;
+    margin-bottom: 4px;
+  }
+  .tech-gsap { background: rgba(249,115,22,0.1); color: #f97316; border: 1px solid rgba(249,115,22,0.2); }
+  .tech-fm { background: rgba(147,51,234,0.1); color: #a78bfa; border: 1px solid rgba(147,51,234,0.2); }
+  .tech-css { background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.4); border: 1px solid rgba(255,255,255,0.08); }
+
+  .mockup-frame {
+    background: #0a0a0a;
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 12px;
+    overflow: hidden;
+    max-width: 600px;
+  }
+
+  .mockup-header {
+    padding: 8px 16px;
+    background: rgba(255,255,255,0.02);
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    font-size: 10px;
+    color: rgba(255,255,255,0.2);
+    font-family: monospace;
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+  .mockup-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.1); }
+
+  .mockup-body { padding: 32px; }
+
+  .anim-note {
+    margin-top: 16px;
+    padding: 12px 16px;
+    background: rgba(249,115,22,0.04);
+    border-left: 2px solid rgba(249,115,22,0.3);
+    border-radius: 0 8px 8px 0;
+    font-size: 12px;
+    color: rgba(255,255,255,0.4);
+    line-height: 1.6;
+  }
+  .anim-note strong { color: rgba(255,255,255,0.6); }
+</style>
+</head>
+<body>
+
+<div class="page-title">Psyche Scan — полный дизайн лендинга</div>
+
+<!-- ═══════════════════════════════════ -->
+<!-- SECTION 1: HERO                    -->
+<!-- ═══════════════════════════════════ -->
+<section>
+  <div class="section-num">Секция 1 — Hero</div>
+  <div class="section-title">Чёрный экран. Один текст. Тишина.</div>
+  <div class="section-desc">Ничего кроме текста. Медленные ember-частицы на фоне — почти невидимые. Текст появляется строка за строкой.</div>
+
+  <div class="mockup-frame">
+    <div class="mockup-header">
+      <div class="mockup-dot"></div><div class="mockup-dot"></div><div class="mockup-dot"></div>
+      psyche-scan.vercel.app
+    </div>
+    <div class="mockup-body" style="min-height:360px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;position:relative;">
+      <!-- Ember particles hint -->
+      <div style="position:absolute;inset:0;overflow:hidden;">
+        <div style="position:absolute;width:3px;height:3px;background:#f97316;border-radius:50%;opacity:0.15;top:20%;left:30%;"></div>
+        <div style="position:absolute;width:2px;height:2px;background:#dc2626;border-radius:50%;opacity:0.1;top:60%;right:25%;"></div>
+        <div style="position:absolute;width:4px;height:4px;background:#f97316;border-radius:50%;opacity:0.08;bottom:30%;left:60%;"></div>
+      </div>
+
+      <div style="position:relative;z-index:1;">
+        <div style="font-family:'Zodiak',serif;font-size:clamp(24px,5vw,38px);font-weight:600;line-height:1.15;letter-spacing:-0.02em;">
+          Ты не знаешь<br>почему ты такой.
+        </div>
+        <div style="margin-top:20px;font-size:15px;color:rgba(255,255,255,0.3);line-height:1.6;max-width:380px;">
+          Почему срываешься. Почему тянешь.<br>Почему одни отношения — как под копирку.
+        </div>
+        <div style="margin-top:16px;font-family:'Zodiak',serif;font-size:17px;color:rgba(255,255,255,0.5);">
+          Внутри тебя — <span style="color:#f97316;">операционная система</span>,<br>
+          которую ты ни разу не открывал.
+        </div>
+        <div style="margin-top:28px;font-family:monospace;font-size:11px;color:rgba(255,255,255,0.15);letter-spacing:0.15em;">
+          ↓ ОТКРОЙ
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:16px;">
+    <span class="tech-badge tech-gsap">GSAP</span>
+    <span class="tech-badge tech-css">Canvas particles</span>
+    <span class="tech-badge tech-fm">Framer Motion text reveal</span>
+  </div>
+  <div class="anim-note">
+    <strong>Анимация:</strong> Текст появляется line-by-line с clip-path reveal (0.8s каждая строка, stagger 0.3s). Ember particles — canvas с ~30 частицами, медленное float движение. Фоновый glow — radial gradient, пульсирует с opacity 0.03→0.06. На скролл — текст parallax уходит вверх, частицы ускоряются.
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════ -->
+<!-- SECTION 2: EXPLANATION             -->
+<!-- ═══════════════════════════════════ -->
+<section>
+  <div class="section-num">Секция 2 — Объяснение</div>
+  <div class="section-title">Простая метафора. Как мем.</div>
+  <div class="section-desc">Одна фраза объясняет весь продукт. Потом — 3 карточки "программа → результат". Человек узнаёт себя.</div>
+
+  <div class="mockup-frame">
+    <div class="mockup-header">
+      <div class="mockup-dot"></div><div class="mockup-dot"></div><div class="mockup-dot"></div>
+      scroll ↓
+    </div>
+    <div class="mockup-body">
+      <div style="font-family:'Zodiak',serif;font-size:22px;font-weight:500;line-height:1.2;margin-bottom:24px;">
+        С рождения до 7 лет мозг записал набор правил.<br>
+        <span style="color:rgba(255,255,255,0.3);">Ты вырос. Правила — нет.</span>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <div style="padding:14px 18px;background:rgba(249,115,22,0.04);border:1px solid rgba(249,115,22,0.12);border-radius:10px;display:flex;justify-content:space-between;align-items:center;">
+          <span style="font-size:14px;color:rgba(255,255,255,0.5);">"Покажу слабость — накажут"</span>
+          <span style="font-size:12px;color:#f97316;font-family:monospace;">→ прячешь эмоции</span>
+        </div>
+        <div style="padding:14px 18px;background:rgba(220,38,38,0.04);border:1px solid rgba(220,38,38,0.12);border-radius:10px;display:flex;justify-content:space-between;align-items:center;">
+          <span style="font-size:14px;color:rgba(255,255,255,0.5);">"Буду идеальным — будут любить"</span>
+          <span style="font-size:12px;color:#dc2626;font-family:monospace;">→ вкалываешь до выгорания</span>
+        </div>
+        <div style="padding:14px 18px;background:rgba(251,191,36,0.04);border:1px solid rgba(251,191,36,0.12);border-radius:10px;display:flex;justify-content:space-between;align-items:center;">
+          <span style="font-size:14px;color:rgba(255,255,255,0.5);">"Люди уходят"</span>
+          <span style="font-size:12px;color:#fbbf24;font-family:monospace;">→ не привязываешься</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:16px;">
+    <span class="tech-badge tech-fm">Framer Motion stagger</span>
+  </div>
+  <div class="anim-note">
+    <strong>Анимация:</strong> Заголовок — clip reveal. Карточки появляются stagger (delay 0.15s). При hover — карточка чуть расширяется, glow по бордеру. Каждая карточка — как "а, это же я" момент.
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════ -->
+<!-- SECTION 3: ABSORPTION              -->
+<!-- ═══════════════════════════════════ -->
+<section>
+  <div class="section-num">Секция 3 — Поглощение (главная секция)</div>
+  <div class="section-title">Scroll-driven анимация: человек впитывает конструкции</div>
+  <div class="section-desc">Sticky-секция на ~300vh. Силуэт по центру. При скролле — фразы прилетают и впитываются, формируя слои.</div>
+
+  <div class="mockup-frame">
+    <div class="mockup-header">
+      <div class="mockup-dot"></div><div class="mockup-dot"></div><div class="mockup-dot"></div>
+      scroll-driven · sticky · ~300vh
+    </div>
+    <div class="mockup-body" style="min-height:400px;display:flex;align-items:center;justify-content:center;position:relative;">
+      <!-- Human figure -->
+      <div style="position:relative;">
+        <!-- Layers -->
+        <div style="width:80px;height:180px;border-radius:40px 40px 30px 30px;position:relative;">
+          <!-- Core -->
+          <div style="position:absolute;inset:15px;border-radius:30px 30px 20px 20px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.02);display:flex;align-items:center;justify-content:center;">
+            <span style="font-size:8px;color:rgba(255,255,255,0.15);">ядро</span>
+          </div>
+          <!-- Layer: fears -->
+          <div style="position:absolute;inset:5px;border-radius:35px 35px 25px 25px;border:1px dashed rgba(249,115,22,0.25);">
+            <span style="position:absolute;top:2px;left:50%;transform:translateX(-50%);font-size:7px;color:rgba(249,115,22,0.35);">страхи</span>
+          </div>
+          <!-- Layer: defenses -->
+          <div style="position:absolute;inset:-5px;border-radius:45px 45px 35px 35px;border:1px dashed rgba(220,38,38,0.2);">
+            <span style="position:absolute;top:2px;left:50%;transform:translateX(-50%);font-size:7px;color:rgba(220,38,38,0.3);">защиты</span>
+          </div>
+          <!-- Layer: masks -->
+          <div style="position:absolute;inset:-15px;border-radius:55px 55px 45px 45px;border:1px dashed rgba(251,191,36,0.15);">
+            <span style="position:absolute;top:2px;left:50%;transform:translateX(-50%);font-size:7px;color:rgba(251,191,36,0.25);">маски</span>
+          </div>
+        </div>
+
+        <!-- Flying phrases -->
+        <div style="position:absolute;top:0;right:-140px;padding:5px 12px;background:rgba(249,115,22,0.08);border:1px solid rgba(249,115,22,0.2);border-radius:6px;font-size:10px;color:rgba(249,115,22,0.6);transform:rotate(-3deg);">"я должен быть сильным"</div>
+        <div style="position:absolute;top:70px;left:-130px;padding:5px 12px;background:rgba(220,38,38,0.08);border:1px solid rgba(220,38,38,0.2);border-radius:6px;font-size:10px;color:rgba(220,38,38,0.6);transform:rotate(2deg);">"меня не любят таким"</div>
+        <div style="position:absolute;bottom:30px;right:-120px;padding:5px 12px;background:rgba(251,191,36,0.08);border:1px solid rgba(251,191,36,0.2);border-radius:6px;font-size:10px;color:rgba(251,191,36,0.6);transform:rotate(-1deg);">"мир опасен"</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:16px;">
+    <span class="tech-badge tech-gsap">GSAP ScrollTrigger pin</span>
+    <span class="tech-badge tech-gsap">GSAP timeline scrub</span>
+    <span class="tech-badge tech-css">SVG/Canvas силуэт</span>
+  </div>
+  <div class="anim-note">
+    <strong>Фазы анимации при скролле (0%→100%):</strong><br>
+    <strong>0-20%:</strong> Чистый силуэт появляется, пульсирует мягким glow<br>
+    <strong>20-50%:</strong> Фразы-программы одна за другой прилетают из-за экрана → подлетают к силуэту → flash при контакте → впитываются (fade + scale down)<br>
+    <strong>50-75%:</strong> Слои начинают проявляться вокруг силуэта — страхи (orange), защиты (red), маски (yellow). Каждый слой = ring с dashed border<br>
+    <strong>75-90%:</strong> Силуэт полностью "загружен", пульсирует тревожным glow<br>
+    <strong>90-100%:</strong> Появляется текст: "Всё это внутри тебя. Прямо сейчас." → переход в следующую секцию
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════ -->
+<!-- SECTION 4: BLURRED RESULT          -->
+<!-- ═══════════════════════════════════ -->
+<section>
+  <div class="section-num">Секция 4 — Размытый результат</div>
+  <div class="section-title">Information gap: покажи часть — спрячь остальное</div>
+  <div class="section-desc">Mockup реального Personality Passport. Первые строки читаемы, дальше — blur. "Хочешь увидеть полностью?"</div>
+
+  <div class="mockup-frame">
+    <div class="mockup-header">
+      <div class="mockup-dot"></div><div class="mockup-dot"></div><div class="mockup-dot"></div>
+      personality passport · preview
+    </div>
+    <div class="mockup-body" style="position:relative;">
+      <div style="font-family:monospace;font-size:10px;color:rgba(249,115,22,0.4);margin-bottom:12px;letter-spacing:0.1em;">PERSONALITY PASSPORT</div>
+      <div style="font-family:'Zodiak',serif;font-size:18px;font-weight:500;margin-bottom:16px;">Твой профиль</div>
+
+      <!-- Readable part -->
+      <div style="font-size:13px;color:rgba(255,255,255,0.6);line-height:1.7;margin-bottom:12px;">
+        Ты — интроверт с высокой открытостью опыту (87-й перцентиль). Тебе нужны люди, но маленькими дозами. Твоя тревожная привязанность создаёт цикл: сближение → страх потери → отталкивание.
+      </div>
+
+      <!-- Blurred part -->
+      <div style="font-size:13px;color:rgba(255,255,255,0.6);line-height:1.7;filter:blur(4px);user-select:none;">
+        Твоя ведущая схема — дефективность. Она сформировалась в возрасте 4-6 лет когда ты получил сообщение что с тобой что-то не так. Это проявляется через перфекционизм...
+      </div>
+      <div style="font-size:13px;color:rgba(255,255,255,0.5);line-height:1.7;filter:blur(6px);user-select:none;margin-top:8px;">
+        Сильные стороны: аналитическое мышление, эмпатия, способность видеть паттерны в хаосе. Слепая зона: ты не замечаешь когда подавляешь злость...
+      </div>
+      <div style="font-size:13px;color:rgba(255,255,255,0.4);line-height:1.7;filter:blur(8px);user-select:none;margin-top:8px;">
+        Рекомендации: начни с осознания момента когда включается "режим перфекциониста". Это твой основной триггер...
+      </div>
+
+      <!-- Overlay -->
+      <div style="position:absolute;bottom:32px;left:0;right:0;height:120px;background:linear-gradient(to top,#0a0a0a,transparent);display:flex;align-items:flex-end;justify-content:center;padding-bottom:0;">
+        <div style="text-align:center;">
+          <div style="font-family:'Zodiak',serif;font-size:16px;color:#f97316;">Это о тебе. Хочешь увидеть полностью?</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:16px;">
+    <span class="tech-badge tech-gsap">GSAP scroll blur transition</span>
+    <span class="tech-badge tech-fm">Framer Motion reveal</span>
+  </div>
+  <div class="anim-note">
+    <strong>Анимация:</strong> При скролле текст появляется сверху вниз. Первые строки чёткие, дальше progressive blur (4px→6px→8px). Gradient overlay снизу. CTA "Хочешь увидеть полностью?" появляется с glow pulse. Information gap theory — мозг мучительно хочет прочитать размытое.
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════ -->
+<!-- SECTION 5: BEFORE/AFTER            -->
+<!-- ═══════════════════════════════════ -->
+<section>
+  <div class="section-num">Секция 5 — Сравнение (FOMO)</div>
+  <div class="section-title">"Ты сейчас" vs "Ты после сканирования"</div>
+  <div class="section-desc">Визуальный контраст: серое/размытое слева, чёткое/цветное справа. Человек не хочет быть в левом столбце.</div>
+
+  <div class="mockup-frame">
+    <div class="mockup-header">
+      <div class="mockup-dot"></div><div class="mockup-dot"></div><div class="mockup-dot"></div>
+    </div>
+    <div class="mockup-body" style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+      <!-- Before -->
+      <div style="padding:20px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.04);border-radius:10px;">
+        <div style="font-size:11px;color:rgba(255,255,255,0.2);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:16px;font-family:monospace;">Сейчас</div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div style="font-size:12px;color:rgba(255,255,255,0.2);filter:blur(0.5px);">"не знаю почему бешусь"</div>
+          <div style="font-size:12px;color:rgba(255,255,255,0.2);filter:blur(0.5px);">"опять та же ссора"</div>
+          <div style="font-size:12px;color:rgba(255,255,255,0.2);filter:blur(0.5px);">"не понимаю чего хочу"</div>
+          <div style="font-size:12px;color:rgba(255,255,255,0.2);filter:blur(0.5px);">"почему я такой"</div>
+        </div>
+      </div>
+      <!-- After -->
+      <div style="padding:20px;background:rgba(249,115,22,0.04);border:1px solid rgba(249,115,22,0.15);border-radius:10px;">
+        <div style="font-size:11px;color:#f97316;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:16px;font-family:monospace;">После сканирования</div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div style="font-size:12px;color:rgba(255,255,255,0.7);">"тревожная привязанность → поэтому"</div>
+          <div style="font-size:12px;color:rgba(255,255,255,0.7);">"схема покинутости → вот паттерн"</div>
+          <div style="font-size:12px;color:rgba(255,255,255,0.7);">"высокая открытость + низкая дисциплина"</div>
+          <div style="font-size:12px;color:rgba(255,255,255,0.7);">"вот инструкция что с этим делать"</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:16px;">
+    <span class="tech-badge tech-gsap">GSAP scroll reveal</span>
+    <span class="tech-badge tech-css">CSS blur/color transition</span>
+  </div>
+  <div class="anim-note">
+    <strong>Анимация:</strong> При скролле сначала появляется левый столбец (серый, размытый). Пауза. Потом правый (яркий, чёткий) — каждая строка stagger. Контраст бьёт визуально. FOMO через "я не хочу оставаться в левом столбце".
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════ -->
+<!-- SECTION 6: TRUST                   -->
+<!-- ═══════════════════════════════════ -->
+<section>
+  <div class="section-num">Секция 6 — Доверие</div>
+  <div class="section-title">Одна строчка + кинематографические титры</div>
+  <div class="section-desc">Не лекция про науку. Одно предложение + бегущая строка фреймворков как film credits.</div>
+
+  <div class="mockup-frame">
+    <div class="mockup-header">
+      <div class="mockup-dot"></div><div class="mockup-dot"></div><div class="mockup-dot"></div>
+    </div>
+    <div class="mockup-body" style="text-align:center;">
+      <div style="font-family:'Zodiak',serif;font-size:20px;font-weight:500;margin-bottom:8px;">
+        22 клинических теста.
+      </div>
+      <div style="font-size:14px;color:rgba(255,255,255,0.3);margin-bottom:24px;">
+        Те же, что используют психологи. Только бесплатно.
+      </div>
+
+      <!-- Film credits marquee -->
+      <div style="overflow:hidden;padding:16px 0;border-top:1px solid rgba(255,255,255,0.04);border-bottom:1px solid rgba(255,255,255,0.04);">
+        <div style="font-family:monospace;font-size:12px;color:rgba(255,255,255,0.15);letter-spacing:0.2em;white-space:nowrap;">
+          BIG FIVE &nbsp;·&nbsp; ECR-R &nbsp;·&nbsp; DERS &nbsp;·&nbsp; YSQ-S3 &nbsp;·&nbsp; ACE &nbsp;·&nbsp; PVQ-RR &nbsp;·&nbsp; DSQ &nbsp;·&nbsp; IFS &nbsp;·&nbsp; POLYVAGAL &nbsp;·&nbsp; MAIA &nbsp;·&nbsp; NEFF &nbsp;·&nbsp; LOEVINGER &nbsp;·&nbsp; McADAMS &nbsp;·&nbsp; KEGAN
+        </div>
+      </div>
+
+      <div style="margin-top:24px;display:flex;justify-content:center;gap:32px;">
+        <div>
+          <div style="font-family:'Zodiak',serif;font-size:28px;color:#f97316;">330</div>
+          <div style="font-size:10px;color:rgba(255,255,255,0.2);font-family:monospace;">ВОПРОСОВ</div>
+        </div>
+        <div>
+          <div style="font-family:'Zodiak',serif;font-size:28px;color:#f97316;">9</div>
+          <div style="font-size:10px;color:rgba(255,255,255,0.2);font-family:monospace;">СЛОЁВ</div>
+        </div>
+        <div>
+          <div style="font-family:'Zodiak',serif;font-size:28px;color:#f97316;">$0</div>
+          <div style="font-size:10px;color:rgba(255,255,255,0.2);font-family:monospace;">ВМЕСТО $174</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:16px;">
+    <span class="tech-badge tech-css">CSS marquee</span>
+    <span class="tech-badge tech-fm">Framer Motion counter</span>
+  </div>
+  <div class="anim-note">
+    <strong>Анимация:</strong> Marquee — медленная, кинематографическая (40s), large letter-spacing, uppercase mono. Числа — AnimatedNumber при scroll-in-view. Минимум элементов = максимум авторитета.
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════ -->
+<!-- SECTION 7: HOW IT WORKS            -->
+<!-- ═══════════════════════════════════ -->
+<section>
+  <div class="section-num">Секция 7 — Процесс</div>
+  <div class="section-title">3 шага. Не 9 сессий.</div>
+  <div class="section-desc">Снижение когнитивной нагрузки. Просто, быстро, понятно.</div>
+
+  <div class="mockup-frame">
+    <div class="mockup-header">
+      <div class="mockup-dot"></div><div class="mockup-dot"></div><div class="mockup-dot"></div>
+    </div>
+    <div class="mockup-body">
+      <div style="display:flex;flex-direction:column;gap:16px;">
+        <div style="display:flex;align-items:flex-start;gap:16px;">
+          <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#f97316,#dc2626);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;flex-shrink:0;">1</div>
+          <div>
+            <div style="font-family:'Zodiak',serif;font-size:16px;font-weight:500;">Отвечаешь на вопросы</div>
+            <div style="font-size:12px;color:rgba(255,255,255,0.3);margin-top:4px;">По 15 минут за раз. Можно за вечер, можно за неделю.</div>
+          </div>
+        </div>
+        <div style="width:1px;height:20px;background:rgba(249,115,22,0.2);margin-left:18px;"></div>
+        <div style="display:flex;align-items:flex-start;gap:16px;">
+          <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#f97316,#dc2626);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;flex-shrink:0;">2</div>
+          <div>
+            <div style="font-family:'Zodiak',serif;font-size:16px;font-weight:500;">AI собирает твой портрет</div>
+            <div style="font-size:12px;color:rgba(255,255,255,0.3);margin-top:4px;">22 теста → единый документ о тебе. Не типология — настоящее описание.</div>
+          </div>
+        </div>
+        <div style="width:1px;height:20px;background:rgba(249,115,22,0.2);margin-left:18px;"></div>
+        <div style="display:flex;align-items:flex-start;gap:16px;">
+          <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#f97316,#dc2626);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;flex-shrink:0;">3</div>
+          <div>
+            <div style="font-family:'Zodiak',serif;font-size:16px;font-weight:500;">Получаешь инструкцию к себе</div>
+            <div style="font-size:12px;color:rgba(255,255,255,0.3);margin-top:4px;">Что с тобой, почему, и что делать. Конкретно.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:16px;">
+    <span class="tech-badge tech-fm">Framer Motion stagger</span>
+  </div>
+  <div class="anim-note">
+    <strong>Анимация:</strong> Каждый шаг появляется при скролле. Линия между шагами "рисуется" сверху вниз (stroke-dashoffset). Простая, не отвлекающая секция — задача: снять тревогу "а это сложно?".
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════ -->
+<!-- SECTION 8: FINAL CTA               -->
+<!-- ═══════════════════════════════════ -->
+<section>
+  <div class="section-num">Секция 8 — Финальный CTA</div>
+  <div class="section-title">Без вариантов. Действуй сейчас.</div>
+  <div class="section-desc">Ember glow на максимум. Одна фраза. Одна кнопка. Social proof + instant gratification.</div>
+
+  <div class="mockup-frame">
+    <div class="mockup-header">
+      <div class="mockup-dot"></div><div class="mockup-dot"></div><div class="mockup-dot"></div>
+    </div>
+    <div class="mockup-body" style="min-height:300px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;position:relative;">
+      <!-- Ember glow -->
+      <div style="position:absolute;width:300px;height:300px;background:radial-gradient(circle,rgba(249,115,22,0.08),transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);"></div>
+
+      <div style="position:relative;z-index:1;">
+        <div style="font-family:'Zodiak',serif;font-size:clamp(22px,4vw,32px);font-weight:600;line-height:1.15;">
+          Хватит гадать.<br>
+          <span style="color:#f97316;">Узнай.</span>
+        </div>
+        <div style="margin-top:24px;">
+          <div style="display:inline-block;padding:14px 36px;background:linear-gradient(135deg,#f97316,#dc2626);border-radius:12px;font-weight:600;font-size:16px;cursor:pointer;">
+            Пройти сканирование
+          </div>
+        </div>
+        <div style="margin-top:16px;font-size:12px;color:rgba(255,255,255,0.2);">
+          Бесплатно · 5 минут на первую сессию · результат сразу
+        </div>
+        <div style="margin-top:12px;font-size:11px;color:rgba(255,255,255,0.12);font-family:monospace;">
+          2,847 человек уже прошли сканирование
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:16px;">
+    <span class="tech-badge tech-gsap">GSAP glow pulse</span>
+    <span class="tech-badge tech-fm">Framer Motion button</span>
+    <span class="tech-badge tech-css">CSS gradient button</span>
+  </div>
+  <div class="anim-note">
+    <strong>Анимация:</strong> Ember glow пульсирует (radial gradient, opacity 0.05→0.12, 3s loop). Кнопка — gradient border animation (rotating conic gradient). Счётчик — AnimatedNumber при scroll-in-view. Текст CTA — максимально короткий, два слова: "Хватит гадать. Узнай."
+  </div>
+</section>
+
+<!-- NAV -->
+<section style="min-height:auto;padding:40px 32px;">
+  <div class="section-num">Навигация (fixed)</div>
+  <div class="section-title">Минимальная. Прозрачная.</div>
+  <div class="mockup-frame" style="max-width:600px;">
+    <div class="mockup-body" style="padding:12px 20px;display:flex;justify-content:space-between;align-items:center;">
+      <div style="font-family:'Zodiak',serif;font-size:16px;font-weight:500;color:#f97316;">Psyche Scan</div>
+      <div style="padding:8px 20px;background:linear-gradient(135deg,#f97316,#dc2626);border-radius:8px;font-size:13px;font-weight:600;">Начать</div>
+    </div>
+  </div>
+  <div class="anim-note" style="max-width:600px;">
+    <strong>Поведение:</strong> Прозрачная при загрузке. При скролле вниз — скрывается. При скролле вверх — появляется с blur backdrop. На последней секции (CTA) — скрывается полностью, чтобы не дублировать кнопку.
+  </div>
+</section>
+
+</body>
+</html>

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Typography Selection</title>
+
+<!-- Load all candidate fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://api.fontshare.com/v2/css?f[]=clash-display@200,300,400,500,600,700&f[]=zodiak@200,300,400,500,600,700&f[]=satoshi@300,400,500,700&f[]=cabinet-grotesk@400,500,700,800&f[]=general-sans@300,400,500,600&display=swap" rel="stylesheet">
+
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #080808; color: #fff; font-family: system-ui; min-height: 100vh; padding: 40px 24px; }
+
+  h1 { font-family: system-ui; font-size: 20px; font-weight: 400; color: rgba(255,255,255,0.5); text-align: center; margin-bottom: 8px; }
+  .subtitle { text-align: center; color: rgba(255,255,255,0.25); font-size: 14px; margin-bottom: 48px; }
+
+  .combo {
+    max-width: 680px;
+    margin: 0 auto 48px;
+    padding: 32px;
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 16px;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.65,0.05,0,1);
+    position: relative;
+  }
+  .combo:hover { border-color: rgba(249,115,22,0.3); background: rgba(249,115,22,0.03); }
+  .combo.selected { border-color: #f97316; background: rgba(249,115,22,0.06); }
+  .combo.selected::after {
+    content: '✓ SELECTED';
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    font-size: 11px;
+    font-family: monospace;
+    color: #f97316;
+    letter-spacing: 0.1em;
+  }
+
+  .combo-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: #f97316;
+    margin-bottom: 24px;
+    font-family: monospace;
+  }
+
+  .combo-note {
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    font-size: 12px;
+    color: rgba(255,255,255,0.3);
+    line-height: 1.5;
+  }
+  .combo-note strong { color: rgba(255,255,255,0.5); }
+
+  .divider {
+    height: 1px;
+    background: rgba(255,255,255,0.06);
+    max-width: 680px;
+    margin: 0 auto 48px;
+  }
+</style>
+</head>
+<body>
+
+<h1>Типографика — выбери комбинацию</h1>
+<p class="subtitle">Реальные шрифты, не заглушки. Кликни на лучшую.</p>
+
+<!-- Combo A -->
+<div class="combo" data-choice="a" onclick="select(this)">
+  <div class="combo-label">A — Clash Display + Satoshi</div>
+  <div style="font-family:'Clash Display',sans-serif;font-size:clamp(36px,6vw,56px);font-weight:700;line-height:1.05;letter-spacing:-0.03em;">
+    Внутри тебя —<br>
+    <span style="color:#f97316;">операционная система.</span>
+  </div>
+  <div style="font-family:'Satoshi',sans-serif;font-size:17px;color:rgba(255,255,255,0.4);margin-top:16px;line-height:1.6;font-weight:400;">
+    Сильные стороны, о которых не догадываешься. Паттерны, которые тобой управляют. Ты живёшь с этим каждый день.
+  </div>
+  <div style="font-family:'Clash Display',sans-serif;font-size:13px;font-weight:500;color:rgba(255,255,255,0.2);margin-top:16px;letter-spacing:0.1em;text-transform:uppercase;">↓ Заглянуть внутрь</div>
+  <div class="combo-note">
+    <strong>Clash Display</strong> — grotesk с характером, закрытые апертуры создают напряжение. <strong>Satoshi</strong> — чистый modernist sans для body. Оба бесплатные от Indian Type Foundry (Fontshare).
+  </div>
+</div>
+
+<!-- Combo B -->
+<div class="combo" data-choice="b" onclick="select(this)">
+  <div class="combo-label">B — Zodiak + General Sans</div>
+  <div style="font-family:'Zodiak',serif;font-size:clamp(36px,6vw,56px);font-weight:600;line-height:1.05;letter-spacing:-0.02em;">
+    Внутри тебя —<br>
+    <span style="color:#f97316;">операционная система.</span>
+  </div>
+  <div style="font-family:'General Sans',sans-serif;font-size:17px;color:rgba(255,255,255,0.4);margin-top:16px;line-height:1.6;font-weight:400;">
+    Сильные стороны, о которых не догадываешься. Паттерны, которые тобой управляют. Ты живёшь с этим каждый день.
+  </div>
+  <div style="font-family:'Zodiak',serif;font-size:13px;font-weight:400;color:rgba(255,255,255,0.2);margin-top:16px;letter-spacing:0.1em;text-transform:uppercase;">↓ Заглянуть внутрь</div>
+  <div class="combo-note">
+    <strong>Zodiak</strong> — high-contrast editorial serif. Драматичные thick-thin переходы = ощущение журнала/кино. <strong>General Sans</strong> — Swiss-inspired, тёплый и чистый. Оба бесплатные (Fontshare).
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- Combo C -->
+<div class="combo" data-choice="c" onclick="select(this)">
+  <div class="combo-label">C — Syne + Cabinet Grotesk</div>
+  <div style="font-family:'Syne',sans-serif;font-size:clamp(36px,6vw,56px);font-weight:800;line-height:1.05;letter-spacing:-0.02em;">
+    Внутри тебя —<br>
+    <span style="color:#f97316;">операционная система.</span>
+  </div>
+  <div style="font-family:'Cabinet Grotesk',sans-serif;font-size:17px;color:rgba(255,255,255,0.4);margin-top:16px;line-height:1.6;font-weight:400;">
+    Сильные стороны, о которых не догадываешься. Паттерны, которые тобой управляют. Ты живёшь с этим каждый день.
+  </div>
+  <div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:500;color:rgba(255,255,255,0.2);margin-top:16px;letter-spacing:0.1em;text-transform:uppercase;">↓ Заглянуть внутрь</div>
+  <div class="combo-note">
+    <strong>Syne</strong> — создан для арт-центра Synesthésie. Геометричный, но с характером. Сжатые пропорции = напряжение. <strong>Cabinet Grotesk</strong> — modern grotesk с quirks (изогнутая нога R, угловые терминалы). Google Fonts + Fontshare.
+  </div>
+</div>
+
+<!-- Combo D -->
+<div class="combo" data-choice="d" onclick="select(this)">
+  <div class="combo-label">D — Clash Display + Cabinet Grotesk</div>
+  <div style="font-family:'Clash Display',sans-serif;font-size:clamp(36px,6vw,56px);font-weight:600;line-height:1.05;letter-spacing:-0.03em;">
+    Ты не знаешь<br>
+    <span style="color:#f97316;">почему ты такой.</span>
+  </div>
+  <div style="font-family:'Cabinet Grotesk',sans-serif;font-size:17px;color:rgba(255,255,255,0.4);margin-top:16px;line-height:1.6;font-weight:400;">
+    Почему бесишься из-за мелочей. Почему тянешь с решениями. Почему одни отношения — как под копирку.
+  </div>
+  <div style="font-family:'Clash Display',sans-serif;font-size:13px;font-weight:500;color:rgba(255,255,255,0.2);margin-top:16px;letter-spacing:0.1em;text-transform:uppercase;">↓ Посмотреть</div>
+  <div class="combo-note">
+    <strong>Полностью sans-serif стек.</strong> Clash Display (закрытые формы, grotesk tension) + Cabinet Grotesk (тёплый, с характером). Без serif = более tech/modern feel. Оба Fontshare.
+  </div>
+</div>
+
+<script>
+function select(el) {
+  document.querySelectorAll('.combo').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  // Record event
+  const choice = el.dataset.choice;
+  const text = el.querySelector('.combo-label')?.textContent || '';
+  fetch('/.record-event', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({type:'click', choice, text, timestamp: Date.now()})
+  }).catch(() => {});
+}
+</script>
+
+</body>
+</html>

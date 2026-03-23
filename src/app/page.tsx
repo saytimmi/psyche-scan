@@ -57,7 +57,7 @@ export default function Home() {
       <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 md:px-10 py-4"
         style={{ background: "rgba(10,10,10,0.85)", backdropFilter: "blur(20px)", borderBottom: "1px solid var(--border)" }}>
         <span className="font-display text-lg" style={{ color: "var(--accent)" }}>Psyche Scan</span>
-        <Link href="/scan">
+        <Link href="/free">
           <button className="btn-accent px-5 py-2.5 text-sm">Начать</button>
         </Link>
       </nav>
@@ -106,7 +106,7 @@ export default function Home() {
             transition={{ delay: 1 }}
             className="mt-8 flex flex-wrap items-center gap-4"
           >
-            <Link href="/scan">
+            <Link href="/free">
               <button className="btn-accent px-8 py-4 text-lg">Пройти сканирование</button>
             </Link>
             <span className="text-xs font-mono" style={{ color: "var(--text-40)" }}>

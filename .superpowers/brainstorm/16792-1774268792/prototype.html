@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Psyche Scan</title>
+<link href="https://api.fontshare.com/v2/css?f[]=zodiak@200,300,400,500,600,700&f[]=general-sans@300,400,500,600,700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #050505;
+    --ember: #f97316;
+    --ember-deep: #dc2626;
+    --ember-warm: #fbbf24;
+    --text: #ffffff;
+    --text-60: rgba(255,255,255,0.6);
+    --text-30: rgba(255,255,255,0.3);
+    --text-15: rgba(255,255,255,0.15);
+    --text-08: rgba(255,255,255,0.08);
+    --text-04: rgba(255,255,255,0.04);
+  }
+
+  ::selection { background: var(--ember); color: var(--bg); }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'General Sans', -apple-system, sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 16px 32px;
+    display: flex; justify-content: space-between; align-items: center;
+    transition: transform 0.5s cubic-bezier(0.33,1,0.68,1), background 0.5s;
+    background: transparent;
+  }
+  nav.scrolled {
+    background: rgba(5,5,5,0.85);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border-bottom: 1px solid var(--text-04);
+  }
+  nav .logo {
+    font-family: 'Zodiak', serif;
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--ember);
+  }
+  nav .cta-nav {
+    padding: 8px 24px;
+    background: linear-gradient(135deg, var(--ember), var(--ember-deep));
+    border: none;
+    border-radius: 10px;
+    color: #fff;
+    font-family: 'General Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.3s, opacity 0.3s;
+  }
+  nav .cta-nav:hover { transform: scale(0.97); opacity: 0.9; }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 0 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .hero-content {
+    position: relative;
+    z-index: 1;
+    max-width: 700px;
+  }
+  .hero h1 {
+    font-family: 'Zodiak', serif;
+    font-size: clamp(2.8rem, 7vw, 5.5rem);
+    font-weight: 600;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    opacity: 0;
+    animation: fadeUp 1s cubic-bezier(0.23,1,0.32,1) 0.2s forwards;
+  }
+  .hero .sub {
+    margin-top: 24px;
+    font-size: clamp(1rem, 2.5vw, 1.25rem);
+    color: var(--text-30);
+    line-height: 1.6;
+    opacity: 0;
+    animation: fadeUp 1s cubic-bezier(0.23,1,0.32,1) 0.6s forwards;
+  }
+  .hero .os-line {
+    margin-top: 20px;
+    font-family: 'Zodiak', serif;
+    font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+    color: var(--text-60);
+    opacity: 0;
+    animation: fadeUp 1s cubic-bezier(0.23,1,0.32,1) 0.9s forwards;
+  }
+  .hero .os-line span { color: var(--ember); }
+  .hero .scroll-hint {
+    margin-top: 48px;
+    font-family: monospace;
+    font-size: 11px;
+    color: var(--text-15);
+    letter-spacing: 0.2em;
+    opacity: 0;
+    animation: fadeUp 1s cubic-bezier(0.23,1,0.32,1) 1.2s forwards;
+  }
+  .hero .scroll-hint .arrow {
+    display: block;
+    margin-top: 8px;
+    animation: bobDown 2s ease-in-out infinite;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes bobDown {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(6px); }
+  }
+
+  /* SECTIONS */
+  .section {
+    padding: clamp(80px, 14vw, 160px) clamp(24px, 6vw, 120px);
+    position: relative;
+  }
+
+  /* EXPLANATION */
+  .explanation {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  .explanation h2 {
+    font-family: 'Zodiak', serif;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
+  .explanation h2 .dim { color: var(--text-30); }
+  .pattern-cards {
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .pattern-card {
+    padding: 18px 24px;
+    border-radius: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.4s cubic-bezier(0.33,1,0.68,1);
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  .pattern-card.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .pattern-card:nth-child(1) {
+    background: rgba(249,115,22,0.05);
+    border: 1px solid rgba(249,115,22,0.12);
+  }
+  .pattern-card:nth-child(2) {
+    background: rgba(220,38,38,0.05);
+    border: 1px solid rgba(220,38,38,0.12);
+  }
+  .pattern-card:nth-child(3) {
+    background: rgba(251,191,36,0.05);
+    border: 1px solid rgba(251,191,36,0.12);
+  }
+  .pattern-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(249,115,22,0.3);
+  }
+  .pattern-card .belief {
+    font-size: 15px;
+    color: var(--text-60);
+  }
+  .pattern-card .result {
+    font-size: 13px;
+    font-family: monospace;
+    letter-spacing: 0.02em;
+  }
+  .pattern-card:nth-child(1) .result { color: var(--ember); }
+  .pattern-card:nth-child(2) .result { color: var(--ember-deep); }
+  .pattern-card:nth-child(3) .result { color: var(--ember-warm); }
+
+  /* ABSORPTION */
+  .absorption {
+    min-height: 300vh;
+    position: relative;
+  }
+  .absorption-sticky {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .silhouette-container {
+    position: relative;
+    width: 200px;
+    height: 360px;
+  }
+  .silhouette-core {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 90px;
+    height: 200px;
+    border-radius: 45px 45px 35px 35px;
+    border: 1px solid var(--text-08);
+    background: rgba(255,255,255,0.01);
+    transition: all 1s;
+  }
+  .silhouette-layer {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    border-radius: 50%;
+    border: 1px dashed;
+    opacity: 0;
+    transition: all 1.2s cubic-bezier(0.33,1,0.68,1);
+  }
+  .layer-fears {
+    width: 140px; height: 260px;
+    transform: translate(-50%, -50%) scale(0.8);
+    border-color: rgba(249,115,22,0.25);
+  }
+  .layer-defenses {
+    width: 180px; height: 300px;
+    transform: translate(-50%, -50%) scale(0.8);
+    border-color: rgba(220,38,38,0.2);
+  }
+  .layer-masks {
+    width: 220px; height: 340px;
+    transform: translate(-50%, -50%) scale(0.8);
+    border-color: rgba(251,191,36,0.15);
+  }
+  .layer-label {
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 10px;
+    font-family: monospace;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    background: var(--bg);
+  }
+
+  .flying-phrase {
+    position: absolute;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    white-space: nowrap;
+    opacity: 0;
+    transition: all 1.5s cubic-bezier(0.33,1,0.68,1);
+  }
+
+  .absorption-text {
+    position: absolute;
+    bottom: 12vh;
+    left: 0; right: 0;
+    text-align: center;
+    font-family: 'Zodiak', serif;
+    font-size: clamp(1.2rem, 3vw, 1.8rem);
+    color: var(--text-30);
+    opacity: 0;
+    transition: opacity 1s;
+  }
+  .absorption-text span { color: var(--ember); }
+
+  /* BLURRED RESULT */
+  .result-preview {
+    max-width: 640px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .result-preview h2 {
+    font-family: 'Zodiak', serif;
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 500;
+    line-height: 1.1;
+    margin-bottom: 48px;
+  }
+  .passport-mock {
+    text-align: left;
+    padding: 32px;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid var(--text-08);
+    border-radius: 16px;
+    position: relative;
+    overflow: hidden;
+  }
+  .passport-mock .passport-label {
+    font-family: monospace;
+    font-size: 10px;
+    color: rgba(249,115,22,0.5);
+    letter-spacing: 0.15em;
+    margin-bottom: 16px;
+  }
+  .passport-mock .passport-title {
+    font-family: 'Zodiak', serif;
+    font-size: 22px;
+    font-weight: 500;
+    margin-bottom: 20px;
+  }
+  .passport-mock .passport-text {
+    font-size: 14px;
+    color: var(--text-60);
+    line-height: 1.8;
+  }
+  .passport-mock .blurred-1 {
+    filter: blur(3px);
+    color: var(--text-60);
+    margin-top: 12px;
+    user-select: none;
+  }
+  .passport-mock .blurred-2 {
+    filter: blur(5px);
+    color: rgba(255,255,255,0.4);
+    margin-top: 12px;
+    user-select: none;
+  }
+  .passport-mock .blurred-3 {
+    filter: blur(7px);
+    color: var(--text-30);
+    margin-top: 12px;
+    user-select: none;
+  }
+  .passport-fade {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 160px;
+    background: linear-gradient(to top, rgba(5,5,5,1) 20%, transparent);
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding-bottom: 32px;
+  }
+  .passport-fade-text {
+    font-family: 'Zodiak', serif;
+    font-size: 18px;
+    color: var(--ember);
+    animation: glowPulse 3s ease-in-out infinite;
+  }
+  @keyframes glowPulse {
+    0%, 100% { text-shadow: 0 0 20px rgba(249,115,22,0.1); }
+    50% { text-shadow: 0 0 30px rgba(249,115,22,0.25); }
+  }
+
+  /* COMPARISON */
+  .comparison {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  .comparison h2 {
+    font-family: 'Zodiak', serif;
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 500;
+    line-height: 1.1;
+    text-align: center;
+    margin-bottom: 48px;
+  }
+  .compare-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  .compare-col {
+    padding: 28px;
+    border-radius: 16px;
+  }
+  .compare-before {
+    background: rgba(255,255,255,0.015);
+    border: 1px solid var(--text-04);
+  }
+  .compare-after {
+    background: rgba(249,115,22,0.03);
+    border: 1px solid rgba(249,115,22,0.12);
+  }
+  .compare-label {
+    font-family: monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+  .compare-before .compare-label { color: var(--text-15); }
+  .compare-after .compare-label { color: var(--ember); }
+  .compare-item {
+    font-size: 14px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--text-04);
+  }
+  .compare-item:last-child { border-bottom: none; }
+  .compare-before .compare-item { color: var(--text-15); }
+  .compare-after .compare-item { color: var(--text-60); }
+
+  /* TRUST */
+  .trust {
+    text-align: center;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+  .trust h2 {
+    font-family: 'Zodiak', serif;
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 500;
+    line-height: 1.1;
+  }
+  .trust .trust-sub {
+    font-size: 16px;
+    color: var(--text-30);
+    margin-top: 12px;
+  }
+  .marquee-wrap {
+    overflow: hidden;
+    padding: 24px 0;
+    margin: 40px -120px;
+    border-top: 1px solid var(--text-04);
+    border-bottom: 1px solid var(--text-04);
+  }
+  .marquee-inner {
+    display: flex;
+    width: max-content;
+    animation: marquee 45s linear infinite;
+  }
+  .marquee-inner span {
+    font-family: monospace;
+    font-size: 13px;
+    color: var(--text-15);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin: 0 32px;
+    white-space: nowrap;
+  }
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  .stats-row {
+    display: flex;
+    justify-content: center;
+    gap: 48px;
+    margin-top: 40px;
+  }
+  .stat-num {
+    font-family: 'Zodiak', serif;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 600;
+    color: var(--ember);
+    line-height: 1;
+  }
+  .stat-label {
+    font-family: monospace;
+    font-size: 10px;
+    color: var(--text-15);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-top: 8px;
+  }
+
+  /* STEPS */
+  .steps {
+    max-width: 520px;
+    margin: 0 auto;
+  }
+  .steps h2 {
+    font-family: 'Zodiak', serif;
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 500;
+    line-height: 1.1;
+    text-align: center;
+    margin-bottom: 56px;
+  }
+  .step {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+  }
+  .step-line {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .step-num {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--ember), var(--ember-deep));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 15px;
+    flex-shrink: 0;
+  }
+  .step-connector {
+    width: 1px;
+    height: 40px;
+    background: linear-gradient(to bottom, rgba(249,115,22,0.3), transparent);
+    margin: 8px 0;
+  }
+  .step-content { padding-top: 8px; }
+  .step-title {
+    font-family: 'Zodiak', serif;
+    font-size: 18px;
+    font-weight: 500;
+  }
+  .step-desc {
+    font-size: 14px;
+    color: var(--text-30);
+    margin-top: 4px;
+  }
+
+  /* CTA */
+  .final-cta {
+    min-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+  }
+  .cta-glow {
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(249,115,22,0.06), rgba(220,38,38,0.03) 40%, transparent 70%);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation: ctaGlow 4s ease-in-out infinite;
+  }
+  @keyframes ctaGlow {
+    0%, 100% { opacity: 0.6; transform: translate(-50%, -50%) scale(1); }
+    50% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+  }
+  .final-cta h2 {
+    font-family: 'Zodiak', serif;
+    font-size: clamp(2.5rem, 7vw, 5rem);
+    font-weight: 600;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    position: relative;
+    z-index: 1;
+  }
+  .final-cta h2 span { color: var(--ember); }
+  .cta-button {
+    margin-top: 40px;
+    padding: 18px 48px;
+    background: linear-gradient(135deg, var(--ember), var(--ember-deep));
+    border: none;
+    border-radius: 14px;
+    color: #fff;
+    font-family: 'General Sans', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    position: relative;
+    z-index: 1;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  .cta-button:hover {
+    transform: scale(0.98);
+    box-shadow: 0 0 40px rgba(249,115,22,0.2);
+  }
+  .cta-meta {
+    margin-top: 20px;
+    font-size: 13px;
+    color: var(--text-15);
+    position: relative;
+    z-index: 1;
+  }
+  .cta-social {
+    margin-top: 12px;
+    font-size: 11px;
+    color: var(--text-08);
+    font-family: monospace;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* FOOTER */
+  footer {
+    padding: 32px;
+    border-top: 1px solid var(--text-04);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    color: var(--text-15);
+  }
+  footer .logo {
+    font-family: 'Zodiak', serif;
+    color: var(--ember);
+    font-size: 16px;
+  }
+  footer a { color: var(--text-15); text-decoration: none; }
+  footer a:hover { color: var(--text-60); }
+
+  /* REVEAL ANIMATION */
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s cubic-bezier(0.23,1,0.32,1), transform 0.8s cubic-bezier(0.23,1,0.32,1);
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    .compare-grid { grid-template-columns: 1fr; }
+    .stats-row { gap: 24px; }
+    .marquee-wrap { margin: 40px -24px; }
+    nav { padding: 12px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="logo">Psyche Scan</div>
+  <button class="cta-nav">Начать</button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <canvas id="embers"></canvas>
+  <div class="hero-content">
+    <h1>Ты не знаешь<br>почему ты такой.</h1>
+    <p class="sub">
+      Почему срываешься на близких.<br>
+      Почему тянешь с решениями.<br>
+      Почему одни отношения — как под копирку.
+    </p>
+    <p class="os-line">
+      Внутри тебя — <span>операционная система</span>,<br>
+      которую ты ни разу не открывал.
+    </p>
+    <div class="scroll-hint">
+      ОТКРОЙ
+      <span class="arrow">↓</span>
+    </div>
+  </div>
+</section>
+
+<!-- EXPLANATION -->
+<section class="section">
+  <div class="explanation">
+    <div class="reveal">
+      <h2>
+        С рождения до 7 лет<br>мозг записал набор правил.<br>
+        <span class="dim">Ты вырос. Правила — нет.</span>
+      </h2>
+    </div>
+    <div class="pattern-cards">
+      <div class="pattern-card reveal">
+        <span class="belief">"Покажу слабость — накажут"</span>
+        <span class="result">→ прячешь эмоции</span>
+      </div>
+      <div class="pattern-card reveal">
+        <span class="belief">"Буду идеальным — будут любить"</span>
+        <span class="result">→ вкалываешь до выгорания</span>
+      </div>
+      <div class="pattern-card reveal">
+        <span class="belief">"Люди уходят"</span>
+        <span class="result">→ не привязываешься</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABSORPTION -->
+<div class="absorption">
+  <div class="absorption-sticky">
+    <div class="silhouette-container" id="silhouette">
+      <div class="silhouette-core" id="core"></div>
+
+      <div class="silhouette-layer layer-fears" id="layer-fears">
+        <span class="layer-label" style="color:rgba(249,115,22,0.4);">страхи</span>
+      </div>
+      <div class="silhouette-layer layer-defenses" id="layer-defenses">
+        <span class="layer-label" style="color:rgba(220,38,38,0.35);">защиты</span>
+      </div>
+      <div class="silhouette-layer layer-masks" id="layer-masks">
+        <span class="layer-label" style="color:rgba(251,191,36,0.3);">маски</span>
+      </div>
+
+      <div class="flying-phrase" id="fp1" style="top:-20px;right:-180px;background:rgba(249,115,22,0.06);border:1px solid rgba(249,115,22,0.15);color:var(--ember);">"я должен быть сильным"</div>
+      <div class="flying-phrase" id="fp2" style="top:80px;left:-200px;background:rgba(220,38,38,0.06);border:1px solid rgba(220,38,38,0.15);color:var(--ember-deep);">"меня не любят таким"</div>
+      <div class="flying-phrase" id="fp3" style="top:170px;right:-160px;background:rgba(251,191,36,0.06);border:1px solid rgba(251,191,36,0.15);color:var(--ember-warm);">"мир опасен"</div>
+      <div class="flying-phrase" id="fp4" style="bottom:40px;left:-170px;background:rgba(249,115,22,0.06);border:1px solid rgba(249,115,22,0.15);color:var(--ember);">"я недостаточно хорош"</div>
+      <div class="flying-phrase" id="fp5" style="bottom:120px;right:-190px;background:rgba(220,38,38,0.06);border:1px solid rgba(220,38,38,0.15);color:var(--ember-deep);">"нельзя доверять"</div>
+    </div>
+
+    <div class="absorption-text" id="absorption-text">
+      Всё это внутри тебя. <span>Прямо сейчас.</span>
+    </div>
+  </div>
+</div>
+
+<!-- BLURRED RESULT -->
+<section class="section">
+  <div class="result-preview">
+    <div class="reveal">
+      <h2>Вот что ты получишь.</h2>
+    </div>
+    <div class="passport-mock reveal">
+      <div class="passport-label">PERSONALITY PASSPORT</div>
+      <div class="passport-title">Твой профиль</div>
+      <div class="passport-text">
+        Ты — интроверт с высокой открытостью опыту (87-й перцентиль). Тебе нужны люди, но маленькими дозами. Твоя тревожная привязанность создаёт цикл: сближение → страх потери → отталкивание.
+      </div>
+      <div class="passport-text blurred-1">
+        Твоя ведущая схема — дефективность. Она сформировалась в возрасте 4-6 лет когда ты получил сообщение что с тобой что-то не так. Это проявляется через перфекционизм и избегание близости.
+      </div>
+      <div class="passport-text blurred-2">
+        Сильные стороны: аналитическое мышление, эмпатия, способность видеть паттерны в хаосе. Слепая зона: ты не замечаешь когда подавляешь злость и трансформируешь её в тревогу.
+      </div>
+      <div class="passport-text blurred-3">
+        Рекомендации: начни с осознания момента когда включается "режим перфекциониста". Это твой основной автопилот. Конкретный шаг: когда замечаешь самокритику — запиши что именно говорит голос.
+      </div>
+      <div class="passport-fade">
+        <div class="passport-fade-text">Хочешь увидеть полностью?</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPARISON -->
+<section class="section">
+  <div class="comparison">
+    <div class="reveal">
+      <h2>Разница — <span style="color:var(--ember)">ясность.</span></h2>
+    </div>
+    <div class="compare-grid reveal">
+      <div class="compare-col compare-before">
+        <div class="compare-label">Ты сейчас</div>
+        <div class="compare-item">"не знаю почему бешусь"</div>
+        <div class="compare-item">"опять та же ссора"</div>
+        <div class="compare-item">"не понимаю чего хочу"</div>
+        <div class="compare-item">"почему я такой"</div>
+      </div>
+      <div class="compare-col compare-after">
+        <div class="compare-label">После сканирования</div>
+        <div class="compare-item">тревожная привязанность → вот почему</div>
+        <div class="compare-item">схема покинутости → вот паттерн</div>
+        <div class="compare-item">высокая открытость + низкая дисциплина</div>
+        <div class="compare-item">вот инструкция что делать</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST -->
+<section class="section">
+  <div class="trust">
+    <div class="reveal">
+      <h2>22 клинических теста.</h2>
+      <p class="trust-sub">Те же, что используют психологи. Только бесплатно.</p>
+    </div>
+    <div class="marquee-wrap">
+      <div class="marquee-inner">
+        <span>Big Five</span><span>ECR-R</span><span>DERS</span><span>YSQ-S3</span><span>ACE</span><span>PVQ-RR</span><span>DSQ</span><span>IFS</span><span>Polyvagal</span><span>MAIA</span><span>Neff</span><span>Loevinger</span><span>McAdams</span><span>Kegan</span>
+        <span>Big Five</span><span>ECR-R</span><span>DERS</span><span>YSQ-S3</span><span>ACE</span><span>PVQ-RR</span><span>DSQ</span><span>IFS</span><span>Polyvagal</span><span>MAIA</span><span>Neff</span><span>Loevinger</span><span>McAdams</span><span>Kegan</span>
+      </div>
+    </div>
+    <div class="stats-row reveal">
+      <div>
+        <div class="stat-num">330</div>
+        <div class="stat-label">вопросов</div>
+      </div>
+      <div>
+        <div class="stat-num">9</div>
+        <div class="stat-label">слоёв</div>
+      </div>
+      <div>
+        <div class="stat-num">$0</div>
+        <div class="stat-label">вместо $174</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STEPS -->
+<section class="section">
+  <div class="steps">
+    <div class="reveal">
+      <h2>Это просто.</h2>
+    </div>
+    <div style="margin-top:56px;">
+      <div class="step reveal">
+        <div class="step-line">
+          <div class="step-num">1</div>
+          <div class="step-connector"></div>
+        </div>
+        <div class="step-content">
+          <div class="step-title">Отвечаешь на вопросы</div>
+          <div class="step-desc">По 15 минут за раз. За вечер или за неделю.</div>
+        </div>
+      </div>
+      <div class="step reveal">
+        <div class="step-line">
+          <div class="step-num">2</div>
+          <div class="step-connector"></div>
+        </div>
+        <div class="step-content">
+          <div class="step-title">AI собирает портрет</div>
+          <div class="step-desc">22 теста → единый документ. Не типология — настоящее описание.</div>
+        </div>
+      </div>
+      <div class="step reveal">
+        <div class="step-line">
+          <div class="step-num">3</div>
+        </div>
+        <div class="step-content">
+          <div class="step-title">Получаешь инструкцию к себе</div>
+          <div class="step-desc">Что с тобой, почему, и что делать. Конкретно.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="section final-cta">
+  <div class="cta-glow"></div>
+  <h2>Хватит гадать.<br><span>Узнай.</span></h2>
+  <button class="cta-button">Пройти сканирование</button>
+  <div class="cta-meta">Бесплатно · 5 минут на первую сессию · результат сразу</div>
+  <div class="cta-social">2,847 человек уже прошли сканирование</div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="logo">Psyche Scan</div>
+  <span>Не заменяет терапию</span>
+  <div style="display:flex;gap:20px;">
+    <a href="#">Тесты</a>
+    <a href="#">Результаты</a>
+  </div>
+</footer>
+
+<script>
+// EMBER PARTICLES
+const canvas = document.getElementById('embers');
+const ctx = canvas.getContext('2d');
+let particles = [];
+
+function resizeCanvas() {
+  canvas.width = canvas.offsetWidth * devicePixelRatio;
+  canvas.height = canvas.offsetHeight * devicePixelRatio;
+  ctx.scale(devicePixelRatio, devicePixelRatio);
+}
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+
+for (let i = 0; i < 40; i++) {
+  particles.push({
+    x: Math.random() * canvas.offsetWidth,
+    y: Math.random() * canvas.offsetHeight,
+    r: Math.random() * 2 + 0.5,
+    vx: (Math.random() - 0.5) * 0.3,
+    vy: -Math.random() * 0.4 - 0.1,
+    opacity: Math.random() * 0.15 + 0.02,
+    color: Math.random() > 0.5 ? '#f97316' : '#dc2626',
+  });
+}
+
+function drawParticles() {
+  ctx.clearRect(0, 0, canvas.offsetWidth, canvas.offsetHeight);
+  for (const p of particles) {
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+    ctx.fillStyle = p.color;
+    ctx.globalAlpha = p.opacity;
+    ctx.fill();
+    // glow
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.r * 4, 0, Math.PI * 2);
+    ctx.fillStyle = p.color;
+    ctx.globalAlpha = p.opacity * 0.2;
+    ctx.fill();
+
+    p.x += p.vx;
+    p.y += p.vy;
+    if (p.y < -10) { p.y = canvas.offsetHeight + 10; p.x = Math.random() * canvas.offsetWidth; }
+    if (p.x < -10) p.x = canvas.offsetWidth + 10;
+    if (p.x > canvas.offsetWidth + 10) p.x = -10;
+  }
+  ctx.globalAlpha = 1;
+  requestAnimationFrame(drawParticles);
+}
+drawParticles();
+
+// NAV SCROLL
+let lastScroll = 0;
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  const y = window.scrollY;
+  if (y > 100) nav.classList.add('scrolled');
+  else nav.classList.remove('scrolled');
+  if (y > lastScroll && y > 300) nav.style.transform = 'translateY(-100%)';
+  else nav.style.transform = 'translateY(0)';
+  lastScroll = y;
+});
+
+// REVEAL ON SCROLL
+const reveals = document.querySelectorAll('.reveal');
+const revealObs = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 100);
+      revealObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.1 });
+reveals.forEach(r => revealObs.observe(r));
+
+// ABSORPTION SCROLL ANIMATION
+const absorption = document.querySelector('.absorption');
+const phrases = [document.getElementById('fp1'), document.getElementById('fp2'), document.getElementById('fp3'), document.getElementById('fp4'), document.getElementById('fp5')];
+const layerFears = document.getElementById('layer-fears');
+const layerDefenses = document.getElementById('layer-defenses');
+const layerMasks = document.getElementById('layer-masks');
+const core = document.getElementById('core');
+const absText = document.getElementById('absorption-text');
+
+window.addEventListener('scroll', () => {
+  const rect = absorption.getBoundingClientRect();
+  const total = absorption.offsetHeight - window.innerHeight;
+  const progress = Math.max(0, Math.min(1, -rect.top / total));
+
+  // Phrases fly in at 10-50%
+  phrases.forEach((p, i) => {
+    const start = 0.1 + i * 0.08;
+    const end = start + 0.12;
+    const t = Math.max(0, Math.min(1, (progress - start) / (end - start)));
+    if (t > 0) {
+      p.style.opacity = t < 0.7 ? t / 0.7 : Math.max(0, 1 - (t - 0.7) / 0.3);
+      const moveX = (1 - t) * 0;
+      p.style.transform = `translateX(${moveX}px) scale(${1 - t * 0.3})`;
+    }
+  });
+
+  // Layers appear at 50-80%
+  const layerT1 = Math.max(0, Math.min(1, (progress - 0.45) / 0.12));
+  const layerT2 = Math.max(0, Math.min(1, (progress - 0.55) / 0.12));
+  const layerT3 = Math.max(0, Math.min(1, (progress - 0.65) / 0.12));
+
+  layerFears.style.opacity = layerT1;
+  layerFears.style.transform = `translate(-50%, -50%) scale(${0.8 + layerT1 * 0.2})`;
+  layerDefenses.style.opacity = layerT2;
+  layerDefenses.style.transform = `translate(-50%, -50%) scale(${0.8 + layerT2 * 0.2})`;
+  layerMasks.style.opacity = layerT3;
+  layerMasks.style.transform = `translate(-50%, -50%) scale(${0.8 + layerT3 * 0.2})`;
+
+  // Core glow
+  const coreGlow = Math.max(0, Math.min(1, (progress - 0.7) / 0.15));
+  core.style.boxShadow = `0 0 ${30 * coreGlow}px rgba(249,115,22,${0.15 * coreGlow}), 0 0 ${60 * coreGlow}px rgba(220,38,38,${0.08 * coreGlow})`;
+  core.style.borderColor = `rgba(249,115,22,${0.08 + coreGlow * 0.2})`;
+
+  // Text at 85-100%
+  const textT = Math.max(0, Math.min(1, (progress - 0.85) / 0.1));
+  absText.style.opacity = textT;
+});
+</script>
+
+</body>
+</html>
