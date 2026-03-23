@@ -1,24 +1,24 @@
-@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://api.fontshare.com/v2/css?f[]=zodiak@200,300,400,500,600,700&f[]=general-sans@300,400,500,600,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap');
 @import "tailwindcss";
 @import "tw-animate-css";
 
 :root {
-  --bg: #0A0A0A;
-  --bg-card: #141414;
-  --bg-card-hover: #1E1E1E;
-  --accent: #D2FF00;
-  --accent-dim: #A8CC00;
-  --text: #FFFFFF;
-  --text-70: rgba(255,255,255,0.7);
-  --text-40: rgba(255,255,255,0.4);
-  --text-20: rgba(255,255,255,0.2);
-  --text-10: rgba(255,255,255,0.1);
-  --border: rgba(255,255,255,0.08);
-  --border-hover: rgba(255,255,255,0.15);
-  --font-display: 'Instrument Serif', Georgia, serif;
-  --font-body: 'DM Sans', system-ui, sans-serif;
+  --bg: #050505;
+  --bg-card: #0e0e0e;
+  --ember: #f97316;
+  --ember-deep: #dc2626;
+  --ember-warm: #fbbf24;
+  --text: #ffffff;
+  --text-60: rgba(255,255,255,0.6);
+  --text-30: rgba(255,255,255,0.3);
+  --text-15: rgba(255,255,255,0.15);
+  --text-08: rgba(255,255,255,0.08);
+  --text-04: rgba(255,255,255,0.04);
+  --font-display: 'Zodiak', Georgia, serif;
+  --font-body: 'General Sans', system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
-  --ease: cubic-bezier(0.65, 0.05, 0, 1);
+  --ease: cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 @theme inline {
@@ -42,66 +42,39 @@ body {
 
 h1, h2, h3 {
   font-family: var(--font-display);
-  line-height: 0.9;
+  line-height: 1.05;
   letter-spacing: -0.03em;
 }
 
-::selection { background: var(--accent); color: var(--bg); }
+::selection { background: var(--ember); color: var(--bg); }
 
 ::-webkit-scrollbar { width: 3px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--text-20); border-radius: 10px; }
+::-webkit-scrollbar-thumb { background: var(--text-15); border-radius: 10px; }
 
-/* Tile — exact Lando Norris hover pattern */
-.tile {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  transition: all 0.5s var(--ease);
+/* Section spacing */
+.section {
+  padding: clamp(80px, 14vw, 160px) clamp(24px, 6vw, 120px);
 }
-.tile:hover {
-  background: var(--accent);
-  color: var(--bg);
-  border-color: var(--accent);
-}
-.tile:hover * { color: var(--bg) !important; }
 
-/* Accent button */
-.btn-accent {
-  background: var(--accent);
-  color: var(--bg);
+/* Ember button */
+.btn-ember {
+  background: linear-gradient(135deg, var(--ember), var(--ember-deep));
+  color: #fff;
   font-weight: 600;
   border-radius: 12px;
   transition: all 0.3s var(--ease);
 }
-.btn-accent:hover {
-  background: var(--accent-dim);
+.btn-ember:hover {
   transform: scale(0.98);
-}
-
-/* Ghost button */
-.btn-ghost {
-  background: transparent;
-  color: var(--text-70);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  transition: all 0.3s var(--ease);
-}
-.btn-ghost:hover {
-  border-color: var(--text-40);
-  color: var(--text);
-}
-
-/* Section spacing */
-.section {
-  padding: clamp(80px, 12vw, 140px) clamp(24px, 5vw, 80px);
+  opacity: 0.9;
 }
 
 /* Divider */
 .divider {
   height: 1px;
-  background: var(--border);
-  margin: 0 clamp(24px, 5vw, 80px);
+  background: var(--text-04);
+  margin: 0 clamp(24px, 6vw, 120px);
 }
 
 /* Marquee — infinite horizontal scroll */
@@ -112,26 +85,12 @@ h1, h2, h3 {
 .marquee-track {
   display: flex;
   width: max-content;
-  animation: marquee-scroll 30s linear infinite;
+  animation: marquee-scroll 45s linear infinite;
 }
 .marquee-track:hover { animation-play-state: paused; }
 
-/* Stagger grid — masonry-like with varied sizes */
-.stagger-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-}
-@media (max-width: 768px) {
-  .stagger-grid { grid-template-columns: 1fr; }
-}
-.stagger-grid > :nth-child(1) { grid-column: span 2; grid-row: span 2; }
-.stagger-grid > :nth-child(5) { grid-column: span 2; }
-
-/* Full-width accent strip */
-.accent-strip {
-  background: var(--accent);
-  color: var(--bg);
-  padding: clamp(40px, 6vw, 80px) clamp(24px, 5vw, 80px);
-  overflow: hidden;
+/* Glow pulse for CTA */
+@keyframes glow-pulse {
+  0%, 100% { text-shadow: 0 0 8px rgba(249,115,22,0.4), 0 0 24px rgba(249,115,22,0.2); }
+  50% { text-shadow: 0 0 16px rgba(249,115,22,0.7), 0 0 48px rgba(249,115,22,0.4); }
 }

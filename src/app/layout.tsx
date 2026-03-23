@@ -3,8 +3,8 @@ import { SmoothScroll } from "@/components/SmoothScroll";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Psyche Scan — Инструкция к себе",
-  description: "9 слоёв. 330 вопросов. 22+ научных фреймворка. Глубинное сканирование личности с AI-анализом.",
+  title: "Psyche Scan — Узнай как ты устроен",
+  description: "Глубинное сканирование личности. 22 клинических теста. AI-анализ. Бесплатно.",
 };
 
 export default function RootLayout({
