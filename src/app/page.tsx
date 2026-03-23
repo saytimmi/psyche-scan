@@ -32,6 +32,34 @@ const patterns = [
     border: "rgba(251,191,36,0.12)",
     color: "var(--ember-warm)",
   },
+  {
+    belief: "«Мир опасен — будь начеку»",
+    result: "Контролируешь всё вокруг",
+    bg: "rgba(249,115,22,0.05)",
+    border: "rgba(249,115,22,0.12)",
+    color: "var(--ember)",
+  },
+  {
+    belief: "«Я недостаточно хорош»",
+    result: "Не начинаешь, чтобы не провалиться",
+    bg: "rgba(220,38,38,0.05)",
+    border: "rgba(220,38,38,0.12)",
+    color: "var(--ember-deep)",
+  },
+  {
+    belief: "«Нельзя доверять»",
+    result: "Держишь дистанцию даже с близкими",
+    bg: "rgba(251,191,36,0.05)",
+    border: "rgba(251,191,36,0.12)",
+    color: "var(--ember-warm)",
+  },
+  {
+    belief: "«Чувства — это слабость»",
+    result: "Рационализируешь вместо того чтобы чувствовать",
+    bg: "rgba(249,115,22,0.05)",
+    border: "rgba(249,115,22,0.12)",
+    color: "var(--ember)",
+  },
 ];
 
 export default function Home() {
@@ -174,14 +202,35 @@ export default function Home() {
             </h2>
           </Reveal>
 
-          <div className="mt-10 flex flex-col gap-3">
+          <Reveal delay={0.15}>
+            <p
+              style={{
+                marginTop: 32,
+                fontSize: "clamp(1rem, 2vw, 1.15rem)",
+                color: "var(--text-30)",
+                lineHeight: 1.7,
+                maxWidth: 600,
+              }}
+            >
+              Не слова — ощущения. Из них мозг построил модель мира.
+              Набор правил, по которым ты живёшь до сих пор.
+              Узнаёшь хотя бы одно?
+            </p>
+          </Reveal>
+
+          <div style={{ marginTop: 48, display: "flex", flexDirection: "column", gap: 12 }}>
             {patterns.map((item, i) => (
-              <Reveal key={item.belief} delay={0.1 * (i + 1)}>
+              <Reveal key={item.belief} delay={0.08 * (i + 1)}>
                 <div
-                  className="rounded-xl p-5 flex justify-between items-center transition-all duration-500 hover:translate-y-[-2px]"
+                  className="rounded-xl transition-all duration-500 hover:translate-y-[-2px]"
                   style={{
+                    padding: "18px 24px",
                     background: item.bg,
                     border: `1px solid ${item.border}`,
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    gap: 16,
                   }}
                 >
                   <span
@@ -197,6 +246,8 @@ export default function Home() {
                       fontFamily: "var(--font-mono)",
                       fontSize: 13,
                       color: item.color,
+                      whiteSpace: "nowrap",
+                      flexShrink: 0,
                     }}
                   >
                     → {item.result}

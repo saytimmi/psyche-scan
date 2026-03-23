@@ -6,34 +6,44 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const phrases = [
+interface PhraseStyle {
+  top?: number;
+  bottom?: number;
+  left?: number;
+  right?: number;
+  color: string;
+  bg: string;
+  border: string;
+}
+
+const phrases: { text: string; style: PhraseStyle; direction: number }[] = [
   {
-    text: "я должен быть сильным",
+    text: "«я должен быть сильным»",
     style: {
-      top: -20,
-      right: -180,
+      top: -10,
+      right: -200,
       color: "#f97316",
       bg: "rgba(249,115,22,0.06)",
       border: "rgba(249,115,22,0.15)",
     },
-    direction: 1, // right side → comes from x: 200
+    direction: 1,
   },
   {
-    text: "меня не любят таким",
+    text: "«меня не любят таким»",
     style: {
-      top: 80,
-      left: -200,
+      top: 70,
+      left: -210,
       color: "#dc2626",
       bg: "rgba(220,38,38,0.06)",
       border: "rgba(220,38,38,0.15)",
     },
-    direction: -1, // left side → comes from x: -200
+    direction: -1,
   },
   {
-    text: "мир опасен",
+    text: "«мир опасен»",
     style: {
-      top: 170,
-      right: -150,
+      top: 155,
+      right: -160,
       color: "#fbbf24",
       bg: "rgba(251,191,36,0.06)",
       border: "rgba(251,191,36,0.15)",
@@ -41,10 +51,10 @@ const phrases = [
     direction: 1,
   },
   {
-    text: "я недостаточно хорош",
+    text: "«я недостаточно хорош»",
     style: {
-      bottom: 60,
-      left: -190,
+      top: 240,
+      left: -210,
       color: "#f97316",
       bg: "rgba(249,115,22,0.06)",
       border: "rgba(249,115,22,0.15)",
@@ -52,10 +62,10 @@ const phrases = [
     direction: -1,
   },
   {
-    text: "нельзя доверять",
+    text: "«нельзя доверять»",
     style: {
-      bottom: 140,
-      right: -170,
+      top: 320,
+      right: -190,
       color: "#dc2626",
       bg: "rgba(220,38,38,0.06)",
       border: "rgba(220,38,38,0.15)",
@@ -67,22 +77,22 @@ const phrases = [
 const layers = [
   {
     label: "страхи",
-    width: 150,
-    height: 270,
+    width: 160,
+    height: 290,
     borderColor: "rgba(249,115,22,0.25)",
     labelColor: "rgba(249,115,22,0.4)",
   },
   {
     label: "защиты",
-    width: 190,
-    height: 310,
+    width: 210,
+    height: 340,
     borderColor: "rgba(220,38,38,0.2)",
     labelColor: "rgba(220,38,38,0.35)",
   },
   {
     label: "маски",
-    width: 230,
-    height: 350,
+    width: 260,
+    height: 390,
     borderColor: "rgba(251,191,36,0.15)",
     labelColor: "rgba(251,191,36,0.3)",
   },
@@ -91,6 +101,7 @@ const layers = [
 export function AbsorptionScene() {
   const containerRef = useRef<HTMLDivElement>(null);
   const coreRef = useRef<HTMLDivElement>(null);
+  const egoRef = useRef<HTMLDivElement>(null);
   const fearsRef = useRef<HTMLDivElement>(null);
   const defensesRef = useRef<HTMLDivElement>(null);
   const masksRef = useRef<HTMLDivElement>(null);
@@ -111,101 +122,92 @@ export function AbsorptionScene() {
       },
     });
 
-    // 1. Core fade in
-    tl.to(coreRef.current, { opacity: 1, duration: 0.15 }, 0);
-
-    // 2. Core glow
+    // 1. Core + EGO label fade in
+    tl.to(coreRef.current, { opacity: 1, duration: 0.1 }, 0);
     tl.to(
       coreRef.current,
-      { boxShadow: "0 0 30px rgba(249,115,22,0.1)", duration: 0.15 },
+      { boxShadow: "0 0 40px rgba(249,115,22,0.08)", duration: 0.1 },
       0
     );
+    if (egoRef.current) {
+      tl.to(egoRef.current, { opacity: 1, duration: 0.1 }, 0);
+    }
 
-    // 3. Each phrase — staggered from 0.15 to 0.50
+    // 2. Each phrase flies in and STAYS (no fade out)
     phraseRefs.current.forEach((el, i) => {
       if (!el) return;
-      const startPos = 0.15 + i * 0.07;
-      const fromX = phrases[i].direction * 200;
+      const startPos = 0.1 + i * 0.08;
+      const fromX = phrases[i].direction * 250;
 
-      // Animate IN
+      // Animate IN — stays at opacity 1
       tl.fromTo(
         el,
         { opacity: 0, x: fromX },
-        { opacity: 1, x: 0, duration: 0.06 },
+        { opacity: 1, x: 0, duration: 0.08, ease: "power2.out" },
         startPos
       );
 
-      // Animate OUT (absorbed)
-      tl.to(
-        el,
-        { opacity: 0, scale: 0.3, duration: 0.04 },
-        startPos + 0.06
-      );
-
-      // Flash core border on absorb
+      // Flash core border on each phrase arrival
       tl.to(
         coreRef.current,
-        { borderColor: "rgba(249,115,22,0.4)", duration: 0.01 },
+        {
+          borderColor: "rgba(249,115,22,0.35)",
+          boxShadow: "0 0 50px rgba(249,115,22,0.15)",
+          duration: 0.02,
+        },
         startPos + 0.06
       );
       tl.to(
         coreRef.current,
-        { borderColor: "rgba(255,255,255,0.08)", duration: 0.02 },
-        startPos + 0.07
+        {
+          borderColor: "rgba(255,255,255,0.08)",
+          boxShadow: "0 0 40px rgba(249,115,22,0.08)",
+          duration: 0.03,
+        },
+        startPos + 0.08
       );
     });
 
-    // 4. Layer fears appear
+    // 3. Layer fears appear
     if (fearsRef.current) {
       tl.to(
         fearsRef.current,
-        {
-          opacity: 1,
-          scale: 1,
-          duration: 0.08,
-        },
-        0.5
+        { opacity: 1, scale: 1, duration: 0.1, ease: "power2.out" },
+        0.55
       );
     }
 
-    // 5. Layer defenses appear
+    // 4. Layer defenses appear
     if (defensesRef.current) {
       tl.to(
         defensesRef.current,
-        {
-          opacity: 1,
-          scale: 1,
-          duration: 0.08,
-        },
-        0.58
+        { opacity: 1, scale: 1, duration: 0.1, ease: "power2.out" },
+        0.63
       );
     }
 
-    // 6. Layer masks appear
+    // 5. Layer masks appear
     if (masksRef.current) {
       tl.to(
         masksRef.current,
-        {
-          opacity: 1,
-          scale: 1,
-          duration: 0.08,
-        },
-        0.66
+        { opacity: 1, scale: 1, duration: 0.1, ease: "power2.out" },
+        0.71
       );
     }
 
-    // 7. Core intensify glow
+    // 6. Core intensify glow + EGO pulses
     tl.to(
       coreRef.current,
       {
         boxShadow:
-          "0 0 50px rgba(249,115,22,0.2), 0 0 100px rgba(220,38,38,0.1)",
+          "0 0 60px rgba(249,115,22,0.2), 0 0 120px rgba(220,38,38,0.1)",
+        borderColor: "rgba(249,115,22,0.2)",
         duration: 0.15,
       },
-      0.75
+      0.78
     );
 
-    // 8. Bottom text
+    // 7. Bottom text
     tl.fromTo(
       textRef.current,
       { opacity: 0, y: 20 },
@@ -222,7 +224,7 @@ export function AbsorptionScene() {
   return (
     <div ref={containerRef} style={{ height: "300vh" }}>
       <div className="sticky top-0 h-screen flex items-center justify-center overflow-hidden">
-        <div className="relative" style={{ width: 240, height: 380 }}>
+        <div className="relative" style={{ width: 280, height: 420 }}>
           {/* Silhouette core */}
           <div
             ref={coreRef}
@@ -231,14 +233,33 @@ export function AbsorptionScene() {
               left: "50%",
               top: "50%",
               transform: "translate(-50%, -50%)",
-              width: 100,
-              height: 220,
-              borderRadius: "50px 50px 38px 38px",
+              width: 110,
+              height: 240,
+              borderRadius: "55px 55px 42px 42px",
               border: "1px solid rgba(255,255,255,0.08)",
               background: "rgba(255,255,255,0.02)",
               opacity: 0,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
             }}
-          />
+          >
+            {/* EGO label — always centered inside core */}
+            <div
+              ref={egoRef}
+              style={{
+                fontFamily: "var(--font-display)",
+                fontSize: 28,
+                fontWeight: 600,
+                letterSpacing: "0.15em",
+                color: "var(--ember)",
+                opacity: 0,
+                textTransform: "uppercase",
+              }}
+            >
+              ЭГО
+            </div>
+          </div>
 
           {/* Layer rings */}
           {layers.map((layer, i) => (
@@ -278,12 +299,12 @@ export function AbsorptionScene() {
             </div>
           ))}
 
-          {/* Flying phrases */}
+          {/* Flying phrases — appear and STAY */}
           {phrases.map((phrase, i) => {
             const pos: React.CSSProperties = {
               position: "absolute",
-              padding: "8px 16px",
-              borderRadius: 8,
+              padding: "10px 18px",
+              borderRadius: 10,
               fontSize: 14,
               whiteSpace: "nowrap",
               opacity: 0,
@@ -293,8 +314,7 @@ export function AbsorptionScene() {
             };
 
             if (phrase.style.top !== undefined) pos.top = phrase.style.top;
-            if (phrase.style.bottom !== undefined)
-              pos.bottom = phrase.style.bottom;
+            if (phrase.style.bottom !== undefined) pos.bottom = phrase.style.bottom;
             if (phrase.style.left !== undefined) pos.left = phrase.style.left;
             if (phrase.style.right !== undefined) pos.right = phrase.style.right;
 
