@@ -25,7 +25,8 @@ export function AnalysisAnimation({ onComplete }: AnalysisAnimationProps) {
       setTimeout(() => onComplete(), 4500),
     ];
     return () => timers.forEach(clearTimeout);
-  }, [onComplete]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="min-h-dvh bg-[#0A0A0A] flex items-center justify-center">
