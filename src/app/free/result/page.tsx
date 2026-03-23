@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { AnalysisAnimation } from "@/components/AnalysisAnimation";
 import { ResultScreen } from "@/components/ResultScreen";
 import { ShareCard } from "@/components/ShareCard";
+import { freeQuestions } from "@/data/free-questions";
 
 /* ─── Types ─── */
 
@@ -147,10 +148,22 @@ export default function FreeResultPage() {
     const profile = JSON.parse(saved) as FreeProfileResult;
     setFreeProfile(profile);
 
+    // Build answer texts for Claude (not just IDs)
+    const savedAnswers = localStorage.getItem("psyche_free_answers");
+    const rawAnswers = savedAnswers ? JSON.parse(savedAnswers) : {};
+    const answerTexts: { question: string; answer: string }[] = [];
+    for (const q of freeQuestions) {
+      const optionId = rawAnswers[q.id];
+      if (optionId) {
+        const opt = q.options.find((o) => o.id === optionId);
+        if (opt) answerTexts.push({ question: q.text, answer: opt.text });
+      }
+    }
+
     fetch("/api/generate-free-profile", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ profile }),
+      body: JSON.stringify({ profile, answerTexts }),
     })
       .then((r) => r.json())
       .then((data) => {
