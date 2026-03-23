@@ -122,20 +122,98 @@ export default function Home() {
       </motion.nav>
 
       {/* ── HERO ── */}
-      <section className="relative min-h-screen flex flex-col items-center justify-center text-center overflow-hidden">
+      <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden">
+        {/* Atmospheric layers */}
         <EmberParticles />
 
-        <div className="relative z-10 px-6" style={{ maxWidth: 700 }}>
+        {/* Large blurred ember orb — center background glow */}
+        <div
+          style={{
+            position: "absolute",
+            top: "40%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: "min(70vw, 600px)",
+            height: "min(70vw, 600px)",
+            borderRadius: "50%",
+            background: "radial-gradient(circle, rgba(249,115,22,0.07) 0%, rgba(220,38,38,0.04) 40%, transparent 70%)",
+            filter: "blur(60px)",
+            pointerEvents: "none",
+          }}
+        />
+
+        {/* Subtle concentric rings — depth hint */}
+        <div
+          style={{
+            position: "absolute",
+            top: "40%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: 320,
+            height: 320,
+            borderRadius: "50%",
+            border: "1px solid rgba(249,115,22,0.04)",
+            pointerEvents: "none",
+          }}
+        />
+        <div
+          style={{
+            position: "absolute",
+            top: "40%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: 500,
+            height: 500,
+            borderRadius: "50%",
+            border: "1px solid rgba(249,115,22,0.025)",
+            pointerEvents: "none",
+          }}
+        />
+        <div
+          style={{
+            position: "absolute",
+            top: "40%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: 700,
+            height: 700,
+            borderRadius: "50%",
+            border: "1px solid rgba(249,115,22,0.015)",
+            pointerEvents: "none",
+          }}
+        />
+
+        {/* Content */}
+        <div className="relative z-10 px-6 flex flex-col items-center" style={{ maxWidth: 800 }}>
+          {/* Eyebrow */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.1, duration: 0.8 }}
+            style={{
+              fontFamily: "var(--font-mono)",
+              fontSize: 11,
+              color: "var(--ember)",
+              letterSpacing: "0.3em",
+              textTransform: "uppercase" as const,
+              marginBottom: 40,
+            }}
+          >
+            DEEP PERSONALITY SCAN
+          </motion.div>
+
+          {/* H1 — cinematic, big, with breathing room */}
           <motion.h1
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2, duration: 1, ease: [0.23, 1, 0.32, 1] }}
+            transition={{ delay: 0.3, duration: 1.2, ease: [0.23, 1, 0.32, 1] }}
             style={{
               fontFamily: "var(--font-display)",
-              fontSize: "clamp(2.8rem, 7vw, 5.5rem)",
+              fontSize: "clamp(3rem, 8vw, 6rem)",
               fontWeight: 600,
-              lineHeight: 1.05,
-              letterSpacing: "-0.03em",
+              lineHeight: 1,
+              letterSpacing: "-0.04em",
+              textAlign: "center",
             }}
           >
             Ты многое о себе
@@ -143,49 +221,112 @@ export default function Home() {
             <span style={{ color: "var(--ember)" }}>не знаешь.</span>
           </motion.h1>
 
+          {/* Spacer */}
+          <motion.div
+            initial={{ scaleX: 0 }}
+            animate={{ scaleX: 1 }}
+            transition={{ delay: 0.8, duration: 1, ease: [0.23, 1, 0.32, 1] }}
+            style={{
+              width: 60,
+              height: 1,
+              background: "linear-gradient(90deg, transparent, var(--ember), transparent)",
+              margin: "36px 0",
+            }}
+          />
+
+          {/* Sub — clear visual separation from H1 */}
           <motion.p
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6, duration: 1, ease: [0.23, 1, 0.32, 1] }}
-            className="mt-6 md:text-lg leading-relaxed"
-            style={{ color: "var(--text-30)" }}
+            transition={{ delay: 1, duration: 1, ease: [0.23, 1, 0.32, 1] }}
+            style={{
+              fontSize: "clamp(1rem, 2.2vw, 1.2rem)",
+              color: "var(--text-30)",
+              lineHeight: 1.8,
+              textAlign: "center",
+              maxWidth: 520,
+            }}
           >
-            Внутри тебя работает операционная система —
+            Внутри тебя работает операционная система.
             <br />
-            она решает за тебя, что чувствовать, кого выбирать
+            Она решает за тебя — что чувствовать,
             <br />
-            и почему ты снова наступаешь на те же грабли.
+            кого выбирать, и от чего бежать.
           </motion.p>
 
+          {/* CTA line — separated, bold */}
           <motion.p
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.9, duration: 1, ease: [0.23, 1, 0.32, 1] }}
-            className="mt-5 md:text-xl"
+            transition={{ delay: 1.3, duration: 1, ease: [0.23, 1, 0.32, 1] }}
             style={{
               fontFamily: "var(--font-display)",
+              fontSize: "clamp(1.1rem, 2.5vw, 1.4rem)",
               color: "var(--text-60)",
+              textAlign: "center",
+              marginTop: 28,
             }}
           >
-            Её можно увидеть.{" "}
-            <span style={{ color: "var(--ember)" }}>Через нейробиологические тесты.</span>
+            Узнай всё.{" "}
+            <span style={{
+              color: "var(--ember)",
+              textShadow: "0 0 30px rgba(249,115,22,0.2)",
+            }}>
+              Через нейробиологические тесты.
+            </span>
           </motion.p>
 
+          {/* CTA Button — proper button, not just text */}
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.2, duration: 1, ease: [0.23, 1, 0.32, 1] }}
-            className="mt-12"
+            transition={{ delay: 1.6, duration: 1, ease: [0.23, 1, 0.32, 1] }}
+            style={{ marginTop: 48 }}
+          >
+            <Link href="/scan">
+              <button
+                className="btn-ember"
+                style={{
+                  padding: "16px 40px",
+                  fontSize: 16,
+                  borderRadius: 12,
+                  border: "none",
+                  cursor: "pointer",
+                  boxShadow: "0 0 30px rgba(249,115,22,0.15), 0 4px 20px rgba(0,0,0,0.3)",
+                }}
+              >
+                Пройти сканирование
+              </button>
+            </Link>
+            <div
+              style={{
+                fontFamily: "var(--font-mono)",
+                fontSize: 11,
+                color: "var(--text-15)",
+                letterSpacing: "0.1em",
+                marginTop: 16,
+                textAlign: "center",
+              }}
+            >
+              бесплатно · 330 вопросов · результат сразу
+            </div>
+          </motion.div>
+
+          {/* Scroll hint — at very bottom */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 2.2, duration: 1 }}
             style={{
+              marginTop: 56,
               fontFamily: "var(--font-mono)",
-              fontSize: 11,
-              color: "var(--text-15)",
+              fontSize: 10,
+              color: "var(--text-08)",
               letterSpacing: "0.2em",
-              textTransform: "uppercase" as const,
+              textAlign: "center",
             }}
           >
-            УЗНАЙ КАК ТЫ УСТРОЕН
-            <div className="animate-bounce mt-1">↓</div>
+            <div className="animate-bounce">↓</div>
           </motion.div>
         </div>
       </section>
