@@ -28,7 +28,7 @@ export const colors = {
   textMuted: "#9CA3AF",
   textDim: "#6B7280",
   border: "#262626",
-  borderAccent: "rgba(249, 115, 22, 0.3)",
+  borderAccent: "#7a3a0e",
 };
 
 export const styles = StyleSheet.create({
