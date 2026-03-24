@@ -50,7 +50,11 @@ src/
 └── lib/
     ├── scoring.ts                       # Full scan scoring engine
     ├── free-scoring.ts                  # Free test scoring (5 scales → pattern)
-    └── supabase.ts                      # Supabase client (not yet used)
+    ├── db.ts                            # Neon Postgres client
+    ├── useUser.ts                       # Anonymous user hook + DB save helpers
+    ├── report-template.tsx              # Free test PDF report (8 pages)
+    ├── full-report-template.tsx         # Full scan PDF report (20 pages, wow-effect)
+    └── report-styles.ts                 # Shared PDF styles (Inter font, Ember theme)
 ```
 
 ## Free Lead Magnet Test (NEW)
@@ -145,14 +149,13 @@ Each screen targets a specific brain response:
 - **Language**: Russian (all UI text)
 
 ## Specs and plans
-- `docs/superpowers/specs/2026-03-23-free-lead-magnet-design.md` — Full spec for free test
-- `docs/superpowers/plans/2026-03-23-free-lead-magnet.md` — Implementation plan
+- `docs/superpowers/specs/2026-03-23-free-lead-magnet-design.md` — Free test spec
+- `docs/superpowers/specs/2026-03-24-telegram-bot-miniapp-design.md` — Telegram Bot + Mini App spec
+- `docs/superpowers/plans/2026-03-24-mvp1-telegram-bot-miniapp.md` — MVP-1 implementation plan
 
-## Future plans
-- Connect Supabase for persistent storage + auth
-- Add free test CTA button to main landing page (currently separate)
-- PDF export of free test results
-- Telegram Mini App version
+## Future plans (next: Telegram Mini App)
+- Telegram Bot + Mini App (spec: `docs/superpowers/specs/2026-03-24-telegram-bot-miniapp-design.md`)
+- Payment integration via Telegram Stars
+- Couples/comparison report
+- AI coach mode in bot
 - Informant report (friend/partner answers about you)
-- Extend Big Five to 60 questions (BFI-2)
-- Payment integration for full scan
