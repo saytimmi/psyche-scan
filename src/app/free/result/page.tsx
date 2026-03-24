@@ -12,6 +12,7 @@ import { AnalysisAnimation } from "@/components/AnalysisAnimation";
 import { ResultScreen } from "@/components/ResultScreen";
 import { ShareCard } from "@/components/ShareCard";
 import { freeQuestions } from "@/data/free-questions";
+import { useUser, saveProfileToDb } from "@/lib/useUser";
 
 /* ─── Types ─── */
 
@@ -141,6 +142,7 @@ export default function FreeResultPage() {
   );
   const [analysisDone, setAnalysisDone] = useState(false);
   const [apiDone, setApiDone] = useState(false);
+  const userId = useUser();
 
   /* ─── On mount: load profile + call API ─── */
 
@@ -175,6 +177,11 @@ export default function FreeResultPage() {
       .then((data) => {
         if (data && data.recognition) {
           setProfileData(data);
+          // Save to Neon in background
+          const uid = localStorage.getItem("psyche_user_id");
+          if (uid) {
+            saveProfileToDb(uid, "free", { scoring: profile, aiResult: data });
+          }
         } else {
           throw new Error("Invalid API response");
         }
@@ -216,6 +223,34 @@ export default function FreeResultPage() {
       setCurrentScreen(screens[idx + 1]);
     }
   }, [currentScreen]);
+
+  /* ─── PDF download ─── */
+
+  const [pdfLoading, setPdfLoading] = useState(false);
+
+  const handleDownloadPdf = async () => {
+    if (!freeProfile || !profileData) return;
+    setPdfLoading(true);
+    try {
+      const res = await fetch("/api/generate-report", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ scoring: freeProfile, aiResult: profileData }),
+      });
+      if (!res.ok) throw new Error("PDF generation failed");
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `psyche-scan-${freeProfile.pattern.name}.pdf`;
+      link.click();
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error("PDF download error:", err);
+    } finally {
+      setPdfLoading(false);
+    }
+  };
 
   /* ─── Share helpers ─── */
 
@@ -615,6 +650,15 @@ export default function FreeResultPage() {
                 onDownload={handleDownload}
                 onShare={handleShare}
               />
+              {/* PDF download */}
+              <button
+                onClick={handleDownloadPdf}
+                disabled={pdfLoading}
+                className="w-full mt-6 bg-white/5 border border-white/10 text-white font-medium px-6 py-3.5 rounded-xl hover:bg-white/10 transition cursor-pointer disabled:opacity-50"
+              >
+                {pdfLoading ? "Генерирую PDF..." : "Скачать PDF-отчёт (8 страниц)"}
+              </button>
+
               <p className="text-white/40 text-center mt-6 text-sm">
                 Интересно — совпадёт ли?
               </p>

@@ -5,6 +5,7 @@ import { sessions } from "@/data/questions";
 import { scoreProfile, generateSummary, type ProfileResult, type RawAnswer } from "@/lib/scoring";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { useUser, saveProfileToDb } from "@/lib/useUser";
 
 // ── Translation map ──
 const translations: Record<string, string> = {
@@ -116,6 +117,7 @@ export default function ResultsPage() {
   const [generating, setGenerating] = useState(false);
   const [genError, setGenError] = useState<string | null>(null);
   const [showRawData, setShowRawData] = useState(false);
+  const userId = useUser();
 
   const handleGeneratePassport = async () => {
     if (!profile) return;
@@ -136,6 +138,10 @@ export default function ResultsPage() {
       } else if (data.passport) {
         setPassport(data.passport);
         localStorage.setItem("psyche_passport", data.passport);
+        // Save to Neon
+        if (userId) {
+          saveProfileToDb(userId, "full", { passport: data.passport, scores: profile });
+        }
       }
     } catch {
       setGenError("Не удалось подключиться к серверу. Попробуй позже.");

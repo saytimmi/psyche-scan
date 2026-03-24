@@ -6,6 +6,7 @@ import { sessions, getTotalQuestionCount } from "@/data/questions";
 import { QuestionCard } from "@/components/QuestionCard";
 import { motion, AnimatePresence } from "framer-motion";
 import type { Question, Section } from "@/data/questions";
+import { useUser, saveAnswersToDb } from "@/lib/useUser";
 
 // Session descriptions for the summary after completion
 const sessionInsights: Record<string, { learned: string; icon: string }> = {
@@ -54,6 +55,7 @@ export default function SessionPage() {
   const params = useParams();
   const router = useRouter();
   const sessionId = params.id as string;
+  const userId = useUser();
 
   const session = sessions.find((s) => s.id === sessionId);
 
@@ -121,6 +123,14 @@ export default function SessionPage() {
           // Session complete — mark completed
           localStorage.setItem(`psyche_answers_${sessionId}`, JSON.stringify(newAnswers));
           localStorage.setItem(`psyche_completed_${sessionId}`, "true");
+          // Save to Neon in background
+          if (userId) {
+            const strAnswers: Record<string, string> = {};
+            for (const [k, v] of Object.entries(newAnswers)) {
+              strAnswers[k] = String(v);
+            }
+            saveAnswersToDb(userId, sessionId, strAnswers);
+          }
           setCompleted(true);
         }
       };

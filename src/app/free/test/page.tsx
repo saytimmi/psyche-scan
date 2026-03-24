@@ -11,12 +11,14 @@ import { motion, AnimatePresence } from "framer-motion";
 import { freeQuestions } from "@/data/free-questions";
 import { scoreFreeProfile } from "@/lib/free-scoring";
 import { FreeQuestionCard } from "@/components/FreeQuestionCard";
+import { useUser, saveAnswersToDb } from "@/lib/useUser";
 
 export default function FreeTestPage() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [phase, setPhase] = useState<"intro" | "questions" | "done">("intro");
   const router = useRouter();
+  const userId = useUser();
 
   // Resume from localStorage
   useEffect(() => {
@@ -41,6 +43,10 @@ export default function FreeTestPage() {
       // Last question — score and redirect
       const profile = scoreFreeProfile(newAnswers);
       localStorage.setItem("psyche_free_profile", JSON.stringify(profile));
+      // Save to Neon in background
+      if (userId) {
+        saveAnswersToDb(userId, "free", newAnswers);
+      }
       router.push("/free/result");
     }
   };

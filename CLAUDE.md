@@ -12,7 +12,7 @@ Live: https://psyche-scan.vercel.app
 - **Tailwind CSS 4** (dark theme, lime accent #D2FF00)
 - **Framer Motion** (animations)
 - **Anthropic Claude API** (Sonnet for AI-generated results)
-- **Supabase** (configured, not yet connected — using localStorage)
+- **Neon Postgres** (`@neondatabase/serverless`) — persistent storage for users, answers, profiles
 - **html2canvas-pro** (shareable result card screenshots)
 
 ## Project structure
@@ -136,8 +136,7 @@ Each screen targets a specific brain response:
 
 ## Environment variables
 - `ANTHROPIC_API_KEY` — Required. Used by both `/api/generate-profile` and `/api/generate-free-profile`
-- `NEXT_PUBLIC_SUPABASE_URL` — Optional, for future Supabase integration
-- `NEXT_PUBLIC_SUPABASE_ANON_KEY` — Optional
+- `DATABASE_URL` — Neon Postgres connection string. Used by `/api/user`, `/api/answers`, `/api/profiles`
 
 ## Design system
 - **Fonts**: Instrument Serif (display), DM Sans (body), JetBrains Mono (data)
