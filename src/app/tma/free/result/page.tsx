@@ -1,11 +1,53 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { AnalysisAnimation } from "@/components/AnalysisAnimation";
-import { ResultScreen } from "@/components/ResultScreen";
+import { TmaAnalysisAnimation } from "@/app/tma/components/TmaAnalysisAnimation";
+import { ShareCardTma } from "@/app/tma/components/ShareCardTma";
 import { BlurredScreen } from "@/app/tma/components/BlurredScreen";
 import { freeQuestions } from "@/data/free-questions";
+
+/* ─── TMA screen wrapper ─── */
+
+function TmaScreen({
+  children,
+  onNext,
+  nextLabel = "Дальше",
+}: {
+  children: React.ReactNode;
+  onNext?: () => void;
+  nextLabel?: string;
+}) {
+  return (
+    <div
+      className="min-h-dvh flex flex-col items-center justify-center px-6 pb-24"
+      style={{ background: "#0D0A1E" }}
+    >
+      <motion.div
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: [0.65, 0.05, 0, 1] }}
+        className="max-w-lg w-full"
+      >
+        {children}
+      </motion.div>
+
+      {onNext && (
+        <button
+          onClick={onNext}
+          className="fixed bottom-8 font-medium px-8 py-3 rounded-xl transition cursor-pointer"
+          style={{
+            background: "#7C3AED",
+            color: "rgba(255,255,255,0.92)",
+            fontSize: 15,
+          }}
+        >
+          {nextLabel}
+        </button>
+      )}
+    </div>
+  );
+}
 
 /* ─── Types ─── */
 
@@ -39,27 +81,23 @@ interface FreeProfileResponse {
   lockedPreviews: string[];
 }
 
-type Screen =
-  | "analysis"
-  | "pattern"
-  | "recognition"
-  | "prediction"
-  | "origin"
-  | "duality"
-  | "actions"
-  | "ai_export"
-  | "share";
+// TMA flow: analysis → pattern → recognition → prediction → origin(blurred) → share
+type Screen = "analysis" | "pattern" | "recognition" | "prediction" | "origin" | "share";
 
-/* ─── Inline components ─── */
+/* ─── TypingText with fading cursor ─── */
 
 function TypingText({
   text,
   className,
+  style,
 }: {
   text: string;
   className?: string;
+  style?: React.CSSProperties;
 }) {
   const [displayedText, setDisplayedText] = useState("");
+  const [done, setDone] = useState(false);
+  const [cursorVisible, setCursorVisible] = useState(true);
 
   useEffect(() => {
     let i = 0;
@@ -69,36 +107,30 @@ function TypingText({
         i++;
       } else {
         clearInterval(interval);
+        setDone(true);
       }
     }, 25);
     return () => clearInterval(interval);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [text]);
 
+  // Fade cursor out 1s after typing finishes
+  useEffect(() => {
+    if (!done) return;
+    const t = setTimeout(() => setCursorVisible(false), 1000);
+    return () => clearTimeout(t);
+  }, [done]);
+
   return (
-    <p className={className}>
+    <p className={className} style={style}>
       {displayedText}
-      <span className="animate-pulse">|</span>
+      <motion.span
+        animate={{ opacity: cursorVisible ? 1 : 0 }}
+        transition={{ duration: 0.4 }}
+      >
+        |
+      </motion.span>
     </p>
-  );
-}
-
-function CopyButton({ text }: { text: string }) {
-  const [copied, setCopied] = useState(false);
-
-  const handleCopy = async () => {
-    await navigator.clipboard.writeText(text);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
-
-  return (
-    <button
-      onClick={handleCopy}
-      className="absolute top-3 right-3 bg-[#f97316] text-white text-xs font-medium px-3 py-1.5 rounded-lg hover:brightness-110 transition cursor-pointer"
-    >
-      {copied ? "✓ Скопировано" : "Скопировать"}
-    </button>
   );
 }
 
@@ -118,15 +150,8 @@ const screens: Screen[] = [
   "recognition",
   "prediction",
   "origin",
-  "duality",
-  "actions",
-  "ai_export",
   "share",
 ];
-
-// Screens 1-3 are free (indices 1, 2, 3 = pattern, recognition, prediction)
-// Screens 4-9 are locked (indices 4+ = origin, duality, actions, ai_export, share)
-const LOCKED_FROM_INDEX = 4;
 
 /* ─── Main page ─── */
 
@@ -136,6 +161,8 @@ export default function TmaFreeResultPage() {
   const [profileData, setProfileData] = useState<FreeProfileResponse | null>(null);
   const [analysisDone, setAnalysisDone] = useState(false);
   const [apiDone, setApiDone] = useState(false);
+  const [showPatternBlackout, setShowPatternBlackout] = useState(false);
+  const shareCardRef = useRef<HTMLDivElement>(null);
 
   /* ─── On mount: load profile + call API ─── */
 
@@ -149,7 +176,6 @@ export default function TmaFreeResultPage() {
     const profile = JSON.parse(saved) as FreeProfileResult;
     setFreeProfile(profile);
 
-    // Build answer texts for Claude
     const savedAnswers = localStorage.getItem("psyche_free_answers");
     const rawAnswers = savedAnswers ? JSON.parse(savedAnswers) : {};
     const answerTexts: { question: string; answer: string }[] = [];
@@ -176,7 +202,6 @@ export default function TmaFreeResultPage() {
         setApiDone(true);
       })
       .catch(() => {
-        // Fallback data
         setProfileData({
           recognition: `Ты ${profile.pattern.description.toLowerCase()}. Это проявляется в повседневных ситуациях — от работы до отношений.\n\nТвой главный паттерн — ${profile.pattern.name}. Он определяет как ты принимаешь решения, как реагируешь на стресс, и почему некоторые ситуации вызывают у тебя сильные эмоции.\n\nЭтот паттерн не плохой и не хороший — это твой способ справляться с миром. Вопрос в том, работает ли он на тебя или против тебя.`,
           predictions: `Ты наверняка замечал за собой: в стрессовых ситуациях ты действуешь на автомате. Не потому что выбираешь — а потому что паттерн включается быстрее чем ты успеваешь подумать.`,
@@ -198,7 +223,13 @@ export default function TmaFreeResultPage() {
 
   useEffect(() => {
     if (analysisDone && apiDone && currentScreen === "analysis") {
-      setCurrentScreen("pattern");
+      // Brief blackout before pattern reveal
+      setShowPatternBlackout(true);
+      const t = setTimeout(() => {
+        setShowPatternBlackout(false);
+        setCurrentScreen("pattern");
+      }, 500);
+      return () => clearTimeout(t);
     }
   }, [analysisDone, apiDone, currentScreen]);
 
@@ -213,34 +244,66 @@ export default function TmaFreeResultPage() {
 
   /* ─── Share helpers ─── */
 
-  const handleShare = async () => {
-    const text = `Мой паттерн: ${freeProfile?.pattern.name} — ${freeProfile?.modifier}. Пройди тоже: https://t.me/psychescan_bot`;
-    if (navigator.share) {
-      await navigator.share({
-        title: "Psyche Scan",
-        text,
+  const handleShareStories = async () => {
+    if (!shareCardRef.current) return;
+    try {
+      const html2canvas = (await import("html2canvas-pro")).default;
+      const canvas = await html2canvas(shareCardRef.current, {
+        backgroundColor: null,
+        scale: 2,
+        useCORS: true,
       });
-    } else {
-      await navigator.clipboard.writeText(text);
+      canvas.toBlob(async (blob) => {
+        if (!blob) return;
+        const file = new File([blob], "psyche-scan.png", { type: "image/png" });
+        if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+          await navigator.share({
+            files: [file],
+            title: "Psyche Scan",
+          });
+        } else {
+          // Fallback: download
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = "psyche-scan.png";
+          a.click();
+          URL.revokeObjectURL(url);
+        }
+      }, "image/png");
+    } catch (err) {
+      console.error("Share error", err);
     }
+  };
+
+  const handleCopyLink = async () => {
+    await navigator.clipboard.writeText("t.me/scanyourbrainbot");
   };
 
   /* ─── Loading guard ─── */
 
   if (!freeProfile) {
-    return <div className="min-h-dvh bg-[#050505]" />;
+    return <div className="min-h-dvh" style={{ background: "#0D0A1E" }} />;
   }
-
-  /* ─── Helper: is this screen locked? ─── */
-
-  const currentIdx = screens.indexOf(currentScreen);
-  const isLocked = currentIdx >= LOCKED_FROM_INDEX;
-  // Screen number shown to user (skipping "analysis" screen 0)
-  const userScreenNumber = currentIdx; // pattern=1, recognition=2, ...
 
   /* ─── Render screens ─── */
 
   const renderScreenContent = () => {
+    // Brief blackout between analysis and pattern
+    if (showPatternBlackout) {
+      return (
+        <motion.div
+          key="blackout"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.25 }}
+          className="min-h-dvh"
+          style={{ background: "#000000" }}
+        />
+      );
+    }
+
     // Spinner if API not ready
     if (currentScreen !== "analysis" && !profileData) {
       return (
@@ -250,9 +313,13 @@ export default function TmaFreeResultPage() {
           initial="initial"
           animate="animate"
           exit="exit"
-          className="min-h-dvh bg-[#050505] flex items-center justify-center"
+          className="min-h-dvh flex items-center justify-center"
+          style={{ background: "#0D0A1E" }}
         >
-          <div className="w-8 h-8 border-2 border-[#f97316] border-t-transparent rounded-full animate-spin" />
+          <div
+            className="w-8 h-8 border-2 border-t-transparent rounded-full animate-spin"
+            style={{ borderColor: "#7C3AED", borderTopColor: "transparent" }}
+          />
         </motion.div>
       );
     }
@@ -268,7 +335,7 @@ export default function TmaFreeResultPage() {
             animate="animate"
             exit="exit"
           >
-            <AnalysisAnimation onComplete={() => setAnalysisDone(true)} />
+            <TmaAnalysisAnimation onComplete={() => setAnalysisDone(true)} />
           </motion.div>
         );
 
@@ -282,26 +349,39 @@ export default function TmaFreeResultPage() {
             animate="animate"
             exit="exit"
           >
-            <ResultScreen onNext={goNext}>
-              <div className="text-center">
+            <TmaScreen onNext={goNext}>
+              <div className="text-center relative">
+                {/* Violet radial glow behind text */}
+                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                  <div
+                    className="w-64 h-64 rounded-full blur-3xl"
+                    style={{ background: "rgba(124,58,237,0.10)" }}
+                  />
+                </div>
+
                 <motion.h1
-                  className="font-serif text-5xl sm:text-7xl text-white"
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.8, ease: [0.65, 0.05, 0, 1] }}
+                  className="font-serif text-5xl sm:text-7xl"
+                  style={{ color: "rgba(255,255,255,0.92)" }}
+                  initial={{ opacity: 0, scale: 0.8, filter: "blur(20px)" }}
+                  animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+                  transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
                 >
                   {freeProfile.pattern.name}
                 </motion.h1>
+
                 <motion.p
-                  className="font-serif italic text-xl text-white/50 mt-4"
+                  className="font-serif italic text-xl mt-4"
+                  style={{ color: "rgba(255,255,255,0.50)" }}
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.6 }}
                 >
                   ...{freeProfile.modifier}
                 </motion.p>
+
                 <motion.p
-                  className="font-mono text-sm text-[#f97316] mt-8"
+                  className="font-mono text-sm mt-8"
+                  style={{ color: "#A78BFA" }}
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 1.2 }}
@@ -309,7 +389,7 @@ export default function TmaFreeResultPage() {
                   {freeProfile.percentile}% людей получают этот результат
                 </motion.p>
               </div>
-            </ResultScreen>
+            </TmaScreen>
           </motion.div>
         );
 
@@ -323,14 +403,15 @@ export default function TmaFreeResultPage() {
             animate="animate"
             exit="exit"
           >
-            <ResultScreen onNext={goNext}>
-              <h2 className="font-serif text-2xl text-white mb-8">
+            <TmaScreen onNext={goNext}>
+              <h2 className="font-serif text-2xl mb-8" style={{ color: "rgba(255,255,255,0.92)" }}>
                 Вот что ты делаешь
               </h2>
               {profileData!.recognition.split("\n\n").map((paragraph, i) => (
                 <motion.p
                   key={i}
-                  className="text-lg text-white/80 leading-relaxed mb-6"
+                  className="text-lg leading-relaxed mb-6"
+                  style={{ color: "rgba(255,255,255,0.80)" }}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.8, duration: 0.6 }}
@@ -338,7 +419,7 @@ export default function TmaFreeResultPage() {
                   {paragraph}
                 </motion.p>
               ))}
-            </ResultScreen>
+            </TmaScreen>
           </motion.div>
         );
 
@@ -352,21 +433,28 @@ export default function TmaFreeResultPage() {
             animate="animate"
             exit="exit"
           >
-            <ResultScreen onNext={goNext}>
-              <div className="border border-[#f97316]/30 rounded-2xl p-8 bg-[#f97316]/5">
-                <p className="font-mono text-sm text-[#f97316] mb-6">
+            <TmaScreen onNext={goNext}>
+              <div
+                className="border rounded-2xl p-8"
+                style={{
+                  borderColor: "rgba(124,58,237,0.30)",
+                  background: "rgba(124,58,237,0.05)",
+                }}
+              >
+                <p className="font-mono text-sm mb-6" style={{ color: "#A78BFA" }}>
                   Мы готовы поспорить:
                 </p>
                 <TypingText
                   text={profileData!.predictions}
-                  className="text-lg text-white leading-relaxed"
+                  className="text-lg leading-relaxed"
+                  style={{ color: "rgba(255,255,255,0.92)" } as React.CSSProperties}
                 />
               </div>
-            </ResultScreen>
+            </TmaScreen>
           </motion.div>
         );
 
-      /* Screen 4: Origin — LOCKED */
+      /* Screen 4: Origin — LOCKED, no "Дальше" button */
       case "origin":
         return (
           <motion.div
@@ -376,116 +464,23 @@ export default function TmaFreeResultPage() {
             animate="animate"
             exit="exit"
           >
-            <ResultScreen onNext={goNext}>
-              <BlurredScreen screenNumber={userScreenNumber}>
+            {/* No onNext passed — BlurredScreen handles CTA; after this we show share */}
+            <TmaScreen>
+              <BlurredScreen screenNumber={4} totalScreens={9} onClick={goNext}>
                 <div>
-                  <h2 className="font-serif text-2xl text-white mb-8">
+                  <h2 className="font-serif text-2xl mb-8" style={{ color: "rgba(255,255,255,0.92)" }}>
                     Откуда это в тебе
                   </h2>
-                  <p className="text-lg text-white/80 leading-relaxed">
+                  <p className="text-lg leading-relaxed" style={{ color: "rgba(255,255,255,0.80)" }}>
                     {profileData!.origin}
                   </p>
                 </div>
               </BlurredScreen>
-            </ResultScreen>
+            </TmaScreen>
           </motion.div>
         );
 
-      /* Screen 5: Duality — LOCKED */
-      case "duality":
-        return (
-          <motion.div
-            key="duality"
-            variants={screenVariants}
-            initial="initial"
-            animate="animate"
-            exit="exit"
-          >
-            <ResultScreen onNext={goNext}>
-              <BlurredScreen screenNumber={userScreenNumber}>
-                <div>
-                  <h2 className="font-serif text-2xl text-white mb-8 text-center">
-                    Две стороны
-                  </h2>
-                  <div className="grid gap-6">
-                    <div className="border border-[#f97316]/30 rounded-xl p-6 bg-[#f97316]/5">
-                      <p className="font-mono text-sm text-[#f97316] mb-3">⚡ Суперсила</p>
-                      <p className="text-white/80 leading-relaxed">{profileData!.superpower}</p>
-                    </div>
-                    <div className="border border-white/10 rounded-xl p-6 bg-white/5">
-                      <p className="font-mono text-sm text-white/40 mb-3">🌑 Слепая зона</p>
-                      <p className="text-white/80 leading-relaxed">{profileData!.shadow}</p>
-                    </div>
-                  </div>
-                </div>
-              </BlurredScreen>
-            </ResultScreen>
-          </motion.div>
-        );
-
-      /* Screen 6: Actions — LOCKED */
-      case "actions":
-        return (
-          <motion.div
-            key="actions"
-            variants={screenVariants}
-            initial="initial"
-            animate="animate"
-            exit="exit"
-          >
-            <ResultScreen onNext={goNext}>
-              <BlurredScreen screenNumber={userScreenNumber}>
-                <div>
-                  <h2 className="font-serif text-2xl text-white mb-8">
-                    Попробуй на этой неделе
-                  </h2>
-                  <div className="space-y-4">
-                    {profileData!.actions.map((action, i) => (
-                      <div
-                        key={i}
-                        className="border border-white/10 rounded-xl p-5 bg-white/5"
-                      >
-                        <span className="font-mono text-sm text-[#f97316] mr-2">{i + 1}.</span>
-                        <span className="text-white/80 leading-relaxed">{action}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </BlurredScreen>
-            </ResultScreen>
-          </motion.div>
-        );
-
-      /* Screen 7: AI Export — LOCKED */
-      case "ai_export":
-        return (
-          <motion.div
-            key="ai_export"
-            variants={screenVariants}
-            initial="initial"
-            animate="animate"
-            exit="exit"
-          >
-            <ResultScreen onNext={goNext}>
-              <BlurredScreen screenNumber={userScreenNumber}>
-                <div>
-                  <h2 className="font-serif text-2xl text-white mb-4">
-                    Скорми в нейросеть
-                  </h2>
-                  <p className="text-white/50 mb-6">
-                    Скопируй и вставь в ChatGPT или Claude
-                  </p>
-                  <div className="relative bg-white/5 border border-white/10 rounded-xl p-5 font-mono text-sm text-white/70 leading-relaxed whitespace-pre-wrap">
-                    {profileData!.aiProfile}
-                    <CopyButton text={profileData!.aiProfile} />
-                  </div>
-                </div>
-              </BlurredScreen>
-            </ResultScreen>
-          </motion.div>
-        );
-
-      /* Screen 8: Share — always visible */
+      /* Screen 5: Share */
       case "share":
         return (
           <motion.div
@@ -495,49 +490,65 @@ export default function TmaFreeResultPage() {
             animate="animate"
             exit="exit"
           >
-            <ResultScreen>
-              <div className="text-center">
-                <h2 className="font-serif text-2xl text-white mb-4">
-                  Готово!
-                </h2>
-                <p className="text-white/50 mb-8 text-sm">
-                  Паттерн: {freeProfile.pattern.name} — {freeProfile.modifier}
-                </p>
-
-                {/* Share buttons */}
-                <div className="flex flex-col gap-3">
-                  <motion.button
-                    whileTap={{ scale: 0.97 }}
-                    onClick={handleShare}
-                    className="w-full bg-[#f97316] text-white font-semibold py-4 rounded-2xl cursor-pointer hover:brightness-110 transition-all"
-                  >
-                    Поделиться результатом
-                  </motion.button>
-
-                  <motion.button
-                    whileTap={{ scale: 0.97 }}
-                    onClick={handleShare}
-                    className="w-full bg-white/10 border border-white/20 text-white font-medium py-4 rounded-2xl cursor-pointer hover:bg-white/15 transition-all"
-                  >
-                    Поделиться в Stories
-                  </motion.button>
-                </div>
-
-                <p className="text-white/30 text-xs mt-6">
-                  Интересно — совпадёт ли у друга?
-                </p>
+            <div
+              className="min-h-dvh flex flex-col items-center justify-center px-6 py-10"
+              style={{ background: "#0D0A1E" }}
+            >
+              {/* Share card preview */}
+              <div ref={shareCardRef} className="mb-8">
+                <ShareCardTma
+                  patternName={freeProfile.pattern.name}
+                  modifier={freeProfile.modifier}
+                  recognitionText={
+                    profileData
+                      ? profileData.recognition.split("\n\n")[0]
+                      : freeProfile.pattern.description
+                  }
+                  percentile={freeProfile.percentile}
+                />
               </div>
-            </ResultScreen>
+
+              {/* Buttons */}
+              <div className="w-full max-w-xs flex flex-col gap-3">
+                <motion.button
+                  whileTap={{ scale: 0.97 }}
+                  onClick={handleShareStories}
+                  className="w-full font-semibold py-4 rounded-2xl cursor-pointer transition-all"
+                  style={{
+                    background: "#7C3AED",
+                    color: "rgba(255,255,255,0.92)",
+                    fontSize: 16,
+                  }}
+                >
+                  Поделиться в Stories
+                </motion.button>
+
+                <motion.button
+                  whileTap={{ scale: 0.97 }}
+                  onClick={handleCopyLink}
+                  className="w-full font-medium py-4 rounded-2xl cursor-pointer transition-all"
+                  style={{
+                    background: "rgba(255,255,255,0.08)",
+                    border: "1px solid rgba(255,255,255,0.12)",
+                    color: "rgba(255,255,255,0.92)",
+                    fontSize: 16,
+                  }}
+                >
+                  Скопировать ссылку
+                </motion.button>
+              </div>
+
+              <p className="mt-6 text-xs" style={{ color: "rgba(255,255,255,0.30)" }}>
+                Интересно — совпадёт ли у друга?
+              </p>
+            </div>
           </motion.div>
         );
     }
   };
 
-  // Suppress unused variable warning — isLocked is used conceptually via LOCKED_FROM_INDEX
-  void isLocked;
-
   return (
-    <div className="min-h-dvh bg-[#050505]">
+    <div className="min-h-dvh" style={{ background: "#0D0A1E" }}>
       <AnimatePresence mode="wait">{renderScreenContent()}</AnimatePresence>
     </div>
   );
