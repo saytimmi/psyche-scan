@@ -4,7 +4,6 @@ import React, { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { TmaAnalysisAnimation } from "@/app/tma/components/TmaAnalysisAnimation";
 import { ShareCardTma } from "@/app/tma/components/ShareCardTma";
-import { BlurredScreen } from "@/app/tma/components/BlurredScreen";
 import { freeQuestions } from "@/data/free-questions";
 
 /* ─── TMA screen wrapper ─── */
@@ -81,8 +80,8 @@ interface FreeProfileResponse {
   lockedPreviews: string[];
 }
 
-// TMA flow: analysis → pattern → recognition → prediction → origin(blurred) → share
-type Screen = "analysis" | "pattern" | "recognition" | "prediction" | "origin" | "share";
+// TMA flow: all screens free — no paywall on free test
+type Screen = "analysis" | "pattern" | "recognition" | "prediction" | "origin" | "duality" | "actions" | "ai_export" | "share";
 
 /* ─── TypingText with fading cursor ─── */
 
@@ -150,6 +149,9 @@ const screens: Screen[] = [
   "recognition",
   "prediction",
   "origin",
+  "duality",
+  "actions",
+  "ai_export",
   "share",
 ];
 
@@ -454,33 +456,114 @@ export default function TmaFreeResultPage() {
           </motion.div>
         );
 
-      /* Screen 4: Origin — LOCKED, no "Дальше" button */
+      /* Screen 4: Origin — FREE */
       case "origin":
         return (
-          <motion.div
-            key="origin"
-            variants={screenVariants}
-            initial="initial"
-            animate="animate"
-            exit="exit"
-          >
-            {/* No onNext passed — BlurredScreen handles CTA; after this we show share */}
-            <TmaScreen>
-              <BlurredScreen screenNumber={4} totalScreens={9} onClick={goNext}>
-                <div>
-                  <h2 className="font-serif text-2xl mb-8" style={{ color: "rgba(255,255,255,0.92)" }}>
-                    Откуда это в тебе
-                  </h2>
-                  <p className="text-lg leading-relaxed" style={{ color: "rgba(255,255,255,0.80)" }}>
-                    {profileData!.origin}
-                  </p>
-                </div>
-              </BlurredScreen>
+          <motion.div key="origin" variants={screenVariants} initial="initial" animate="animate" exit="exit">
+            <TmaScreen onNext={goNext}>
+              <h2 className="font-serif text-2xl mb-8" style={{ color: "rgba(255,255,255,0.92)" }}>
+                Откуда это в тебе
+              </h2>
+              <motion.p
+                className="text-lg leading-relaxed"
+                style={{ color: "rgba(255,255,255,0.80)" }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.8 }}
+              >
+                {profileData!.origin}
+              </motion.p>
             </TmaScreen>
           </motion.div>
         );
 
-      /* Screen 5: Share */
+      /* Screen 5: Duality — superpower + shadow — FREE */
+      case "duality":
+        return (
+          <motion.div key="duality" variants={screenVariants} initial="initial" animate="animate" exit="exit">
+            <TmaScreen onNext={goNext}>
+              <h2 className="font-serif text-2xl mb-8 text-center" style={{ color: "rgba(255,255,255,0.92)" }}>
+                Две стороны
+              </h2>
+              <div className="grid gap-5">
+                <motion.div
+                  className="rounded-xl p-5"
+                  style={{ background: "rgba(124,58,237,0.08)", border: "1px solid rgba(124,58,237,0.25)" }}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.5 }}
+                >
+                  <p className="font-mono text-sm mb-2" style={{ color: "#A78BFA" }}>⚡ Суперсила</p>
+                  <p className="leading-relaxed" style={{ color: "rgba(255,255,255,0.80)" }}>{profileData!.superpower}</p>
+                </motion.div>
+                <motion.div
+                  className="rounded-xl p-5"
+                  style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }}
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 1.2, duration: 0.5 }}
+                >
+                  <p className="font-mono text-sm mb-2" style={{ color: "rgba(255,255,255,0.40)" }}>🌑 Слепая зона</p>
+                  <p className="leading-relaxed" style={{ color: "rgba(255,255,255,0.80)" }}>{profileData!.shadow}</p>
+                </motion.div>
+              </div>
+            </TmaScreen>
+          </motion.div>
+        );
+
+      /* Screen 6: Actions — FREE */
+      case "actions":
+        return (
+          <motion.div key="actions" variants={screenVariants} initial="initial" animate="animate" exit="exit">
+            <TmaScreen onNext={goNext}>
+              <h2 className="font-serif text-2xl mb-8" style={{ color: "rgba(255,255,255,0.92)" }}>
+                Попробуй на этой неделе
+              </h2>
+              <div className="space-y-4">
+                {profileData!.actions.map((action, i) => (
+                  <motion.div
+                    key={i}
+                    className="rounded-xl p-5"
+                    style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: i * 0.3, duration: 0.5 }}
+                  >
+                    <span className="font-mono text-sm mr-2" style={{ color: "#A78BFA" }}>{i + 1}.</span>
+                    <span className="leading-relaxed" style={{ color: "rgba(255,255,255,0.80)" }}>{action}</span>
+                  </motion.div>
+                ))}
+              </div>
+            </TmaScreen>
+          </motion.div>
+        );
+
+      /* Screen 7: AI Export — FREE */
+      case "ai_export":
+        return (
+          <motion.div key="ai_export" variants={screenVariants} initial="initial" animate="animate" exit="exit">
+            <TmaScreen onNext={goNext}>
+              <h2 className="font-serif text-2xl mb-4" style={{ color: "rgba(255,255,255,0.92)" }}>
+                Скорми в нейросеть
+              </h2>
+              <p className="mb-6" style={{ color: "rgba(255,255,255,0.50)", fontSize: 14 }}>
+                Скопируй и вставь в ChatGPT или Claude — он сразу будет понимать как с тобой общаться
+              </p>
+              <div className="relative rounded-xl p-5 font-mono text-sm leading-relaxed whitespace-pre-wrap" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.70)" }}>
+                {profileData!.aiProfile}
+                <button
+                  onClick={async () => { await navigator.clipboard.writeText(profileData!.aiProfile); }}
+                  className="absolute top-3 right-3 text-xs font-medium px-3 py-1.5 rounded-lg cursor-pointer transition"
+                  style={{ background: "#7C3AED", color: "white" }}
+                >
+                  Скопировать
+                </button>
+              </div>
+            </TmaScreen>
+          </motion.div>
+        );
+
+      /* Screen 8: Share */
       case "share":
         return (
           <motion.div
