@@ -33,13 +33,11 @@ export default function TmaFreeTestPage() {
   const router = useRouter();
   const { initDataRaw } = useTma();
 
-  // Timer — counts up every second
   useEffect(() => {
     const t = setInterval(() => setElapsed((s) => s + 1), 1000);
     return () => clearInterval(t);
   }, []);
 
-  // Resume from localStorage
   useEffect(() => {
     const savedAnswers = localStorage.getItem("psyche_free_answers");
     const savedIndex = localStorage.getItem("psyche_free_index");
@@ -57,7 +55,6 @@ export default function TmaFreeTestPage() {
     }
   }, [pendingIndex]);
 
-  // Auto-dismiss revelation after 2.5s
   useEffect(() => {
     if (!showRevelation) return;
     const timer = setTimeout(dismissRevelation, 2500);
@@ -65,6 +62,13 @@ export default function TmaFreeTestPage() {
   }, [showRevelation, dismissRevelation]);
 
   const handleAnswer = async (questionId: string, optionId: string) => {
+    // Haptic feedback
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const tg = (window as any).Telegram;
+      tg?.WebApp?.HapticFeedback?.impactOccurred?.("light");
+    } catch { /* outside TG */ }
+
     const newAnswers = { ...answers, [questionId]: optionId };
     setAnswers(newAnswers);
     localStorage.setItem("psyche_free_answers", JSON.stringify(newAnswers));
@@ -74,8 +78,7 @@ export default function TmaFreeTestPage() {
     if (currentIndex < freeQuestions.length - 1) {
       localStorage.setItem("psyche_free_index", String(nextIndex));
 
-      // Check if we should show a micro-revelation after this question (1-based check)
-      const questionNumber = currentIndex + 1; // question 1 = index 0
+      const questionNumber = currentIndex + 1;
       const revelation = REVELATIONS[questionNumber];
       if (revelation) {
         setPendingIndex(nextIndex);
@@ -84,65 +87,60 @@ export default function TmaFreeTestPage() {
         setCurrentIndex(nextIndex);
       }
     } else {
-      // Last question — score and save
       const profile = scoreFreeProfile(newAnswers);
       localStorage.setItem("psyche_free_profile", JSON.stringify(profile));
 
-      // POST answers to TMA API endpoint in background
       if (initDataRaw) {
         fetch("/api/tma/answers", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ answers: newAnswers, initData: initDataRaw }),
-        }).catch(() => {
-          // Non-critical — ignore errors
-        });
+        }).catch(() => {});
       }
 
       router.push("/tma/free/result");
     }
   };
 
-  const progressPercent = Math.round(
-    (currentIndex / freeQuestions.length) * 100
-  );
+  const progress = currentIndex / freeQuestions.length;
 
   return (
-    <div
-      className="min-h-dvh flex flex-col"
-      style={{ backgroundColor: "#F5F0E8" }}
-    >
-      {/* Fixed top progress bar — thin, terracotta */}
+    <div className="min-h-dvh flex flex-col">
+      {/* Progress — thin native-feeling bar */}
       <div
         className="fixed top-0 left-0 right-0 z-50"
-        style={{ height: "3px", backgroundColor: "rgba(26,23,20,0.08)" }}
+        style={{
+          height: 2,
+          background: "var(--tg-theme-secondary-bg-color, rgba(255,255,255,0.06))",
+        }}
       >
         <motion.div
           className="h-full"
-          style={{ backgroundColor: "#C2814B", borderRadius: "0 2px 2px 0" }}
-          animate={{ width: `${progressPercent}%` }}
-          transition={{ type: "spring", stiffness: 80, damping: 20 }}
+          style={{
+            background: "var(--tg-theme-accent-text-color, var(--tg-theme-button-color, #7C93E8))",
+            borderRadius: "0 1px 1px 0",
+          }}
+          animate={{ width: `${progress * 100}%` }}
+          transition={{ type: "spring", stiffness: 80, damping: 22 }}
         />
       </div>
 
-      {/* Timer + counter */}
+      {/* Counter — minimal */}
       <div
-        className="fixed top-2 left-0 right-0 z-50 flex justify-between px-5"
+        className="fixed top-1.5 right-4 z-50"
         style={{
-          fontSize: "11px",
-          fontWeight: 600,
-          letterSpacing: "0.06em",
-          color: "rgba(26,23,20,0.35)",
-          fontFamily: "'General Sans', system-ui",
+          fontSize: 11,
+          fontWeight: 500,
+          letterSpacing: "0.04em",
+          color: "var(--tg-theme-hint-color, rgba(255,255,255,0.35))",
         }}
       >
-        <span>{Math.floor(elapsed / 60)}:{String(elapsed % 60).padStart(2, "0")}</span>
-        <span>{currentIndex + 1} / {freeQuestions.length}</span>
+        {currentIndex + 1}/{freeQuestions.length}
       </div>
 
-      {/* Questions — vertically centered */}
-      <div className="flex-1 flex items-center justify-center px-5 pt-8 pb-6">
-        <div className="w-full max-w-md">
+      {/* Question area */}
+      <div className="flex-1 flex items-center px-5 pt-10 pb-8">
+        <div className="w-full">
           {freeQuestions[currentIndex] && (
             <AnimatePresence mode="wait">
               <FreeQuestionCard
@@ -158,7 +156,7 @@ export default function TmaFreeTestPage() {
         </div>
       </div>
 
-      {/* Micro-revelation overlay */}
+      {/* Micro-revelation */}
       <AnimatePresence>
         {showRevelation && (
           <motion.div
@@ -166,40 +164,38 @@ export default function TmaFreeTestPage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.35 }}
+            transition={{ duration: 0.3 }}
             className="fixed inset-0 z-[100] flex items-center justify-center"
             style={{
-              backgroundColor: "rgba(245,240,232,0.92)",
-              backdropFilter: "blur(20px)",
-              WebkitBackdropFilter: "blur(20px)",
+              background: "var(--tg-theme-bg-color, #0F0F0F)",
             }}
             onClick={dismissRevelation}
           >
             <motion.div
-              initial={{ opacity: 0, y: 12 }}
+              initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.4 }}
+              transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
               className="text-center px-8 max-w-xs"
             >
               <p
                 style={{
-                  fontSize: "24px",
+                  fontSize: 28,
                   fontWeight: 400,
                   fontFamily: "'Zodiak', Georgia, serif",
-                  color: "#C2814B",
-                  marginBottom: "16px",
-                  letterSpacing: "-0.02em",
+                  color: "var(--tg-theme-accent-text-color, var(--tg-theme-button-color, #7C93E8))",
+                  marginBottom: 14,
+                  letterSpacing: "-0.03em",
+                  lineHeight: 1.1,
                 }}
               >
                 {showRevelation.headline}
               </p>
               <p
                 style={{
-                  fontSize: "15px",
+                  fontSize: 15,
                   fontWeight: 400,
-                  fontFamily: "'General Sans', system-ui",
-                  color: "rgba(26,23,20,0.7)",
+                  color: "var(--tg-theme-hint-color, rgba(255,255,255,0.5))",
                   lineHeight: 1.65,
                   whiteSpace: "pre-line",
                 }}

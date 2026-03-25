@@ -17,8 +17,8 @@ export default function TmaLayout({
       className="min-h-dvh"
       style={{
         overscrollBehavior: "none",
-        background: "#F5F0E8",
-        color: "#1A1714",
+        background: "var(--tg-theme-bg-color, #0F0F0F)",
+        color: "var(--tg-theme-text-color, #F5F5F5)",
         fontFamily: "'General Sans', system-ui, sans-serif",
         WebkitFontSmoothing: "antialiased",
         textRendering: "optimizeLegibility",

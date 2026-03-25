@@ -11,11 +11,13 @@ import {
 interface TmaContextValue {
   initDataRaw: string | undefined;
   isReady: boolean;
+  isDark: boolean;
 }
 
 const TmaContext = createContext<TmaContextValue>({
   initDataRaw: undefined,
   isReady: false,
+  isDark: true,
 });
 
 export function useTma() {
@@ -29,6 +31,7 @@ interface TmaProviderProps {
 export function TmaProvider({ children }: TmaProviderProps) {
   const [initDataRaw, setInitDataRaw] = useState<string | undefined>(undefined);
   const [isReady, setIsReady] = useState(false);
+  const [isDark, setIsDark] = useState(true);
 
   useEffect(() => {
     let cleanup: (() => void) | undefined;
@@ -37,23 +40,43 @@ export function TmaProvider({ children }: TmaProviderProps) {
       try {
         const sdk = await import("@telegram-apps/sdk-react");
 
-        // init() sets up event listeners so the SDK can communicate with Telegram
         cleanup = sdk.init();
 
-        // Try to read raw init data
+        // Read init data
         try {
           const raw = sdk.retrieveRawInitData();
           setInitDataRaw(raw);
         } catch {
-          // Not in Telegram or dev mode — initData will be undefined
           setInitDataRaw(undefined);
         }
 
-        // Mount mini-app and signal ready
+        // Mount theme params and bind CSS variables
         try {
-          const miniAppSdk = await import("@telegram-apps/sdk");
-          if (miniAppSdk.mountMiniAppSync.isAvailable()) {
-            miniAppSdk.mountMiniAppSync();
+          const tpMod = await import("@telegram-apps/sdk");
+
+          // Mount mini app
+          if (tpMod.mountMiniAppSync.isAvailable()) {
+            tpMod.mountMiniAppSync();
+          }
+
+          // Mount theme params and bind to CSS vars
+          if (tpMod.mountThemeParamsSync) {
+            tpMod.mountThemeParamsSync();
+          }
+          if (tpMod.bindThemeParamsCssVars) {
+            tpMod.bindThemeParamsCssVars();
+          }
+
+          // Check if dark mode
+          try {
+            const darkSignal = tpMod.isThemeParamsDark;
+            if (darkSignal && typeof darkSignal === "function") {
+              setIsDark(darkSignal());
+            } else if (darkSignal !== undefined) {
+              setIsDark(Boolean(darkSignal));
+            }
+          } catch {
+            // Fallback — check CSS
           }
         } catch {
           // Outside Telegram — ignore
@@ -74,14 +97,23 @@ export function TmaProvider({ children }: TmaProviderProps) {
 
   if (!isReady) {
     return (
-      <div className="min-h-dvh bg-[#050505] flex items-center justify-center">
-        <div className="w-8 h-8 border-2 border-[#f97316] border-t-transparent rounded-full animate-spin" />
+      <div
+        className="min-h-dvh flex items-center justify-center"
+        style={{ background: "var(--tg-theme-bg-color, #0F0F0F)" }}
+      >
+        <div
+          className="w-6 h-6 rounded-full animate-spin"
+          style={{
+            border: "2px solid var(--tg-theme-hint-color, #555)",
+            borderTopColor: "transparent",
+          }}
+        />
       </div>
     );
   }
 
   return (
-    <TmaContext.Provider value={{ initDataRaw, isReady }}>
+    <TmaContext.Provider value={{ initDataRaw, isReady, isDark }}>
       {children}
     </TmaContext.Provider>
   );

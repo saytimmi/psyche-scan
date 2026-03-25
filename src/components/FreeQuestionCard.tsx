@@ -58,19 +58,19 @@ export function FreeQuestionCard({
         {/* Question text */}
         {isTma ? (
           <motion.div
-            initial={{ opacity: 0, y: 12 }}
+            initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.45, ease: [0.23, 1, 0.32, 1] }}
-            style={{ marginBottom: "28px" }}
+            transition={{ duration: 0.5, ease: [0.23, 1, 0.32, 1] }}
+            style={{ marginBottom: 32 }}
           >
             <p
               style={{
-                fontSize: 21,
+                fontSize: 22,
                 fontWeight: 400,
-                lineHeight: 1.45,
+                lineHeight: 1.42,
                 fontFamily: "'Zodiak', Georgia, serif",
-                color: "#1A1714",
-                letterSpacing: "-0.01em",
+                color: "var(--tg-theme-text-color, #F5F5F5)",
+                letterSpacing: "-0.02em",
                 margin: 0,
               }}
             >
@@ -90,7 +90,7 @@ export function FreeQuestionCard({
         )}
 
         {/* Options grid */}
-        <div className={isTma ? "flex flex-col gap-2" : "grid grid-cols-1 md:grid-cols-2 gap-3"}>
+        <div className={isTma ? "flex flex-col gap-2.5" : "grid grid-cols-1 md:grid-cols-2 gap-3"}>
           {question.options.map((option, i) => {
             const isSelected = selectedOption === option.id;
             const isFaded = selectedOption !== null && !isSelected;
@@ -99,75 +99,56 @@ export function FreeQuestionCard({
               return (
                 <motion.button
                   key={option.id}
-                  initial={{ opacity: 0, y: 16 }}
+                  initial={{ opacity: 0, y: 14 }}
                   animate={{
-                    opacity: isFaded ? 0.4 : 1,
+                    opacity: isFaded ? 0.35 : 1,
                     y: 0,
                     scale: isSelected ? 1.0 : isFaded ? 0.98 : 1,
                   }}
-                  whileTap={!selectedOption ? { scale: 0.97 } : {}}
+                  whileTap={!selectedOption ? { scale: 0.96 } : {}}
                   transition={{
-                    delay: i * 0.05,
-                    duration: 0.3,
-                    scale: { type: "spring", stiffness: 500, damping: 30 },
+                    delay: i * 0.04,
+                    duration: 0.25,
+                    scale: { type: "spring", stiffness: 500, damping: 28 },
                   }}
                   onClick={() => handleSelect(option.id)}
                   disabled={selectedOption !== null}
                   style={{
                     textAlign: "left",
-                    padding: "16px 18px",
-                    borderRadius: "14px",
+                    padding: "14px 16px",
+                    borderRadius: "12px",
                     border: isSelected
-                      ? "1.5px solid #C2814B"
-                      : "1px solid rgba(26,23,20,0.08)",
+                      ? "1.5px solid var(--tg-theme-accent-text-color, var(--tg-theme-button-color, #7C93E8))"
+                      : "1px solid var(--tg-theme-section-separator-color, rgba(255,255,255,0.08))",
                     background: isSelected
-                      ? "#EDE3D4"
-                      : "#FFFDF9",
+                      ? "var(--tg-theme-section-bg-color, rgba(255,255,255,0.08))"
+                      : "var(--tg-theme-secondary-bg-color, rgba(255,255,255,0.04))",
                     cursor: selectedOption !== null ? "default" : "pointer",
-                    boxShadow: isSelected
-                      ? "0 2px 12px rgba(194,129,75,0.12)"
-                      : "0 1px 3px rgba(0,0,0,0.04), inset 0 1px 0 rgba(255,255,255,0.8)",
-                    transition: "background 200ms ease-out, border-color 200ms ease-out, box-shadow 200ms ease-out",
-                    position: "relative",
-                    overflow: "hidden",
+                    transition: "background 180ms, border-color 180ms",
                   }}
                 >
-                  {/* Left accent bar on selection */}
-                  {isSelected && (
-                    <motion.div
-                      initial={{ scaleY: 0 }}
-                      animate={{ scaleY: 1 }}
-                      transition={{ duration: 0.2, delay: 0.05 }}
-                      style={{
-                        position: "absolute",
-                        left: 0,
-                        top: 6,
-                        bottom: 6,
-                        width: 3,
-                        borderRadius: 2,
-                        backgroundColor: "#C2814B",
-                        transformOrigin: "top",
-                      }}
-                    />
-                  )}
-                  <span className="flex items-center gap-3">
+                  <span className="flex items-center" style={{ gap: 12 }}>
                     <span
                       style={{
-                        width: 26,
-                        height: 26,
-                        borderRadius: "50%",
+                        width: 28,
+                        height: 28,
+                        borderRadius: 8,
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
                         flexShrink: 0,
-                        fontSize: 11,
+                        fontSize: 12,
                         fontWeight: 600,
-                        fontFamily: "'General Sans', system-ui",
                         background: isSelected
-                          ? "#C2814B"
-                          : "rgba(26,23,20,0.05)",
-                        color: isSelected ? "#FFFDF9" : "rgba(26,23,20,0.35)",
-                        transition: "all 200ms ease-out",
+                          ? "var(--tg-theme-accent-text-color, var(--tg-theme-button-color, #7C93E8))"
+                          : "transparent",
+                        color: isSelected
+                          ? "var(--tg-theme-button-text-color, #fff)"
+                          : "var(--tg-theme-hint-color, rgba(255,255,255,0.35))",
+                        border: isSelected
+                          ? "none"
+                          : "1.5px solid var(--tg-theme-hint-color, rgba(255,255,255,0.15))",
+                        transition: "all 180ms",
                       }}
                     >
                       {isSelected ? "✓" : OPTION_LABELS[i]}
@@ -177,9 +158,10 @@ export function FreeQuestionCard({
                         fontSize: 15,
                         fontWeight: 450,
                         lineHeight: 1.45,
-                        fontFamily: "'General Sans', system-ui",
-                        color: isSelected ? "#1A1714" : "rgba(26,23,20,0.75)",
-                        transition: "color 200ms",
+                        color: isSelected
+                          ? "var(--tg-theme-text-color, #F5F5F5)"
+                          : "var(--tg-theme-subtitle-text-color, var(--tg-theme-text-color, rgba(255,255,255,0.7)))",
+                        transition: "color 180ms",
                       }}
                     >
                       {option.text}
