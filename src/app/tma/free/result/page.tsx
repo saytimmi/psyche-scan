@@ -19,30 +19,32 @@ function TmaScreen({
 }) {
   return (
     <div
-      className="min-h-dvh flex flex-col items-center justify-center px-6 pb-24"
+      className="min-h-dvh flex flex-col px-6 pt-12 pb-28 overflow-y-auto"
       style={{ background: "#0D0A1E" }}
     >
       <motion.div
-        initial={{ opacity: 0, y: 40 }}
+        initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: [0.65, 0.05, 0, 1] }}
-        className="max-w-lg w-full"
+        className="max-w-lg w-full mx-auto flex-1"
       >
         {children}
       </motion.div>
 
       {onNext && (
-        <button
-          onClick={onNext}
-          className="fixed bottom-8 font-medium px-8 py-3 rounded-xl transition cursor-pointer"
-          style={{
-            background: "#7C3AED",
-            color: "rgba(255,255,255,0.92)",
-            fontSize: 15,
-          }}
-        >
-          {nextLabel}
-        </button>
+        <div className="fixed bottom-0 left-0 right-0 flex justify-center pb-6 pt-4" style={{ background: "linear-gradient(transparent, #0D0A1E 40%)" }}>
+          <button
+            onClick={onNext}
+            className="font-medium px-10 py-3.5 rounded-2xl transition cursor-pointer"
+            style={{
+              background: "#7C3AED",
+              color: "rgba(255,255,255,0.92)",
+              fontSize: 15,
+            }}
+          >
+            {nextLabel}
+          </button>
+        </div>
       )}
     </div>
   );

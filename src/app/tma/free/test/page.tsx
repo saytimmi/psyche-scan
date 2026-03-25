@@ -29,8 +29,15 @@ export default function TmaFreeTestPage() {
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [showRevelation, setShowRevelation] = useState<Revelation | null>(null);
   const [pendingIndex, setPendingIndex] = useState<number | null>(null);
+  const [elapsed, setElapsed] = useState(0);
   const router = useRouter();
   const { initDataRaw } = useTma();
+
+  // Timer — counts up every second
+  useEffect(() => {
+    const t = setInterval(() => setElapsed((s) => s + 1), 1000);
+    return () => clearInterval(t);
+  }, []);
 
   // Resume from localStorage
   useEffect(() => {
@@ -118,16 +125,10 @@ export default function TmaFreeTestPage() {
         />
       </div>
 
-      {/* Question counter */}
-      <div
-        className="fixed top-2 right-4 z-50"
-        style={{
-          fontSize: "13px",
-          fontWeight: 300,
-          color: "rgba(255,255,255,0.40)",
-        }}
-      >
-        {currentIndex + 1} / {freeQuestions.length}
+      {/* Timer + counter */}
+      <div className="fixed top-2 left-0 right-0 z-50 flex justify-between px-4" style={{ fontSize: "13px", fontWeight: 300, color: "rgba(255,255,255,0.40)" }}>
+        <span>{Math.floor(elapsed / 60)}:{String(elapsed % 60).padStart(2, "0")}</span>
+        <span>{currentIndex + 1} / {freeQuestions.length}</span>
       </div>
 
       {/* Questions */}
