@@ -14,10 +14,28 @@ export default function TmaLayout({
 }) {
   return (
     <div
-      className="min-h-dvh bg-[#050505] text-white"
-      style={{ overscrollBehavior: "none" }}
+      className="min-h-dvh text-white"
+      style={{
+        overscrollBehavior: "none",
+        background: "#0D0A1E",
+        fontFamily: "var(--font-manrope, 'Manrope', system-ui, sans-serif)",
+      }}
     >
-      <TmaProvider>{children}</TmaProvider>
+      {/* Radial gradient depth overlay */}
+      <div
+        aria-hidden
+        style={{
+          position: "fixed",
+          inset: 0,
+          pointerEvents: "none",
+          background:
+            "radial-gradient(ellipse 80% 60% at 50% 30%, rgba(124,58,237,0.12) 0%, rgba(13,10,30,0) 70%)",
+          zIndex: 0,
+        }}
+      />
+      <div style={{ position: "relative", zIndex: 1 }}>
+        <TmaProvider>{children}</TmaProvider>
+      </div>
     </div>
   );
 }

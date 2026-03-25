@@ -1,6 +1,14 @@
 import type { Metadata } from "next";
+import { Manrope } from "next/font/google";
 import { SmoothScroll } from "@/components/SmoothScroll";
 import "./globals.css";
+
+const manrope = Manrope({
+  subsets: ["latin", "cyrillic"],
+  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-manrope",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "Psyche Scan — Узнай как ты устроен",
@@ -13,7 +21,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ru" className="antialiased">
+    <html lang="ru" className={`antialiased ${manrope.variable}`}>
       <body className="min-h-screen">
         <SmoothScroll />
         {children}

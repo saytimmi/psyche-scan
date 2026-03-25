@@ -123,3 +123,20 @@ h1, h2, h3 {
   from { transform: scaleX(0); }
   to { transform: scaleX(1); }
 }
+
+/* ─── TMA Design System ─── */
+.tma-bg { background: #0D0A1E; }
+.tma-surface {
+  background: rgba(20, 16, 48, 0.75);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+.tma-accent { color: #7C3AED; }
+.tma-text { color: rgba(255, 255, 255, 0.92); }
+.tma-text-secondary { color: rgba(255, 255, 255, 0.60); }
+.tma-text-tertiary { color: rgba(255, 255, 255, 0.40); }
+
+@keyframes tma-glow-pulse {
+  0%, 100% { box-shadow: 0 0 20px rgba(124, 58, 237, 0.3), 0 0 40px rgba(124, 58, 237, 0.15); }
+  50% { box-shadow: 0 0 32px rgba(124, 58, 237, 0.5), 0 0 64px rgba(124, 58, 237, 0.25); }
+}
