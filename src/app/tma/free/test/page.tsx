@@ -109,42 +109,53 @@ export default function TmaFreeTestPage() {
 
   return (
     <div
-      className="min-h-dvh flex items-center justify-center"
-      style={{ backgroundColor: "#0D0A1E" }}
+      className="min-h-dvh flex flex-col"
+      style={{ backgroundColor: "#F5F0E8" }}
     >
-      {/* Fixed top progress bar */}
+      {/* Fixed top progress bar — thin, terracotta */}
       <div
         className="fixed top-0 left-0 right-0 z-50"
-        style={{ height: "3px", backgroundColor: "rgba(255,255,255,0.08)" }}
+        style={{ height: "3px", backgroundColor: "rgba(26,23,20,0.08)" }}
       >
         <motion.div
           className="h-full"
-          style={{ backgroundColor: "#7C3AED" }}
+          style={{ backgroundColor: "#C2814B", borderRadius: "0 2px 2px 0" }}
           animate={{ width: `${progressPercent}%` }}
-          transition={{ type: "spring", stiffness: 100, damping: 20 }}
+          transition={{ type: "spring", stiffness: 80, damping: 20 }}
         />
       </div>
 
       {/* Timer + counter */}
-      <div className="fixed top-2 left-0 right-0 z-50 flex justify-between px-4" style={{ fontSize: "13px", fontWeight: 300, color: "rgba(255,255,255,0.40)" }}>
+      <div
+        className="fixed top-2 left-0 right-0 z-50 flex justify-between px-5"
+        style={{
+          fontSize: "11px",
+          fontWeight: 600,
+          letterSpacing: "0.06em",
+          color: "rgba(26,23,20,0.35)",
+          fontFamily: "'General Sans', system-ui",
+        }}
+      >
         <span>{Math.floor(elapsed / 60)}:{String(elapsed % 60).padStart(2, "0")}</span>
         <span>{currentIndex + 1} / {freeQuestions.length}</span>
       </div>
 
-      {/* Questions */}
-      <div className="max-w-2xl mx-auto px-6 w-full pt-8">
-        {freeQuestions[currentIndex] && (
-          <AnimatePresence mode="wait">
-            <FreeQuestionCard
-              key={currentIndex}
-              question={freeQuestions[currentIndex]}
-              questionIndex={currentIndex}
-              totalQuestions={freeQuestions.length}
-              onAnswer={handleAnswer}
-              variant="tma"
-            />
-          </AnimatePresence>
-        )}
+      {/* Questions — vertically centered */}
+      <div className="flex-1 flex items-center justify-center px-5 pt-8 pb-6">
+        <div className="w-full max-w-md">
+          {freeQuestions[currentIndex] && (
+            <AnimatePresence mode="wait">
+              <FreeQuestionCard
+                key={currentIndex}
+                question={freeQuestions[currentIndex]}
+                questionIndex={currentIndex}
+                totalQuestions={freeQuestions.length}
+                onAnswer={handleAnswer}
+                variant="tma"
+              />
+            </AnimatePresence>
+          )}
+        </div>
       </div>
 
       {/* Micro-revelation overlay */}
@@ -155,38 +166,41 @@ export default function TmaFreeTestPage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.4 }}
+            transition={{ duration: 0.35 }}
             className="fixed inset-0 z-[100] flex items-center justify-center"
             style={{
-              backgroundColor: "rgba(13,10,30,0.90)",
-              backdropFilter: "blur(16px)",
-              WebkitBackdropFilter: "blur(16px)",
+              backgroundColor: "rgba(245,240,232,0.92)",
+              backdropFilter: "blur(20px)",
+              WebkitBackdropFilter: "blur(20px)",
             }}
             onClick={dismissRevelation}
           >
             <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1.0 }}
-              exit={{ opacity: 0, scale: 0.95 }}
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
               transition={{ duration: 0.4 }}
-              className="text-center px-8 max-w-sm"
+              className="text-center px-8 max-w-xs"
             >
               <p
                 style={{
-                  fontSize: "20px",
-                  fontWeight: 600,
-                  color: "#7C3AED",
-                  marginBottom: "20px",
+                  fontSize: "24px",
+                  fontWeight: 400,
+                  fontFamily: "'Zodiak', Georgia, serif",
+                  color: "#C2814B",
+                  marginBottom: "16px",
+                  letterSpacing: "-0.02em",
                 }}
               >
                 {showRevelation.headline}
               </p>
               <p
                 style={{
-                  fontSize: "16px",
+                  fontSize: "15px",
                   fontWeight: 400,
-                  color: "rgba(255,255,255,0.92)",
-                  lineHeight: 1.6,
+                  fontFamily: "'General Sans', system-ui",
+                  color: "rgba(26,23,20,0.7)",
+                  lineHeight: 1.65,
                   whiteSpace: "pre-line",
                 }}
               >

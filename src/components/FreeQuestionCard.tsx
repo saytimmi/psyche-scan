@@ -58,27 +58,19 @@ export function FreeQuestionCard({
         {/* Question text */}
         {isTma ? (
           <motion.div
-            initial={{ opacity: 0, y: 15 }}
+            initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4 }}
-            style={{
-              padding: "24px 22px",
-              borderRadius: "20px",
-              background: "linear-gradient(135deg, rgba(255,255,255,0.07), rgba(255,255,255,0.02))",
-              backdropFilter: "blur(24px)",
-              WebkitBackdropFilter: "blur(24px)",
-              border: "1px solid rgba(255,255,255,0.08)",
-              boxShadow: "0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.06)",
-              marginBottom: "24px",
-            }}
+            transition={{ duration: 0.45, ease: [0.23, 1, 0.32, 1] }}
+            style={{ marginBottom: "28px" }}
           >
             <p
               style={{
-                fontSize: 18,
+                fontSize: 21,
                 fontWeight: 400,
-                lineHeight: 1.55,
-                fontFamily: "var(--font-manrope), system-ui",
-                color: "rgba(255,255,255,0.92)",
+                lineHeight: 1.45,
+                fontFamily: "'Zodiak', Georgia, serif",
+                color: "#1A1714",
+                letterSpacing: "-0.01em",
                 margin: 0,
               }}
             >
@@ -98,7 +90,7 @@ export function FreeQuestionCard({
         )}
 
         {/* Options grid */}
-        <div className={isTma ? "flex flex-col gap-2.5" : "grid grid-cols-1 md:grid-cols-2 gap-3"}>
+        <div className={isTma ? "flex flex-col gap-2" : "grid grid-cols-1 md:grid-cols-2 gap-3"}>
           {question.options.map((option, i) => {
             const isSelected = selectedOption === option.id;
             const isFaded = selectedOption !== null && !isSelected;
@@ -107,72 +99,87 @@ export function FreeQuestionCard({
               return (
                 <motion.button
                   key={option.id}
-                  initial={{ opacity: 0, y: 20 }}
+                  initial={{ opacity: 0, y: 16 }}
                   animate={{
-                    opacity: isFaded ? 0.3 : 1,
+                    opacity: isFaded ? 0.4 : 1,
                     y: 0,
-                    scale: isSelected ? 1.02 : isFaded ? 0.96 : 1,
+                    scale: isSelected ? 1.0 : isFaded ? 0.98 : 1,
                   }}
-                  whileHover={!selectedOption ? { scale: 1.02, borderColor: "rgba(124,58,237,0.4)" } : {}}
                   whileTap={!selectedOption ? { scale: 0.97 } : {}}
                   transition={{
-                    delay: i * 0.06,
-                    duration: 0.25,
-                    scale: { type: "spring", stiffness: 400, damping: 25 },
+                    delay: i * 0.05,
+                    duration: 0.3,
+                    scale: { type: "spring", stiffness: 500, damping: 30 },
                   }}
                   onClick={() => handleSelect(option.id)}
                   disabled={selectedOption !== null}
                   style={{
                     textAlign: "left",
-                    padding: "18px 20px",
-                    borderRadius: "16px",
+                    padding: "16px 18px",
+                    borderRadius: "14px",
                     border: isSelected
-                      ? "1.5px solid rgba(124,58,237,0.8)"
-                      : "1px solid rgba(255,255,255,0.06)",
+                      ? "1.5px solid #C2814B"
+                      : "1px solid rgba(26,23,20,0.08)",
                     background: isSelected
-                      ? "linear-gradient(135deg, rgba(124,58,237,0.15), rgba(124,58,237,0.05))"
-                      : "linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02))",
-                    backdropFilter: "blur(20px)",
-                    WebkitBackdropFilter: "blur(20px)",
+                      ? "#EDE3D4"
+                      : "#FFFDF9",
                     cursor: selectedOption !== null ? "default" : "pointer",
                     boxShadow: isSelected
-                      ? "0 0 24px rgba(124,58,237,0.2), inset 0 1px 0 rgba(255,255,255,0.06)"
-                      : "inset 0 1px 0 rgba(255,255,255,0.04)",
-                    transition: "all 250ms cubic-bezier(0.4, 0, 0.2, 1)",
+                      ? "0 2px 12px rgba(194,129,75,0.12)"
+                      : "0 1px 3px rgba(0,0,0,0.04), inset 0 1px 0 rgba(255,255,255,0.8)",
+                    transition: "background 200ms ease-out, border-color 200ms ease-out, box-shadow 200ms ease-out",
+                    position: "relative",
+                    overflow: "hidden",
                   }}
                 >
+                  {/* Left accent bar on selection */}
+                  {isSelected && (
+                    <motion.div
+                      initial={{ scaleY: 0 }}
+                      animate={{ scaleY: 1 }}
+                      transition={{ duration: 0.2, delay: 0.05 }}
+                      style={{
+                        position: "absolute",
+                        left: 0,
+                        top: 6,
+                        bottom: 6,
+                        width: 3,
+                        borderRadius: 2,
+                        backgroundColor: "#C2814B",
+                        transformOrigin: "top",
+                      }}
+                    />
+                  )}
                   <span className="flex items-center gap-3">
                     <span
                       style={{
-                        width: 28,
-                        height: 28,
+                        width: 26,
+                        height: 26,
                         borderRadius: "50%",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
                         flexShrink: 0,
-                        fontSize: 12,
+                        fontSize: 11,
                         fontWeight: 600,
-                        fontFamily: "var(--font-manrope), system-ui",
+                        fontFamily: "'General Sans', system-ui",
                         background: isSelected
-                          ? "rgba(124,58,237,0.3)"
-                          : "rgba(255,255,255,0.06)",
-                        color: isSelected ? "#C4B5FD" : "rgba(255,255,255,0.35)",
-                        border: isSelected
-                          ? "1px solid rgba(124,58,237,0.5)"
-                          : "1px solid rgba(255,255,255,0.08)",
-                        transition: "all 250ms",
+                          ? "#C2814B"
+                          : "rgba(26,23,20,0.05)",
+                        color: isSelected ? "#FFFDF9" : "rgba(26,23,20,0.35)",
+                        transition: "all 200ms ease-out",
                       }}
                     >
-                      {OPTION_LABELS[i]}
+                      {isSelected ? "✓" : OPTION_LABELS[i]}
                     </span>
                     <span
                       style={{
                         fontSize: 15,
-                        fontWeight: 400,
-                        lineHeight: 1.5,
-                        fontFamily: "var(--font-manrope), system-ui",
-                        color: isSelected ? "rgba(255,255,255,0.95)" : "rgba(255,255,255,0.75)",
+                        fontWeight: 450,
+                        lineHeight: 1.45,
+                        fontFamily: "'General Sans', system-ui",
+                        color: isSelected ? "#1A1714" : "rgba(26,23,20,0.75)",
+                        transition: "color 200ms",
                       }}
                     >
                       {option.text}
