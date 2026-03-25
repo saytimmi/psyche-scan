@@ -18,7 +18,9 @@ export default function TmaLayout({
       style={{
         overscrollBehavior: "none",
         background: "#0D0A1E",
-        fontFamily: "var(--font-manrope, 'Manrope', system-ui, sans-serif)",
+        fontFamily: "var(--font-manrope), 'Manrope', system-ui, sans-serif",
+        WebkitFontSmoothing: "antialiased",
+        textRendering: "optimizeLegibility",
       }}
     >
       {/* Radial gradient depth overlay */}

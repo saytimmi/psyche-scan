@@ -364,7 +364,7 @@ export default function TmaFreeResultPage() {
                 </div>
 
                 <motion.h1
-                  className="font-serif text-5xl sm:text-7xl"
+                  className="tma-heading text-5xl sm:text-7xl"
                   style={{ color: "rgba(255,255,255,0.92)" }}
                   initial={{ opacity: 0, scale: 0.8, filter: "blur(20px)" }}
                   animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
@@ -374,7 +374,7 @@ export default function TmaFreeResultPage() {
                 </motion.h1>
 
                 <motion.p
-                  className="font-serif italic text-xl mt-4"
+                  className="tma-heading italic text-xl mt-4"
                   style={{ color: "rgba(255,255,255,0.50)" }}
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
@@ -384,7 +384,7 @@ export default function TmaFreeResultPage() {
                 </motion.p>
 
                 <motion.p
-                  className="font-mono text-sm mt-8"
+                  className="tma-mono text-sm mt-8"
                   style={{ color: "#A78BFA" }}
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
@@ -408,7 +408,7 @@ export default function TmaFreeResultPage() {
             exit="exit"
           >
             <TmaScreen onNext={goNext}>
-              <h2 className="font-serif text-2xl mb-8" style={{ color: "rgba(255,255,255,0.92)" }}>
+              <h2 className="tma-heading text-2xl mb-8" style={{ color: "rgba(255,255,255,0.92)" }}>
                 Вот что ты делаешь
               </h2>
               {profileData!.recognition.split("\n\n").map((paragraph, i) => (
@@ -445,7 +445,7 @@ export default function TmaFreeResultPage() {
                   background: "rgba(124,58,237,0.05)",
                 }}
               >
-                <p className="font-mono text-sm mb-6" style={{ color: "#A78BFA" }}>
+                <p className="tma-mono text-sm mb-6" style={{ color: "#A78BFA" }}>
                   Мы готовы поспорить:
                 </p>
                 <TypingText
@@ -463,7 +463,7 @@ export default function TmaFreeResultPage() {
         return (
           <motion.div key="origin" variants={screenVariants} initial="initial" animate="animate" exit="exit">
             <TmaScreen onNext={goNext}>
-              <h2 className="font-serif text-2xl mb-8" style={{ color: "rgba(255,255,255,0.92)" }}>
+              <h2 className="tma-heading text-2xl mb-8" style={{ color: "rgba(255,255,255,0.92)" }}>
                 Откуда это в тебе
               </h2>
               <motion.p
@@ -484,7 +484,7 @@ export default function TmaFreeResultPage() {
         return (
           <motion.div key="duality" variants={screenVariants} initial="initial" animate="animate" exit="exit">
             <TmaScreen onNext={goNext}>
-              <h2 className="font-serif text-2xl mb-8 text-center" style={{ color: "rgba(255,255,255,0.92)" }}>
+              <h2 className="tma-heading text-2xl mb-8 text-center" style={{ color: "rgba(255,255,255,0.92)" }}>
                 Две стороны
               </h2>
               <div className="grid gap-5">
@@ -495,7 +495,7 @@ export default function TmaFreeResultPage() {
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.5 }}
                 >
-                  <p className="font-mono text-sm mb-2" style={{ color: "#A78BFA" }}>⚡ Суперсила</p>
+                  <p className="tma-mono text-sm mb-2" style={{ color: "#A78BFA" }}>⚡ Суперсила</p>
                   <p className="leading-relaxed" style={{ color: "rgba(255,255,255,0.80)" }}>{profileData!.superpower}</p>
                 </motion.div>
                 <motion.div
@@ -505,7 +505,7 @@ export default function TmaFreeResultPage() {
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 1.2, duration: 0.5 }}
                 >
-                  <p className="font-mono text-sm mb-2" style={{ color: "rgba(255,255,255,0.40)" }}>🌑 Слепая зона</p>
+                  <p className="tma-mono text-sm mb-2" style={{ color: "rgba(255,255,255,0.40)" }}>🌑 Слепая зона</p>
                   <p className="leading-relaxed" style={{ color: "rgba(255,255,255,0.80)" }}>{profileData!.shadow}</p>
                 </motion.div>
               </div>
@@ -518,7 +518,7 @@ export default function TmaFreeResultPage() {
         return (
           <motion.div key="actions" variants={screenVariants} initial="initial" animate="animate" exit="exit">
             <TmaScreen onNext={goNext}>
-              <h2 className="font-serif text-2xl mb-8" style={{ color: "rgba(255,255,255,0.92)" }}>
+              <h2 className="tma-heading text-2xl mb-8" style={{ color: "rgba(255,255,255,0.92)" }}>
                 Попробуй на этой неделе
               </h2>
               <div className="space-y-4">
@@ -531,7 +531,7 @@ export default function TmaFreeResultPage() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: i * 0.3, duration: 0.5 }}
                   >
-                    <span className="font-mono text-sm mr-2" style={{ color: "#A78BFA" }}>{i + 1}.</span>
+                    <span className="tma-mono text-sm mr-2" style={{ color: "#A78BFA" }}>{i + 1}.</span>
                     <span className="leading-relaxed" style={{ color: "rgba(255,255,255,0.80)" }}>{action}</span>
                   </motion.div>
                 ))}
@@ -545,13 +545,13 @@ export default function TmaFreeResultPage() {
         return (
           <motion.div key="ai_export" variants={screenVariants} initial="initial" animate="animate" exit="exit">
             <TmaScreen onNext={goNext}>
-              <h2 className="font-serif text-2xl mb-4" style={{ color: "rgba(255,255,255,0.92)" }}>
+              <h2 className="tma-heading text-2xl mb-4" style={{ color: "rgba(255,255,255,0.92)" }}>
                 Скорми в нейросеть
               </h2>
               <p className="mb-6" style={{ color: "rgba(255,255,255,0.50)", fontSize: 14 }}>
                 Скопируй и вставь в ChatGPT или Claude — он сразу будет понимать как с тобой общаться
               </p>
-              <div className="relative rounded-xl p-5 font-mono text-sm leading-relaxed whitespace-pre-wrap" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.70)" }}>
+              <div className="relative rounded-xl p-5 tma-mono text-sm leading-relaxed whitespace-pre-wrap" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.70)" }}>
                 {profileData!.aiProfile}
                 <button
                   onClick={async () => { await navigator.clipboard.writeText(profileData!.aiProfile); }}
